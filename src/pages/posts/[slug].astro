@@ -1,0 +1,348 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { formatDate, getRelatedPosts } from '../../lib/posts';
+import { getCategoryColor, getCategoryIcon } from '../../lib/config';
+import { getDifficultyColor, getDifficultyLabel } from '../../lib/utils';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+  return posts.map(post => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+const relatedPosts = await getRelatedPosts(post, 3);
+
+const { title, description, pubDate, updatedDate, coverImage, coverImageAlt, category, tags, author, difficulty, estimatedTime, prerequisites, osCompatibility } = post.data;
+---
+
+<BaseLayout
+  title={`${title} - ServerHi`}
+  description={description}
+  image={coverImage?.src}
+  article={true}
+  publishedTime={pubDate.toISOString()}
+  modifiedTime={updatedDate?.toISOString()}
+>
+  <article class="article-page">
+    <div class="container">
+      <!-- Article Header -->
+      <header class="article-header fade-in-up">
+        <div class="article-meta">
+          <a
+            href={`/category/${category}`}
+            class="category-badge terminal-hover"
+            style={`background: ${getCategoryColor(category)}20; color: ${getCategoryColor(category)}`}
+          >
+            {getCategoryIcon(category)} {category}
+          </a>
+          {difficulty && (
+            <span class="difficulty-badge" style={`color: ${getDifficultyColor(difficulty)}`}>
+              {getDifficultyLabel(difficulty)}
+            </span>
+          )}
+        </div>
+
+        <h1 class="article-title">{title}</h1>
+        <p class="article-description">{description}</p>
+
+        <div class="article-info">
+          <div class="info-item">
+            <span class="info-label">Published:</span>
+            <time datetime={pubDate.toISOString()}>{formatDate(pubDate)}</time>
+          </div>
+          {estimatedTime && (
+            <div class="info-item">
+              <span class="info-label">Duration:</span>
+              <span>⏱️ {estimatedTime}</span>
+            </div>
+          )}
+          <div class="info-item">
+            <span class="info-label">Author:</span>
+            <span>{author}</span>
+          </div>
+        </div>
+
+        {prerequisites && prerequisites.length > 0 && (
+          <div class="prerequisites terminal-window">
+            <div class="terminal-header">
+              <span class="terminal-dot red"></span>
+              <span class="terminal-dot yellow"></span>
+              <span class="terminal-dot green"></span>
+            </div>
+            <div class="prerequisites-content">
+              <h3>Prerequisites</h3>
+              <ul>
+                {prerequisites.map(prereq => (
+                  <li>{prereq}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        )}
+
+        {osCompatibility && osCompatibility.length > 0 && (
+          <div class="os-compatibility">
+            <span class="os-label">Compatible with:</span>
+            {osCompatibility.map(os => (
+              <span class="os-badge">{os}</span>
+            ))}
+          </div>
+        )}
+      </header>
+
+      <!-- Cover Image -->
+      {coverImage && (
+        <div class="article-cover fade-in-up">
+          <img src={coverImage.src} alt={coverImageAlt} />
+        </div>
+      )}
+
+      <!-- Article Content -->
+      <div class="article-content content-wrapper fade-in-up">
+        <Content />
+      </div>
+
+      <!-- Tags -->
+      {tags && tags.length > 0 && (
+        <div class="article-tags fade-in-up">
+          <h3 class="tags-title">Tags</h3>
+          <div class="tags-list">
+            {tags.map(tag => (
+              <a href={`/tag/${tag}`} class="tag terminal-hover">
+                #{tag}
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <!-- Related Posts -->
+      {relatedPosts.length > 0 && (
+        <section class="related-posts fade-in-up">
+          <h2 class="section-title">
+            <span class="terminal-prompt"></span>
+            Related Tutorials
+          </h2>
+          <div class="related-grid">
+            {relatedPosts.map(relatedPost => (
+              <ArticleCard post={relatedPost} />
+            ))}
+          </div>
+        </section>
+      )}
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .article-page {
+    padding: 2rem 0;
+  }
+
+  .article-header {
+    margin-bottom: 2rem;
+  }
+
+  .article-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .category-badge,
+  .difficulty-badge {
+    font-family: var(--font-code);
+    font-size: 0.75rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+  }
+
+  .difficulty-badge {
+    background: var(--code-bg);
+  }
+
+  .article-title {
+    font-size: clamp(2rem, 5vw, 3rem);
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+
+  .article-description {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+
+  .article-info {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    padding: 1rem 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 1.5rem;
+  }
+
+  .info-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-code);
+    font-size: 0.875rem;
+  }
+
+  .info-label {
+    color: var(--text-secondary);
+  }
+
+  .prerequisites {
+    margin: 1.5rem 0;
+  }
+
+  .prerequisites-content {
+    padding: 1.5rem;
+  }
+
+  .prerequisites h3 {
+    font-family: var(--font-code);
+    font-size: 1rem;
+    color: var(--primary);
+    margin-bottom: 1rem;
+  }
+
+  .prerequisites ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .prerequisites li {
+    padding-left: 1.5rem;
+    position: relative;
+    margin-bottom: 0.5rem;
+  }
+
+  .prerequisites li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--primary);
+    font-weight: 700;
+  }
+
+  .os-compatibility {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+  }
+
+  .os-label {
+    font-family: var(--font-code);
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+  }
+
+  .os-badge {
+    font-family: var(--font-code);
+    font-size: 0.75rem;
+    background: var(--code-bg);
+    color: var(--text);
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-sm);
+  }
+
+  .article-cover {
+    margin-bottom: 3rem;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  .article-cover img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .article-content {
+    margin-bottom: 3rem;
+  }
+
+  .article-tags {
+    padding: 2rem 0;
+    border-top: 1px solid var(--border);
+    margin-bottom: 3rem;
+  }
+
+  .tags-title {
+    font-family: var(--font-code);
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .tag {
+    font-family: var(--font-code);
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    background: var(--code-bg);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border: 1px solid var(--border);
+  }
+
+  .tag:hover {
+    color: var(--primary);
+    border-color: var(--primary);
+  }
+
+  .related-posts {
+    padding: 2rem 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .section-title {
+    font-size: 1.75rem;
+    margin-bottom: 2rem;
+  }
+
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+
+  @media (max-width: 768px) {
+    .article-info {
+      flex-direction: column;
+      gap: 0.75rem;
+      align-items: flex-start;
+    }
+
+    .related-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

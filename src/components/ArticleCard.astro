@@ -1,0 +1,196 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { formatDate } from '../lib/posts';
+import { getCategoryColor, getCategoryIcon } from '../lib/config';
+import { getDifficultyColor, getDifficultyLabel } from '../lib/utils';
+
+interface Props {
+  post: CollectionEntry<'posts'>;
+}
+
+const { post } = Astro.props;
+const { title, description, pubDate, coverImage, coverImageAlt, category, tags, difficulty, estimatedTime } = post.data;
+---
+
+<article class="article-card terminal-window hover-lift fade-in-up">
+  <a href={`/posts/${post.slug}`} class="card-link">
+    {coverImage && (
+      <div class="card-image">
+        <img src={coverImage.src} alt={coverImageAlt} loading="lazy" />
+        <div class="image-overlay"></div>
+      </div>
+    )}
+
+    <div class="card-content">
+      <div class="card-meta">
+        <span class="category-badge" style={`background: ${getCategoryColor(category)}20; color: ${getCategoryColor(category)}`}>
+          {getCategoryIcon(category)} {category}
+        </span>
+        {difficulty && (
+          <span class="difficulty-badge" style={`color: ${getDifficultyColor(difficulty)}`}>
+            {getDifficultyLabel(difficulty)}
+          </span>
+        )}
+      </div>
+
+      <h3 class="card-title terminal-prompt">{title}</h3>
+      <p class="card-description">{description}</p>
+
+      <div class="card-footer">
+        <time class="card-date" datetime={pubDate.toISOString()}>
+          {formatDate(pubDate)}
+        </time>
+        {estimatedTime && (
+          <span class="reading-time">⏱️ {estimatedTime}</span>
+        )}
+      </div>
+
+      {tags && tags.length > 0 && (
+        <div class="card-tags">
+          {tags.slice(0, 3).map(tag => (
+            <span class="tag">{tag}</span>
+          ))}
+        </div>
+      )}
+    </div>
+  </a>
+</article>
+
+<style>
+  .article-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .article-card:hover {
+    border-color: var(--primary);
+    box-shadow: 0 0 20px rgba(var(--primary-rgb), 0.2);
+  }
+
+  .card-link {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .card-image {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+  }
+
+  .card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .article-card:hover .card-image img {
+    transform: scale(1.05);
+  }
+
+  .image-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, var(--surface), transparent);
+    opacity: 0.6;
+  }
+
+  .card-content {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    flex: 1;
+  }
+
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .category-badge,
+  .difficulty-badge {
+    font-family: var(--font-code);
+    font-size: 0.75rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .difficulty-badge {
+    background: var(--code-bg);
+    color: var(--code-text);
+  }
+
+  .card-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.3;
+    color: var(--text);
+  }
+
+  .card-title::before {
+    color: var(--primary);
+  }
+
+  .card-description {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin: 0;
+    flex: 1;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .card-date,
+  .reading-time {
+    font-family: var(--font-code);
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+  }
+
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .tag {
+    font-family: var(--font-code);
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    background: var(--code-bg);
+    color: var(--code-text);
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm);
+  }
+
+  .tag::before {
+    content: '#';
+    color: var(--primary);
+  }
+</style>

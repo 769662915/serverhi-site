@@ -1,0 +1,22 @@
+{
+  "adsense": {
+    "enabled": false,
+    "clientId": "",
+    "autoAds": false,
+    "slots": {
+      "articleTop": "",
+      "articleMiddle": "",
+      "articleBottom": "",
+      "sidebar": ""
+    }
+  },
+  "analytics": {
+    "enabled": false,
+    "provider": "google",
+    "measurementId": ""
+  },
+  "search": {
+    "provider": "pagefind",
+    "enabled": true
+  }
+}

@@ -1,0 +1,227 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Terms of Service - ServerHi">
+  <div class="container">
+    <article class="legal-page">
+      <header class="page-header fade-in-up">
+        <h1 class="page-title">
+          <span class="terminal-prompt"></span>
+          Terms of Service
+        </h1>
+        <p class="last-updated">Last updated: February 7, 2026</p>
+      </header>
+
+      <div class="content-wrapper">
+        <div class="legal-content fade-in-up">
+          <section class="legal-section">
+            <h2>Agreement to Terms</h2>
+            <p>
+              By accessing or using ServerHi (serverhi.com), you agree to be bound by these Terms of Service. If you disagree with any part of these terms, you may not access the website.
+            </p>
+          </section>
+
+          <section class="legal-section">
+            <h2>Use License</h2>
+            <p>
+              Permission is granted to temporarily access the materials (tutorials, articles, code examples) on ServerHi for personal, non-commercial use only. This is the grant of a license, not a transfer of title.
+            </p>
+
+            <h3>Under this license you may not:</h3>
+            <ul>
+              <li>Modify or copy the materials without attribution</li>
+              <li>Use the materials for commercial purposes without permission</li>
+              <li>Remove any copyright or proprietary notations</li>
+              <li>Transfer the materials to another person or "mirror" the materials on any other server</li>
+            </ul>
+          </section>
+
+          <section class="legal-section">
+            <h2>Content and Code Examples</h2>
+            <p>
+              The tutorials and code examples provided on ServerHi are for educational purposes. While we strive for accuracy, we make no warranties about the completeness, reliability, or suitability of the information.
+            </p>
+
+            <h3>Code Usage</h3>
+            <p>
+              Code examples provided in tutorials may be used freely in your projects. However, we recommend:
+            </p>
+            <ul>
+              <li>Testing code thoroughly before production use</li>
+              <li>Understanding what the code does before implementing it</li>
+              <li>Adapting code to your specific security and performance requirements</li>
+              <li>Keeping systems and dependencies updated</li>
+            </ul>
+          </section>
+
+          <section class="legal-section">
+            <h2>Disclaimer</h2>
+            <p>
+              The materials on ServerHi are provided on an "as is" basis. ServerHi makes no warranties, expressed or implied, and hereby disclaims all other warranties including, without limitation:
+            </p>
+            <ul>
+              <li>Implied warranties of merchantability or fitness for a particular purpose</li>
+              <li>Non-infringement of intellectual property or other violation of rights</li>
+            </ul>
+            <p>
+              ServerHi does not warrant that the website will be uninterrupted, timely, secure, or error-free.
+            </p>
+          </section>
+
+          <section class="legal-section">
+            <h2>Limitations of Liability</h2>
+            <p>
+              In no event shall ServerHi or its suppliers be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use the materials on ServerHi.
+            </p>
+          </section>
+
+          <section class="legal-section">
+            <h2>Accuracy of Materials</h2>
+            <p>
+              The materials appearing on ServerHi could include technical, typographical, or photographic errors. ServerHi does not warrant that any of the materials are accurate, complete, or current.
+            </p>
+            <p>
+              ServerHi may make changes to the materials at any time without notice. However, ServerHi does not make any commitment to update the materials.
+            </p>
+          </section>
+
+          <section class="legal-section">
+            <h2>Links to Third-Party Sites</h2>
+            <p>
+              ServerHi may contain links to third-party websites or services that are not owned or controlled by ServerHi. We have no control over, and assume no responsibility for, the content, privacy policies, or practices of any third-party websites or services.
+            </p>
+          </section>
+
+          <section class="legal-section">
+            <h2>User Conduct</h2>
+            <p>You agree not to:</p>
+            <ul>
+              <li>Use the website for any unlawful purpose</li>
+              <li>Attempt to gain unauthorized access to any portion of the website</li>
+              <li>Interfere with or disrupt the website or servers</li>
+              <li>Transmit any viruses, malware, or harmful code</li>
+              <li>Collect or harvest any information from the website using automated means</li>
+              <li>Impersonate any person or entity</li>
+            </ul>
+          </section>
+
+          <section class="legal-section">
+            <h2>Intellectual Property</h2>
+            <p>
+              The content, organization, graphics, design, and other matters related to ServerHi are protected under applicable copyrights and other proprietary laws. Copying, redistribution, or publication of any such matters or any part of the website is prohibited without express written permission.
+            </p>
+          </section>
+
+          <section class="legal-section">
+            <h2>Modifications to Terms</h2>
+            <p>
+              ServerHi may revise these Terms of Service at any time without notice. By using this website, you agree to be bound by the current version of these Terms of Service.
+            </p>
+          </section>
+
+          <section class="legal-section">
+            <h2>Governing Law</h2>
+            <p>
+              These terms and conditions are governed by and construed in accordance with applicable laws, and you irrevocably submit to the exclusive jurisdiction of the courts in that location.
+            </p>
+          </section>
+
+          <section class="legal-section">
+            <h2>Contact Information</h2>
+            <p>If you have any questions about these Terms of Service, please contact us:</p>
+            <ul>
+              <li>Email: <a href="mailto:legal@serverhi.com">legal@serverhi.com</a></li>
+              <li>Website: <a href="/contact">Contact Form</a></li>
+            </ul>
+          </section>
+        </div>
+      </div>
+    </article>
+  </div>
+</BaseLayout>
+
+<style>
+  .legal-page {
+    padding: 2rem 0;
+  }
+
+  .page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .page-title {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .last-updated {
+    color: var(--text-secondary);
+    font-family: var(--font-code);
+    font-size: 0.9rem;
+  }
+
+  .legal-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .legal-section {
+    margin-bottom: 3rem;
+  }
+
+  .legal-section h2 {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+    color: var(--primary);
+  }
+
+  .legal-section h3 {
+    font-size: 1.25rem;
+    margin: 1.5rem 0 0.75rem;
+    color: var(--text);
+  }
+
+  .legal-section p {
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin-bottom: 1rem;
+  }
+
+  .legal-section ul {
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin-bottom: 1rem;
+    padding-left: 2rem;
+  }
+
+  .legal-section li {
+    margin-bottom: 0.5rem;
+  }
+
+  .legal-section a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .legal-section a:hover {
+    color: var(--primary);
+    text-decoration: underline;
+  }
+
+  .legal-section strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  @media (max-width: 768px) {
+    .page-title {
+      font-size: 2rem;
+    }
+
+    .legal-section h2 {
+      font-size: 1.5rem;
+    }
+  }
+</style>

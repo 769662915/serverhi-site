@@ -1,0 +1,115 @@
+---
+import { site } from '../lib/config';
+import ThemeToggle from './ThemeToggle';
+---
+
+<header class="site-header">
+  <div class="container">
+    <div class="header-content">
+      <a href="/" class="logo terminal-hover">
+        <span class="logo-bracket">[</span>
+        <span class="logo-text glow-primary">{site.name}</span>
+        <span class="logo-bracket">]</span>
+      </a>
+
+      <nav class="main-nav">
+        <a href="/" class="nav-link terminal-hover">Home</a>
+        <a href="/posts" class="nav-link terminal-hover">Tutorials</a>
+        <a href="/category/docker" class="nav-link terminal-hover">Docker</a>
+        <a href="/category/linux" class="nav-link terminal-hover">Linux</a>
+        <a href="/category/devops" class="nav-link terminal-hover">DevOps</a>
+        <a href="/search" class="nav-link terminal-hover">Search</a>
+      </nav>
+
+      <div class="header-actions">
+        <ThemeToggle client:load />
+      </div>
+    </div>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    background: rgba(var(--surface-rgb), 0.85);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+
+  .logo {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .logo-bracket {
+    color: var(--secondary);
+  }
+
+  .logo-text {
+    color: var(--primary);
+  }
+
+  .main-nav {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    flex: 1;
+    justify-content: center;
+  }
+
+  .nav-link {
+    font-family: var(--font-code);
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+    position: relative;
+  }
+
+  .nav-link::before {
+    content: '> ';
+    color: var(--primary);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .nav-link:hover {
+    color: var(--primary);
+  }
+
+  .nav-link:hover::before {
+    opacity: 1;
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  @media (max-width: 768px) {
+    .main-nav {
+      display: none;
+    }
+
+    .logo {
+      font-size: 1.25rem;
+    }
+  }
+</style>

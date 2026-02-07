@@ -1,0 +1,60 @@
+{
+  "type": "server",
+  "name": "ServerHi",
+  "title": "ServerHi - Linux Server Tutorials & DevOps Guides",
+  "description": "Professional tutorials on Linux server management, Docker containerization, DevOps tools, and system administration. From basics to advanced configurations.",
+  "url": "https://serverhi.com",
+
+  "contentFocus": {
+    "primary": "Linux server management and Docker containerization tutorials",
+    "secondary": [
+      "Ubuntu and CentOS system administration",
+      "Nginx, Apache, and database configuration",
+      "DevOps automation and CI/CD pipelines",
+      "Container orchestration and best practices"
+    ],
+    "targetAudience": "Beginners to intermediate developers, system administrators, and DevOps engineers",
+    "tone": "Clear, practical, and technically accurate with step-by-step guidance"
+  },
+
+  "keywords": {
+    "primary": [
+      "Linux tutorial",
+      "Docker guide",
+      "server management",
+      "Ubuntu tutorial",
+      "DevOps"
+    ],
+    "secondary": [
+      "Nginx configuration",
+      "container deployment",
+      "system administration",
+      "server security",
+      "automation scripts",
+      "CI/CD pipeline",
+      "database setup",
+      "cloud deployment"
+    ],
+    "niche": [
+      "Docker Compose tutorial",
+      "Ubuntu 22.04 setup",
+      "Nginx reverse proxy",
+      "Kubernetes basics",
+      "Linux security hardening",
+      "systemd service management"
+    ]
+  },
+
+  "author": {
+    "name": "ServerHi Editorial Team"
+  },
+
+  "postsPerPage": 12,
+  "relatedPostsCount": 3,
+
+  "features": {
+    "search": true,
+    "darkMode": true,
+    "newsletter": false
+  }
+}

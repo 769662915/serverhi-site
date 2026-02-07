@@ -1,0 +1,12 @@
+{
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "verify": "./verify-project.sh",
+    "format": "prettier --write .",
+    "lint": "prettier --check ."
+  }
+}

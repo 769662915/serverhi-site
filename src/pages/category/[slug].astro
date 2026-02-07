@@ -1,0 +1,134 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { getPostsByCategory } from '../../lib/posts';
+import { categories, getCategoryBySlug } from '../../lib/config';
+
+export async function getStaticPaths() {
+  return categories.map(category => ({
+    params: { slug: category.slug },
+  }));
+}
+
+const { slug } = Astro.params;
+const category = getCategoryBySlug(slug);
+const posts = await getPostsByCategory(slug);
+---
+
+<BaseLayout title={`${category?.name} Tutorials - ServerHi`}>
+  <div class="container">
+    <div class="category-header fade-in-up">
+      <div class="category-icon-large">{category?.icon}</div>
+      <h1 class="page-title">
+        <span class="terminal-prompt"></span>
+        {category?.name}
+      </h1>
+      <p class="page-description">{category?.description}</p>
+      <div class="category-stats">
+        <span class="stat">{posts.length} tutorials</span>
+      </div>
+    </div>
+
+    {posts.length > 0 ? (
+      <div class="posts-grid">
+        {posts.map((post, index) => (
+          <div class="stagger-item" style={`animation-delay: ${index * 0.05}s`}>
+            <ArticleCard post={post} />
+          </div>
+        ))}
+      </div>
+    ) : (
+      <div class="empty-state terminal-window">
+        <div class="terminal-header">
+          <span class="terminal-dot red"></span>
+          <span class="terminal-dot yellow"></span>
+          <span class="terminal-dot green"></span>
+        </div>
+        <div class="empty-content">
+          <p class="terminal-prompt">No tutorials found in this category yet.</p>
+          <a href="/posts" class="btn btn-primary">Browse All Tutorials</a>
+        </div>
+      </div>
+    )}
+  </div>
+</BaseLayout>
+
+<style>
+  .category-header {
+    text-align: center;
+    margin: 3rem 0;
+  }
+
+  .category-icon-large {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+  }
+
+  .page-title {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .page-description {
+    color: var(--text-secondary);
+    font-size: 1.125rem;
+    max-width: 600px;
+    margin: 0 auto 1rem;
+  }
+
+  .category-stats {
+    font-family: var(--font-code);
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+  }
+
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+  }
+
+  .empty-state {
+    max-width: 500px;
+    margin: 3rem auto;
+  }
+
+  .empty-content {
+    padding: 3rem 2rem;
+    text-align: center;
+  }
+
+  .empty-content p {
+    margin-bottom: 1.5rem;
+    font-family: var(--font-code);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-code);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .btn-primary {
+    background: var(--primary);
+    color: var(--background);
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 0 20px var(--primary);
+  }
+
+  @media (max-width: 768px) {
+    .posts-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

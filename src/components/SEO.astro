@@ -1,0 +1,60 @@
+---
+import { site } from '../lib/config';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  article?: boolean;
+  publishedTime?: string;
+  modifiedTime?: string;
+}
+
+const {
+  title = site.title,
+  description = site.description,
+  image = `${site.url}/images/site/og-image.jpg`,
+  article = false,
+  publishedTime,
+  modifiedTime,
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, site.url);
+---
+
+<!-- Primary Meta Tags -->
+<title>{title}</title>
+<meta name="title" content={title} />
+<meta name="description" content={description} />
+<link rel="canonical" href={canonicalURL} />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content={article ? 'article' : 'website'} />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={image} />
+<meta property="og:site_name" content={site.name} />
+
+{article && publishedTime && (
+  <meta property="article:published_time" content={publishedTime} />
+)}
+{article && modifiedTime && (
+  <meta property="article:modified_time" content={modifiedTime} />
+)}
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:url" content={canonicalURL} />
+<meta property="twitter:title" content={title} />
+<meta property="twitter:description" content={description} />
+<meta property="twitter:image" content={image} />
+
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+<!-- Sitemap -->
+<link rel="sitemap" href="/sitemap-index.xml" />
+
+<!-- RSS Feed -->
+<link rel="alternate" type="application/rss+xml" title={site.name} href={`${site.url}/rss.xml`} />

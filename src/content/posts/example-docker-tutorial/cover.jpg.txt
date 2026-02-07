@@ -1,0 +1,4 @@
+# Placeholder for cover image
+# Replace this with an actual 1200x630px JPG image
+# Recommended: Use Canva, Figma, or similar tools to create cover images
+# Color scheme: Dark background (#0d1117) with terminal green (#00ff00) accents

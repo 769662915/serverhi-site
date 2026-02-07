@@ -1,0 +1,282 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Search - ServerHi">
+  <div class="container">
+    <div class="search-page">
+      <div class="search-header fade-in-up">
+        <h1 class="page-title">
+          <span class="terminal-prompt"></span>
+          Search Tutorials
+        </h1>
+        <p class="page-description">
+          Find tutorials on Linux, Docker, DevOps, and server management
+        </p>
+      </div>
+
+      <div class="search-container fade-in-up">
+        <div class="search-box terminal-window">
+          <div class="terminal-header">
+            <span class="terminal-dot red"></span>
+            <span class="terminal-dot yellow"></span>
+            <span class="terminal-dot green"></span>
+          </div>
+          <div class="search-input-wrapper">
+            <span class="search-prompt">$</span>
+            <div id="search"></div>
+          </div>
+        </div>
+
+        <div id="search-results" class="search-results"></div>
+      </div>
+
+      <div class="search-tips fade-in-up">
+        <h2 class="tips-title">
+          <span class="terminal-prompt"></span>
+          Search Tips
+        </h2>
+        <ul class="tips-list">
+          <li>Use specific keywords like "docker compose" or "nginx ssl"</li>
+          <li>Search by category: "docker", "linux", "devops"</li>
+          <li>Look for difficulty levels: "beginner", "intermediate", "advanced"</li>
+          <li>Try OS-specific searches: "ubuntu", "centos", "debian"</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .search-page {
+    padding: 2rem 0;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .search-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .page-title {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .page-description {
+    color: var(--text-secondary);
+    font-size: 1.125rem;
+  }
+
+  .search-container {
+    margin-bottom: 3rem;
+  }
+
+  .search-box {
+    margin-bottom: 2rem;
+  }
+
+  .search-input-wrapper {
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .search-prompt {
+    font-family: var(--font-code);
+    color: var(--primary);
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+
+  #search {
+    flex: 1;
+  }
+
+  #search input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: var(--text);
+    font-family: var(--font-code);
+    font-size: 1rem;
+    outline: none;
+  }
+
+  #search input::placeholder {
+    color: var(--text-secondary);
+  }
+
+  .search-results {
+    min-height: 200px;
+  }
+
+  .search-tips {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 2rem;
+  }
+
+  .tips-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .tips-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .tips-list li {
+    padding: 0.75rem 0;
+    padding-left: 2rem;
+    position: relative;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .tips-list li:last-child {
+    border-bottom: none;
+  }
+
+  .tips-list li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--primary);
+    font-weight: 700;
+  }
+
+  @media (max-width: 768px) {
+    .search-page {
+      padding: 1rem 0;
+    }
+
+    .page-title {
+      font-size: 2rem;
+    }
+  }
+</style>
+
+<script is:inline>
+  // Pagefind will be initialized after build
+  // This is a placeholder for the search functionality
+
+  if (typeof window !== 'undefined') {
+    window.addEventListener('DOMContentLoaded', async () => {
+      try {
+        // @ts-ignore - Pagefind is generated during build
+        const pagefind = await import('/pagefind/pagefind.js');
+        await pagefind.options({
+          excerptLength: 15
+        });
+
+        const searchInput = document.querySelector('#search input');
+        const searchResults = document.querySelector('#search-results');
+
+        if (searchInput && searchResults) {
+          searchInput.addEventListener('input', async (e) => {
+            const query = e.target.value;
+
+            if (query.length < 2) {
+              searchResults.innerHTML = '';
+              return;
+            }
+
+            const results = await pagefind.search(query);
+
+            if (results.results.length === 0) {
+              searchResults.innerHTML = `
+                <div class="no-results terminal-window">
+                  <div class="terminal-header">
+                    <span class="terminal-dot red"></span>
+                    <span class="terminal-dot yellow"></span>
+                    <span class="terminal-dot green"></span>
+                  </div>
+                  <div style="padding: 2rem; text-align: center;">
+                    <p class="terminal-prompt">No results found for "${query}"</p>
+                  </div>
+                </div>
+              `;
+              return;
+            }
+
+            const resultItems = await Promise.all(
+              results.results.slice(0, 10).map(r => r.data())
+            );
+
+            searchResults.innerHTML = resultItems.map(item => `
+              <article class="search-result-item terminal-hover">
+                <a href="${item.url}">
+                  <h3>${item.meta.title}</h3>
+                  <p>${item.excerpt}</p>
+                </a>
+              </article>
+            `).join('');
+          });
+        }
+      } catch (error) {
+        console.log('Pagefind not loaded yet. Run build first.');
+      }
+    });
+  }
+</script>
+
+<style is:global>
+  .search-result-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    transition: all 0.2s ease;
+  }
+
+  .search-result-item:hover {
+    border-color: var(--primary);
+    box-shadow: 0 0 10px rgba(var(--primary-rgb), 0.2);
+  }
+
+  .search-result-item a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .search-result-item h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+  }
+
+  .search-result-item p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .no-results {
+    margin-top: 2rem;
+  }
+</style>
+
+<style is:global>
+  /* Ensure search results work in both themes */
+  .search-result-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+
+  .search-result-item h3 {
+    color: var(--text);
+  }
+
+  .search-result-item p {
+    color: var(--text-secondary);
+  }
+</style>

@@ -1,0 +1,177 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getAllPosts, getPostsByTag } from '../../lib/posts';
+import type { CollectionEntry } from 'astro:content';
+
+export async function getStaticPaths() {
+  const allPosts = await getAllPosts();
+  const tags = new Set<string>();
+
+  allPosts.forEach((post: CollectionEntry<'posts'>) => {
+    post.data.tags.forEach((tag: string) => tags.add(tag));
+  });
+
+  return Array.from(tags).map(tag => ({
+    params: { slug: tag },
+  }));
+}
+
+const { slug } = Astro.params;
+const posts = await getPostsByTag(slug);
+---
+
+<BaseLayout title={`${slug} Tutorials - ServerHi`}>
+  <div class="container">
+    <div class="tag-header fade-in-up">
+      <h1 class="page-title">
+        <span class="terminal-prompt"></span>
+        <span class="tag-symbol">#</span>{slug}
+      </h1>
+      <p class="page-description">
+        {posts.length} tutorial{posts.length !== 1 ? 's' : ''} tagged with "{slug}"
+      </p>
+    </div>
+
+    {posts.length > 0 ? (
+      <div class="posts-grid">
+        {posts.map((post: any, index: number) => (
+          <div class="stagger-item" style={`animation-delay: ${index * 0.05}s`}>
+            <article class="post-card terminal-window hover-lift">
+              <a href={`/posts/${post.slug}`}>
+                <div class="card-content">
+                  <h2 class="card-title terminal-prompt">{post.data.title}</h2>
+                  <p class="card-description">{post.data.description}</p>
+                  <div class="card-meta">
+                    <span class="category-badge" style={`background: var(--code-bg); color: var(--primary)`}>
+                      {post.data.category}
+                    </span>
+                  </div>
+                </div>
+              </a>
+            </article>
+          </div>
+        ))}
+      </div>
+    ) : (
+      <div class="empty-state terminal-window">
+        <div class="terminal-header">
+          <span class="terminal-dot red"></span>
+          <span class="terminal-dot yellow"></span>
+          <span class="terminal-dot green"></span>
+        </div>
+        <div class="empty-content">
+          <p class="terminal-prompt">No tutorials found with this tag.</p>
+          <a href="/posts" class="btn btn-primary">Browse All Tutorials</a>
+        </div>
+      </div>
+    )}
+  </div>
+</BaseLayout>
+
+<style>
+  .tag-header {
+    text-align: center;
+    margin: 3rem 0;
+  }
+
+  .page-title {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .tag-symbol {
+    color: var(--primary);
+  }
+
+  .page-description {
+    color: var(--text-secondary);
+    font-size: 1.125rem;
+    font-family: var(--font-code);
+  }
+
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+  }
+
+  .post-card {
+    height: 100%;
+  }
+
+  .post-card a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    height: 100%;
+  }
+
+  .card-content {
+    padding: 2rem;
+  }
+
+  .card-title {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    color: var(--text);
+  }
+
+  .card-description {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  .card-meta {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .category-badge {
+    font-family: var(--font-code);
+    font-size: 0.75rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .empty-state {
+    max-width: 500px;
+    margin: 3rem auto;
+  }
+
+  .empty-content {
+    padding: 3rem 2rem;
+    text-align: center;
+  }
+
+  .empty-content p {
+    margin-bottom: 1.5rem;
+    font-family: var(--font-code);
+  }
+
+  .btn {
+    display: inline-flex;
+    padding: 0.75rem 1.5rem;
+    background: var(--primary);
+    color: var(--background);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-code);
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .btn:hover {
+    box-shadow: 0 0 20px var(--primary);
+  }
+
+  @media (max-width: 768px) {
+    .posts-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

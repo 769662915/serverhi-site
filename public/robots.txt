@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://serverhi.com/sitemap-index.xml

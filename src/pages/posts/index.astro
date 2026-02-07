@@ -1,0 +1,60 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { getAllPosts } from '../../lib/posts';
+
+const allPosts = await getAllPosts();
+// const postsPerPage = 12; // Reserved for future pagination
+---
+
+<BaseLayout title="All Tutorials - ServerHi">
+  <div class="container">
+    <div class="page-header fade-in-up">
+      <h1 class="page-title">
+        <span class="terminal-prompt"></span>
+        All Tutorials
+      </h1>
+      <p class="page-description">
+        Browse all {allPosts.length} tutorials on Linux, Docker, DevOps, and server management
+      </p>
+    </div>
+
+    <div class="posts-grid">
+      {allPosts.map((post, index) => (
+        <div class="stagger-item" style={`animation-delay: ${(index % 12) * 0.05}s`}>
+          <ArticleCard post={post} />
+        </div>
+      ))}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-header {
+    text-align: center;
+    margin: 3rem 0;
+  }
+
+  .page-title {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .page-description {
+    color: var(--text-secondary);
+    font-size: 1.125rem;
+  }
+
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+  }
+
+  @media (max-width: 768px) {
+    .posts-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,46 @@
+{
+  "categories": [
+    {
+      "slug": "docker",
+      "name": "Docker & Containers",
+      "description": "Docker tutorials, containerization guides, and orchestration best practices",
+      "color": "#0db7ed",
+      "icon": "🐳"
+    },
+    {
+      "slug": "linux",
+      "name": "Linux Systems",
+      "description": "Ubuntu, CentOS, and Linux system administration tutorials",
+      "color": "#fcc624",
+      "icon": "🐧"
+    },
+    {
+      "slug": "server-config",
+      "name": "Server Configuration",
+      "description": "Nginx, Apache, databases, and server software setup guides",
+      "color": "#009639",
+      "icon": "⚙️"
+    },
+    {
+      "slug": "devops",
+      "name": "DevOps & Automation",
+      "description": "CI/CD pipelines, automation tools, and DevOps workflows",
+      "color": "#ff6b35",
+      "icon": "🚀"
+    },
+    {
+      "slug": "security",
+      "name": "Security & Hardening",
+      "description": "Server security, SSL/TLS, firewall configuration, and best practices",
+      "color": "#e63946",
+      "icon": "🔒"
+    },
+    {
+      "slug": "troubleshooting",
+      "name": "Troubleshooting",
+      "description": "Common issues, debugging guides, and problem-solving tutorials",
+      "color": "#8338ec",
+      "icon": "🔧"
+    }
+  ]
+}
