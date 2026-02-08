@@ -13,30 +13,33 @@ export async function getStaticPaths() {
   });
 
   return Array.from(tags).map(tag => ({
-    params: { slug: tag },
+    params: { slug: encodeURIComponent(tag) },
+    props: { originalTag: tag }
   }));
 }
 
 const { slug } = Astro.params;
-const posts = await getPostsByTag(slug);
+const { originalTag } = Astro.props;
+const decodedSlug = originalTag || decodeURIComponent(slug);
+const posts = await getPostsByTag(decodedSlug);
 
 const breadcrumbItems = [
   { label: 'Tags', href: '/posts' },
-  { label: `#${slug}`, href: `/tag/${slug}` }
+  { label: `#${decodedSlug}`, href: `/tag/${slug}` }
 ];
 ---
 
-<BaseLayout title={`${slug} Tutorials - ServerHi`}>
+<BaseLayout title={`${decodedSlug} Tutorials - ServerHi`}>
   <div class="container">
     <Breadcrumb items={breadcrumbItems} />
 
     <div class="tag-header fade-in-up">
       <h1 class="page-title">
         <span class="terminal-prompt"></span>
-        <span class="tag-symbol">#</span>{slug}
+        <span class="tag-symbol">#</span>{decodedSlug}
       </h1>
       <p class="page-description">
-        {posts.length} tutorial{posts.length !== 1 ? 's' : ''} tagged with "{slug}"
+        {posts.length} tutorial{posts.length !== 1 ? 's' : ''} tagged with "{decodedSlug}"
       </p>
     </div>
 
