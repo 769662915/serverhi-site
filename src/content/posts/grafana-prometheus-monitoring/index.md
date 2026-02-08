@@ -10,7 +10,7 @@ tags: ["Grafana", "Prometheus", "monitoring", "Linux", "metrics", "visualization
 
 ## Introduction
 
-Effective monitoring transforms operations from reactive firefighting into proactive management. When you understand your infrastructure's behavior patterns, you identify problems before users notice them, optimize resource allocation based on actual usage, and make informed capacity planning decisions. Grafana and Prometheus together form an open-source monitoring stack used by organizations worldwide, from small startups to massive enterprises running millions of containers.
+Monitoring transforms operations from reactive firefighting into proactive management. When you understand your infrastructure's behavior patterns, you identify problems before users notice them, optimize resource allocation based on actual usage, and make informed capacity planning decisions. Grafana and Prometheus together form an open-source monitoring stack used by organizations worldwide, from small startups to massive enterprises running millions of containers.
 
 Prometheus excels at collecting and storing time-series metrics, providing a powerful query language for analyzing system behavior over time. Grafana transforms those metrics into intuitive visualizations, enabling teams to understand complex data through well-designed dashboards. Both tools integrate seamlessly with Kubernetes, Docker, and traditional Linux servers, making them versatile choices for diverse infrastructure.
 
@@ -18,7 +18,7 @@ This comprehensive guide walks you through deploying a complete monitoring stack
 
 ## Understanding the Monitoring Stack
 
-Before diving into installation, understanding how Prometheus and Grafana work together clarifies the setup process and helps with future troubleshooting.
+Before diving into installation, learn how Prometheus and Grafana work together. This knowledge clarifies the setup process and helps with future troubleshooting.
 
 Prometheus operates on a pull-based model, periodically fetching metrics from configured targets. Each target exposes metrics in a plaintext format that Prometheus scrapes at regular intervals. These metrics include system information like CPU usage, memory consumption, disk I/O, and network activity, as well as application-specific measurements. Prometheus stores all data locally with efficient compression, enabling retention of historical metrics for trend analysis and capacity planning.
 

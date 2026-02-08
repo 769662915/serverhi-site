@@ -14,7 +14,7 @@ Setting up a Linux server requires careful attention to configuration, security,
 
 The steps in this guide follow best practices accumulated from years of production deployments. Each configuration decision considers security implications, performance impact, and maintainability. Whether you are setting up a web server, database server, or development environment, the principles here apply broadly.
 
-We will cover everything from initial server access through SSH to hardening your server against common threats. The guide assumes you have root or sudo access to a fresh Ubuntu 22.04 installation and a basic understanding of the command line. By the end, you will have a server ready for production use.
+We will cover everything from initial server access through SSH to hardening your server against common threats. The guide assumes you have root or sudo access to a fresh Ubuntu 22.04 installation and a basic command line knowledge. By the end, you will have a server ready for production use.
 
 ## Initial Server Configuration
 

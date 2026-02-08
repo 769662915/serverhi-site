@@ -51,13 +51,5 @@
     "search": true,
     "darkMode": true,
     "newsletter": false
-  },
-  "categories": [
-    "docker",
-    "linux",
-    "server-config",
-    "devops",
-    "security",
-    "troubleshooting"
-  ]
+  }
 }

@@ -18,7 +18,7 @@ The examples use common Linux utilities available on Ubuntu, RHEL, and other mai
 
 ## Systematic Troubleshooting Approach
 
-Effective troubleshooting follows a methodology rather than random experimentation. This structured approach finds root causes faster and prevents symptom treatment while underlying problems persist.
+Troubleshooting follows a methodology rather than random experimentation. This structured approach finds root causes faster and prevents symptom treatment while underlying problems persist.
 
 ### The Investigation Process
 

@@ -14,11 +14,11 @@ Continuous Integration and Continuous Deployment (CI/CD) transforms how teams de
 
 The pipeline we build covers code checkout, dependency installation, testing, building container images, and deploying to production. Each stage provides feedback that helps developers identify and fix problems quickly. The automation eliminates inconsistencies that plague manual deployment processes.
 
-Understanding CI/CD principles prepares you for DevOps roles and improves software quality regardless of team size. The practices here apply to projects ranging from personal applications to enterprise systems.
+CI/CD principles apply to projects ranging from personal applications to enterprise systems, improving software quality regardless of team size. The practices here prepare you for DevOps roles and modern development workflows.
 
 ## Pipeline Architecture
 
-Before writing configuration files, designing the pipeline architecture helps structure the implementation effectively. A well-designed pipeline balances thoroughness with speed, providing comprehensive checks without creating excessive friction.
+Before writing configuration files, design your pipeline architecture to structure the implementation effectively. A well-designed pipeline balances thoroughness with speed, providing comprehensive checks without creating excessive friction.
 
 ### Pipeline Stages
 

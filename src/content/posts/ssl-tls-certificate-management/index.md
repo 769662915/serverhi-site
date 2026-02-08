@@ -12,7 +12,7 @@ tags: ["SSL", "TLS", "HTTPS", "certificates", "Let's Encrypt"]
 
 HTTPS has become mandatory for modern web applications. Browser warnings for non-HTTPS sites erode user trust while search engines penalize unencrypted connections. This guide covers complete SSL/TLS certificate management from Let's Encrypt issuance through automated renewal.
 
-Let's Encrypt provides free certificates that automate the certificate lifecycle. Combined with certbot and web server integration, certificates issue and renew automatically without manual intervention. Understanding certificate management protects against service disruptions from expired certificates.
+Let's Encrypt provides free certificates that automate the certificate lifecycle. Combined with certbot and web server integration, certificates issue and renew automatically without manual intervention. Certificate management protects against service disruptions from expired certificates.
 
 Certificate management extends beyond Let's Encrypt to internal certificates, wildcard certificates, and certificate chains. Enterprise environments require certificate authority hierarchies and certificate transparency logging compliance. This guide addresses both public-facing and internal certificate needs.
 

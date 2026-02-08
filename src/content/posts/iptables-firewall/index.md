@@ -18,7 +18,7 @@ This guide walks you through iptables fundamentals to advanced configuration. Yo
 
 ## Understanding iptables Architecture
 
-Before writing rules, understanding the architecture helps you organize policies effectively and troubleshoot issues.
+Before writing rules, learn the architecture. This knowledge helps you organize policies effectively and troubleshoot issues.
 
 iptables divides functionality into tables, each serving a specific purpose. The filter table handles packet filtering decisions—the core firewall function. The nat table manages Network Address Translation for port forwarding and MASQUERADE. The mangle table modifies packet headers, while the raw table bypasses connection tracking for special cases. Most server configurations primarily use the filter and nat tables.
 

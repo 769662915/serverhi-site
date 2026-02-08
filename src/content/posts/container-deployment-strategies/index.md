@@ -14,7 +14,7 @@ Container deployment strategies determine how new versions reach production user
 
 Modern deployment strategies enable progressive rollouts that reveal problems before they affect all users. Rather than deploying a new version to everyone simultaneously, you can route a small percentage of traffic to new versions, monitor for issues, and gradually increase exposure.
 
-Understanding these patterns prepares you for production operations that demand high availability. The techniques here apply whether you use Docker Compose, Kubernetes, or dedicated deployment platforms.
+These patterns apply whether you use Docker Compose, Kubernetes, or dedicated deployment platforms. The techniques here suit production operations that demand high availability.
 
 ## Deployment Strategy Overview
 

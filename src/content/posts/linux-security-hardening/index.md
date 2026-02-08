@@ -12,9 +12,9 @@ tags: ["Linux security", "server hardening", "SSH", "firewall", "sysadmin"]
 
 Linux servers face constant threats from automated attacks, targeted exploits, and human adversaries. While Linux's permission model provides strong foundations, default configurations leave significant gaps that attackers routinely exploit. Security hardening addresses these gaps through layered defenses that protect systems without sacrificing usability.
 
-This guide presents practical hardening measures for production Linux servers. Each recommendation includes implementation steps and explanations of the security improvements they provide. The focus remains on measures with meaningful security returns rather than theater that creates complexity without protection.
+This guide presents practical hardening measures for production Linux servers. The recommendations include implementation steps and explanations of the security improvements they provide. We focus on measures with meaningful security returns rather than theater that creates complexity without protection.
 
-Effective security requires balancing protection against operational requirements. Overly restrictive configurations impede legitimate work and may lead administrators to disable protections. The recommendations here aim for reasonable security while maintaining server functionality.
+Security requires balancing protection against operational requirements. Overly restrictive configurations impede legitimate work and may lead administrators to disable protections. The recommendations here aim for reasonable security while maintaining server functionality.
 
 ## Network-Level Protections
 

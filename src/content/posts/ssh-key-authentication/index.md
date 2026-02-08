@@ -18,7 +18,7 @@ This comprehensive guide walks you through implementing SSH key authentication f
 
 ## Understanding SSH Keys
 
-Before implementation, understanding how SSH keys work helps you make informed decisions about configuration and security.
+Before implementation, learn how SSH keys work. This knowledge helps you make informed decisions about configuration and security.
 
 SSH keys come in pairs: a private key that you keep secret and a public key that you share with servers. The mathematics behind these keys ensure that something encrypted with the public key can only be decrypted by the corresponding private key. When you connect to a server, your SSH client proves possession of the private key without ever transmitting it across the network.
 

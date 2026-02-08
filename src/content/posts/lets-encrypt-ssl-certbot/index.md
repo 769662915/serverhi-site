@@ -18,7 +18,7 @@ This guide walks you through obtaining SSL certificates using Certbot, the most 
 
 ## Why SSL Certificates Matter
 
-Understanding the importance of SSL certificates helps you appreciate why implementation matters for every website, regardless of content or audience size.
+Learn the importance of SSL certificates to appreciate why implementation matters for every website, regardless of content or audience size.
 
 ### Data Encryption and Privacy
 
