@@ -1,6 +1,6 @@
 ---
 title: "Nginx Reverse Proxy Setup: Complete Configuration Guide"
-description: "Learn how to configure Nginx as a reverse proxy for your applications with SSL/TLS, load balancing, and performance optimization."
+description: "Configure Nginx reverse proxy with SSL/TLS. Step-by-step guide for load balancing, security & performance. Production-ready examples included."
 pubDate: 2026-02-05
 coverImage: "./cover.jpg"
 coverImageAlt: "Nginx server architecture diagram showing reverse proxy configuration"
@@ -35,6 +35,8 @@ Reverse proxies provide several benefits:
 - **Compression**: Reduce bandwidth usage
 
 ## Installing Nginx
+
+Before configuring Nginx, ensure you have a properly configured server. See our [Ubuntu 22.04 Server Setup Guide](/posts/example-ubuntu-guide) for initial server configuration.
 
 Update package list:
 
@@ -526,9 +528,32 @@ You now have a production-ready Nginx reverse proxy with:
 
 Monitor your setup regularly and adjust configurations based on your application's needs.
 
+## 常见问题 (FAQ)
+
+### 什么是反向代理？
+
+反向代理是位于后端服务器前的服务器，接收客户端请求并转发到后端。与正向代理不同，反向代理代表服务器而非客户端。主要用于负载均衡、SSL 终止、缓存和安全防护。Nginx 是最流行的反向代理服务器之一。
+
+### Nginx 和 Apache 哪个更好？
+
+Nginx 在高并发场景下性能更优，内存占用更少，特别适合静态内容和反向代理。Apache 配置更灵活，.htaccess 支持更好。对于现代 Web 应用和微服务架构，推荐使用 Nginx。许多大型网站同时使用两者，Nginx 作为前端反向代理，Apache 处理动态内容。
+
+### 如何配置 Nginx SSL/TLS？
+
+使用 Let's Encrypt 获取免费 SSL 证书，通过 Certbot 自动配置。配置 `ssl_certificate` 和 `ssl_certificate_key` 指令，启用 HTTP/2，配置安全的加密套件。使用 `ssl_protocols TLSv1.2 TLSv1.3` 禁用旧协议。定期更新证书并监控过期时间。
+
+### Nginx 反向代理如何处理 WebSocket？
+
+添加 `proxy_http_version 1.1`、`proxy_set_header Upgrade $http_upgrade` 和 `proxy_set_header Connection "upgrade"` 指令。确保后端应用支持 WebSocket。配置合适的超时时间（如 `proxy_read_timeout 3600s`）以保持长连接。测试连接稳定性和断线重连机制。
+
+### 如何优化 Nginx 性能？
+
+调整 `worker_processes` 和 `worker_connections`，启用 gzip 压缩，配置缓存，使用 `sendfile` 和 `tcp_nopush`。启用 HTTP/2，配置合理的超时值。监控连接数和响应时间，根据实际负载调整参数。使用 `nginx -t` 验证配置，用 `ab` 或 `wrk` 进行压力测试。
+
 ---
 
-**Related Tutorials:**
-- [Nginx Performance Optimization](/posts/nginx-performance)
-- [SSL Certificate Management with Certbot](/posts/certbot-ssl)
-- [Nginx Security Best Practices](/posts/nginx-security)
+**相关教程：**
+- [Nginx 性能优化指南](/posts/nginx-performance) - 深入优化技巧
+- [Let's Encrypt SSL 证书管理](/posts/certbot-ssl) - 自动化证书管理
+- [Nginx 安全最佳实践](/posts/nginx-security) - 加固 Nginx 安全
+- [Docker 与 Nginx 集成](/posts/example-docker-tutorial) - 容器化部署

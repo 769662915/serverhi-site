@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ArticleCard from '../../components/ArticleCard.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
 import { getPostsByCategory } from '../../lib/posts';
 import { categories, getCategoryBySlug } from '../../lib/config';
 
@@ -13,10 +14,17 @@ export async function getStaticPaths() {
 const { slug } = Astro.params;
 const category = getCategoryBySlug(slug);
 const posts = await getPostsByCategory(slug);
+
+const breadcrumbItems = [
+  { label: 'Categories', href: '/posts' },
+  { label: category?.name || slug, href: `/category/${slug}` }
+];
 ---
 
 <BaseLayout title={`${category?.name} Tutorials - ServerHi`}>
   <div class="container">
+    <Breadcrumb items={breadcrumbItems} />
+
     <div class="category-header fade-in-up">
       <div class="category-icon-large">{category?.icon}</div>
       <h1 class="page-title">

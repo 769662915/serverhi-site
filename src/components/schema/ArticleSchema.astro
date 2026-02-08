@@ -1,0 +1,61 @@
+---
+/**
+ * Article Schema 组件
+ * 为文章页面添加结构化数据，提升 SEO 和富媒体搜索结果
+ */
+import { site } from '../../lib/config';
+
+interface Props {
+  title: string;
+  description: string;
+  publishedTime: string;
+  modifiedTime?: string;
+  author: string;
+  image: string;
+  category: string;
+  tags: string[];
+  url: string;
+}
+
+const {
+  title,
+  description,
+  publishedTime,
+  modifiedTime,
+  author,
+  image,
+  category,
+  tags,
+  url,
+} = Astro.props;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: title,
+  description: description,
+  image: image,
+  datePublished: publishedTime,
+  dateModified: modifiedTime || publishedTime,
+  author: {
+    '@type': 'Organization',
+    name: author,
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: site.name,
+    logo: {
+      '@type': 'ImageObject',
+      url: `${site.url}/favicon.svg`,
+    },
+  },
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': url,
+  },
+  articleSection: category,
+  keywords: tags.join(', '),
+};
+---
+
+<script type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />

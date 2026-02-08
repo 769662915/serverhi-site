@@ -1,0 +1,28 @@
+---
+/**
+ * Organization Schema 组件
+ * 为网站添加组织信息结构化数据
+ */
+import { site } from '../../lib/config';
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: site.name,
+  url: site.url,
+  logo: `${site.url}/favicon.svg`,
+  description: site.description,
+  sameAs: [
+    // 添加社交媒体链接（如果有）
+    // 'https://twitter.com/serverhi',
+    // 'https://github.com/serverhi',
+  ],
+  contactPoint: {
+    '@type': 'ContactPoint',
+    contactType: 'Customer Service',
+    url: `${site.url}/contact`,
+  },
+};
+---
+
+<script type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />

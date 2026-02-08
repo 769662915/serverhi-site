@@ -1,0 +1,118 @@
+---
+/**
+ * 目录 (Table of Contents) 组件
+ * 为长文章生成可点击的目录
+ */
+
+interface Heading {
+  depth: number;
+  text: string;
+  slug: string;
+}
+
+interface Props {
+  headings: Heading[];
+}
+
+const { headings } = Astro.props;
+
+// 只显示 H2 和 H3
+const tocHeadings = headings.filter(h => h.depth === 2 || h.depth === 3);
+---
+
+{tocHeadings.length > 0 && (
+  <nav class="table-of-contents terminal-window">
+    <div class="terminal-header">
+      <span class="terminal-dot red"></span>
+      <span class="terminal-dot yellow"></span>
+      <span class="terminal-dot green"></span>
+    </div>
+    <div class="toc-content">
+      <h2 class="toc-title">
+        <span class="terminal-prompt"></span>
+        目录
+      </h2>
+      <ul class="toc-list">
+        {tocHeadings.map((heading) => (
+          <li class={`toc-item toc-depth-${heading.depth}`}>
+            <a href={`#${heading.slug}`} class="toc-link terminal-hover">
+              {heading.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </nav>
+)}
+
+<style>
+  .table-of-contents {
+    margin: 2rem 0;
+    position: sticky;
+    top: 2rem;
+  }
+
+  .toc-content {
+    padding: 1.5rem;
+  }
+
+  .toc-title {
+    font-family: var(--font-code);
+    font-size: 1rem;
+    color: var(--primary);
+    margin-bottom: 1rem;
+  }
+
+  .toc-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .toc-item {
+    margin-bottom: 0.5rem;
+  }
+
+  .toc-depth-2 {
+    padding-left: 0;
+  }
+
+  .toc-depth-3 {
+    padding-left: 1.5rem;
+    font-size: 0.9rem;
+  }
+
+  .toc-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-family: var(--font-code);
+    font-size: 0.875rem;
+    display: block;
+    padding: 0.25rem 0;
+    transition: all 0.2s ease;
+    border-left: 2px solid transparent;
+    padding-left: 0.75rem;
+  }
+
+  .toc-link:hover {
+    color: var(--primary);
+    border-left-color: var(--primary);
+    padding-left: 1rem;
+  }
+
+  @media (max-width: 1200px) {
+    .table-of-contents {
+      position: static;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .table-of-contents {
+      margin: 1rem 0;
+    }
+
+    .toc-content {
+      padding: 1rem;
+    }
+  }
+</style>

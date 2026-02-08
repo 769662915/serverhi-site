@@ -1,0 +1,94 @@
+---
+interface Props {
+  items: Array<{
+    label: string;
+    href: string;
+  }>;
+}
+
+const { items } = Astro.props;
+---
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <ol class="breadcrumb-list">
+    <li class="breadcrumb-item">
+      <a href="/" class="breadcrumb-link">
+        <span class="breadcrumb-icon">🏠</span>
+        <span>Home</span>
+      </a>
+    </li>
+    {items.map((item, index) => (
+      <li class="breadcrumb-item">
+        <span class="breadcrumb-separator">→</span>
+        {index === items.length - 1 ? (
+          <span class="breadcrumb-current">{item.label}</span>
+        ) : (
+          <a href={item.href} class="breadcrumb-link">
+            {item.label}
+          </a>
+        )}
+      </li>
+    ))}
+  </ol>
+</nav>
+
+<style>
+  .breadcrumb {
+    margin-bottom: 2rem;
+  }
+
+  .breadcrumb-list {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-family: var(--font-code);
+    font-size: 0.875rem;
+  }
+
+  .breadcrumb-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .breadcrumb-separator {
+    color: var(--primary);
+    font-weight: 700;
+  }
+
+  .breadcrumb-link {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .breadcrumb-link:hover {
+    color: var(--primary);
+  }
+
+  .breadcrumb-icon {
+    font-size: 1rem;
+  }
+
+  .breadcrumb-current {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  @media (max-width: 768px) {
+    .breadcrumb-list {
+      font-size: 0.8rem;
+    }
+
+    .breadcrumb-icon {
+      display: none;
+    }
+  }
+</style>

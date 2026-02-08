@@ -1,6 +1,6 @@
 ---
 title: "Ubuntu 22.04 Server Setup: Complete Initial Configuration Guide"
-description: "Step-by-step guide to configure a fresh Ubuntu 22.04 server with security hardening, user management, and essential tools installation."
+description: "Setup Ubuntu 22.04 server from scratch. Security hardening, user management, SSH & firewall configuration. Complete initial setup guide."
 pubDate: 2026-02-06
 coverImage: "./cover.jpg"
 coverImageAlt: "Ubuntu server terminal showing system configuration commands"
@@ -473,9 +473,34 @@ Remember to:
 - Back up important data
 - Document any changes you make
 
+## 常见问题 (FAQ)
+
+### Ubuntu Server 和 Desktop 有什么区别？
+
+Server 版本无图形界面，占用资源更少，专为服务器优化。包含服务器相关软件包，长期支持 (LTS) 版本提供 5 年安全更新。Desktop 版本包含图形界面和桌面应用，适合日常使用。对于生产服务器，始终选择 Server 版本。
+
+### 如何选择 Ubuntu 版本？
+
+生产环境推荐 LTS 版本（如 22.04），获得 5 年安全更新和稳定性保证。非 LTS 版本支持 9 个月，适合测试新特性。考虑硬件兼容性和软件包可用性。对于关键业务，始终使用 LTS 版本。
+
+### 是否需要禁用 root 登录？
+
+强烈建议禁用 root SSH 登录，使用 sudo 用户代替。在 `/etc/ssh/sshd_config` 设置 `PermitRootLogin no`。使用密钥认证替代密码登录，提高安全性。这是服务器安全的基本最佳实践。
+
+### 如何配置自动安全更新？
+
+安装 `unattended-upgrades` 包，配置 `/etc/apt/apt.conf.d/50unattended-upgrades`。启用自动安全更新，但手动更新主要版本。定期检查更新日志确保没有问题。自动更新可以及时修补安全漏洞。
+
+### UFW 防火墙如何配置？
+
+使用 `ufw allow` 开放端口，`ufw deny` 拒绝访问。默认拒绝所有入站，允许所有出站。开放 SSH (22)、HTTP (80)、HTTPS (443) 等必要端口。使用 `ufw status` 检查规则。详细配置参见我们的 [UFW 防火墙指南](/posts/ufw-firewall)。
+
 ---
 
-**Next Steps:**
-- [Install and Configure Nginx](/posts/nginx-setup)
+**下一步：**
+- [安装和配置 Nginx](/posts/example-nginx-setup) - Web 服务器设置
+- [Docker 安装指南](/posts/docker-installation-ubuntu) - 容器化平台
+- [SSH 密钥认证配置](/posts/ssh-key-setup) - 增强 SSH 安全
+- [Linux 系统监控工具](/posts/linux-monitoring) - 监控服务器状态
 - [Set Up Docker on Ubuntu](/posts/docker-ubuntu-install)
 - [MySQL Database Installation Guide](/posts/mysql-ubuntu-setup)

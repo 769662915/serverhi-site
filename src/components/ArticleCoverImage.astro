@@ -1,0 +1,39 @@
+---
+/**
+ * 文章封面图片组件
+ * 针对文章封面优化的图片组件，支持多种尺寸
+ */
+import { Image } from 'astro:assets';
+
+interface Props {
+  src: ImageMetadata | string;
+  alt: string;
+  class?: string;
+}
+
+const { src, alt, class: className } = Astro.props;
+---
+
+{typeof src === 'string' ? (
+  <img
+    src={src}
+    alt={alt}
+    width={1200}
+    height={630}
+    loading="lazy"
+    class={className}
+  />
+) : (
+  <Image
+    src={src}
+    alt={alt}
+    width={1200}
+    height={630}
+    format="webp"
+    quality={85}
+    loading="lazy"
+    class={className}
+    widths={[400, 800, 1200]}
+    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
+  />
+)}

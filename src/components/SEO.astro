@@ -19,20 +19,25 @@ const {
   modifiedTime,
 } = Astro.props;
 
+// 优化 meta description 长度
+const optimizedDescription = description.length > 160
+  ? description.substring(0, 157) + '...'
+  : description;
+
 const canonicalURL = new URL(Astro.url.pathname, site.url);
 ---
 
 <!-- Primary Meta Tags -->
 <title>{title}</title>
 <meta name="title" content={title} />
-<meta name="description" content={description} />
+<meta name="description" content={optimizedDescription} />
 <link rel="canonical" href={canonicalURL} />
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content={article ? 'article' : 'website'} />
 <meta property="og:url" content={canonicalURL} />
 <meta property="og:title" content={title} />
-<meta property="og:description" content={description} />
+<meta property="og:description" content={optimizedDescription} />
 <meta property="og:image" content={image} />
 <meta property="og:site_name" content={site.name} />
 
@@ -47,7 +52,7 @@ const canonicalURL = new URL(Astro.url.pathname, site.url);
 <meta property="twitter:card" content="summary_large_image" />
 <meta property="twitter:url" content={canonicalURL} />
 <meta property="twitter:title" content={title} />
-<meta property="twitter:description" content={description} />
+<meta property="twitter:description" content={optimizedDescription} />
 <meta property="twitter:image" content={image} />
 
 <!-- Favicon -->

@@ -1,0 +1,50 @@
+---
+/**
+ * HowTo Schema 组件
+ * 为教程类文章添加结构化数据
+ */
+
+interface HowToStep {
+  name: string;
+  text: string;
+  image?: string;
+}
+
+interface Props {
+  name: string;
+  description: string;
+  image?: string;
+  estimatedTime?: string;
+  steps: HowToStep[];
+  tools?: string[];
+  supplies?: string[];
+}
+
+const { name, description, image, estimatedTime, steps, tools, supplies } = Astro.props;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: name,
+  description: description,
+  image: image,
+  totalTime: estimatedTime,
+  tool: tools?.map((tool) => ({
+    '@type': 'HowToTool',
+    name: tool,
+  })),
+  supply: supplies?.map((supply) => ({
+    '@type': 'HowToSupply',
+    name: supply,
+  })),
+  step: steps.map((step, index) => ({
+    '@type': 'HowToStep',
+    position: index + 1,
+    name: step.name,
+    text: step.text,
+    image: step.image,
+  })),
+};
+---
+
+<script type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />

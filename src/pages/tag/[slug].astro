@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
 import { getAllPosts, getPostsByTag } from '../../lib/posts';
 import type { CollectionEntry } from 'astro:content';
 
@@ -18,10 +19,17 @@ export async function getStaticPaths() {
 
 const { slug } = Astro.params;
 const posts = await getPostsByTag(slug);
+
+const breadcrumbItems = [
+  { label: 'Tags', href: '/posts' },
+  { label: `#${slug}`, href: `/tag/${slug}` }
+];
 ---
 
 <BaseLayout title={`${slug} Tutorials - ServerHi`}>
   <div class="container">
+    <Breadcrumb items={breadcrumbItems} />
+
     <div class="tag-header fade-in-up">
       <h1 class="page-title">
         <span class="terminal-prompt"></span>

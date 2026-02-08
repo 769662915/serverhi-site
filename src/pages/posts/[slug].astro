@@ -2,8 +2,11 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ArticleCard from '../../components/ArticleCard.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import ArticleSchema from '../../components/schema/ArticleSchema.astro';
+import BreadcrumbSchema from '../../components/schema/BreadcrumbSchema.astro';
 import { formatDate, getRelatedPosts } from '../../lib/posts';
-import { getCategoryColor, getCategoryIcon } from '../../lib/config';
+import { getCategoryColor, getCategoryIcon, getCategoryBySlug, site } from '../../lib/config';
 import { getDifficultyColor, getDifficultyLabel } from '../../lib/utils';
 
 export async function getStaticPaths() {
@@ -19,6 +22,17 @@ const { Content } = await post.render();
 const relatedPosts = await getRelatedPosts(post, 3);
 
 const { title, description, pubDate, updatedDate, coverImage, coverImageAlt, category, tags, author, difficulty, estimatedTime, prerequisites, osCompatibility } = post.data;
+
+const categoryInfo = getCategoryBySlug(category);
+const breadcrumbItems = [
+  { label: 'Tutorials', href: '/posts' },
+  { label: categoryInfo?.name || category, href: `/category/${category}` },
+  { label: title, href: `/posts/${post.slug}` }
+];
+
+// 构建完整的图片 URL
+const fullImageUrl = coverImage?.src ? `${site.url}${coverImage.src}` : `${site.url}/images/site/og-image.jpg`;
+const articleUrl = `${site.url}/posts/${post.slug}`;
 ---
 
 <BaseLayout
@@ -29,8 +43,24 @@ const { title, description, pubDate, updatedDate, coverImage, coverImageAlt, cat
   publishedTime={pubDate.toISOString()}
   modifiedTime={updatedDate?.toISOString()}
 >
+  <ArticleSchema
+    title={title}
+    description={description}
+    publishedTime={pubDate.toISOString()}
+    modifiedTime={updatedDate?.toISOString()}
+    author={author}
+    image={fullImageUrl}
+    category={categoryInfo?.name || category}
+    tags={tags}
+    url={articleUrl}
+  />
+  <BreadcrumbSchema items={breadcrumbItems} />
+
   <article class="article-page">
     <div class="container">
+      <!-- Breadcrumb -->
+      <Breadcrumb items={breadcrumbItems} />
+
       <!-- Article Header -->
       <header class="article-header fade-in-up">
         <div class="article-meta">
@@ -56,6 +86,12 @@ const { title, description, pubDate, updatedDate, coverImage, coverImageAlt, cat
             <span class="info-label">Published:</span>
             <time datetime={pubDate.toISOString()}>{formatDate(pubDate)}</time>
           </div>
+          {updatedDate && (
+            <div class="info-item">
+              <span class="info-label">Updated:</span>
+              <time datetime={updatedDate.toISOString()}>{formatDate(updatedDate)}</time>
+            </div>
+          )}
           {estimatedTime && (
             <div class="info-item">
               <span class="info-label">Duration:</span>

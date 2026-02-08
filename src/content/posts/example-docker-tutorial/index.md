@@ -1,6 +1,6 @@
 ---
 title: "Docker Compose Tutorial: Deploy Multi-Container Applications"
-description: "Learn how to use Docker Compose to define and run multi-container Docker applications with practical examples and best practices."
+description: "Learn Docker Compose with practical examples. Deploy multi-container apps, manage services & networks. Includes troubleshooting tips. For intermediate users."
 pubDate: 2026-02-07
 coverImage: "./cover.jpg"
 coverImageAlt: "Docker containers connected together representing multi-container architecture"
@@ -35,7 +35,7 @@ Managing multiple containers manually becomes complex quickly. Docker Compose so
 
 ## Installing Docker Compose
 
-First, verify Docker is installed:
+First, verify Docker is installed. If you haven't installed Docker yet, check our [Docker Installation Guide for Ubuntu 22.04](/posts/docker-installation-ubuntu).
 
 ```bash
 docker --version
@@ -236,6 +236,8 @@ services:
 
 ## Best Practices
 
+For production deployments, also review our guide on [Docker Security Best Practices](/posts/docker-security) and [Nginx with Docker Compose](/posts/nginx-docker-compose).
+
 ### Use Specific Image Tags
 
 Avoid using `latest` tags in production:
@@ -397,9 +399,32 @@ Docker Compose simplifies multi-container application management. You've learned
 
 Start small, experiment with different configurations, and gradually build more complex applications.
 
+## 常见问题 (FAQ)
+
+### Docker Compose 和 Docker 有什么区别？
+
+Docker 是容器运行时，用于运行单个容器。Docker Compose 是编排工具，用于定义和运行多容器应用。Compose 使用 YAML 文件配置所有服务，可以一次性启动整个应用栈，非常适合开发环境和小型生产部署。
+
+### Docker Compose 适合生产环境吗？
+
+Docker Compose 适合小型生产环境和开发环境。对于大规模生产部署，建议使用 Kubernetes 或 Docker Swarm。Compose 的优势是简单易用，适合单服务器或小集群部署。如果你的应用需要跨多个服务器扩展，考虑使用容器编排平台。
+
+### 如何在 Docker Compose 中管理环境变量？
+
+使用 `.env` 文件存储环境变量，在 `docker-compose.yml` 中通过 `${VARIABLE_NAME}` 引用。避免在配置文件中硬编码敏感信息。也可以使用 `environment` 或 `env_file` 指令。确保将 `.env` 文件添加到 `.gitignore` 以保护敏感数据。
+
+### Docker Compose 文件的版本有什么区别？
+
+版本 3.x 是当前推荐版本，支持 Docker Swarm 部署。版本 2.x 仅支持单机部署。版本 3.8 是最新稳定版，包含所有现代功能。选择版本时考虑 Docker Engine 兼容性。大多数新项目应该使用版本 3.8。
+
+### 如何调试 Docker Compose 启动失败？
+
+使用 `docker-compose logs` 查看日志，`docker-compose ps` 检查容器状态。添加 `--verbose` 标志获取详细输出。检查端口冲突、卷权限和网络配置。使用 `docker-compose config` 验证配置文件语法。常见问题包括端口已被占用、镜像拉取失败和环境变量未设置。
+
 ---
 
-**Related Tutorials:**
-- [Docker Networking Deep Dive](/posts/docker-networking)
-- [Docker Volumes and Data Persistence](/posts/docker-volumes)
-- [Production Docker Deployment Guide](/posts/docker-production)
+**相关教程：**
+- [Docker 网络深度解析](/posts/docker-networking) - 了解容器网络配置
+- [Docker 卷与数据持久化](/posts/docker-volumes) - 管理容器数据
+- [生产环境 Docker 部署指南](/posts/docker-production) - 生产级配置
+- [Nginx 反向代理配置](/posts/example-nginx-setup) - 与 Docker 集成

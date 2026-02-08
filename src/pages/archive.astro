@@ -1,0 +1,251 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getAllPosts } from '../lib/posts';
+
+const allPosts = await getAllPosts();
+
+// Group posts by year and month
+const postsByDate = allPosts.reduce((acc, post) => {
+  const year = post.data.pubDate.getFullYear();
+  const month = post.data.pubDate.toLocaleString('en-US', { month: 'long' });
+
+  if (!acc[year]) {
+    acc[year] = {};
+  }
+  if (!acc[year][month]) {
+    acc[year][month] = [];
+  }
+
+  acc[year][month].push(post);
+  return acc;
+}, {} as Record<number, Record<string, typeof allPosts>>);
+
+// Sort years in descending order
+const sortedYears = Object.keys(postsByDate)
+  .map(Number)
+  .sort((a, b) => b - a);
+
+// Month order for sorting
+const monthOrder = [
+  'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December'
+];
+---
+
+<BaseLayout title="Archive - ServerHi">
+  <div class="container">
+    <div class="archive-page">
+      <header class="page-header fade-in-up">
+        <h1 class="page-title">
+          <span class="terminal-prompt"></span>
+          Tutorial Archive
+        </h1>
+        <p class="page-description">
+          Browse all {allPosts.length} tutorials organized by date
+        </p>
+      </header>
+
+      <div class="archive-content">
+        {sortedYears.map((year, yearIndex) => {
+          const months = Object.keys(postsByDate[year]).sort(
+            (a, b) => monthOrder.indexOf(b) - monthOrder.indexOf(a)
+          );
+
+          return (
+            <section class="year-section fade-in-up" style={`animation-delay: ${yearIndex * 0.1}s`}>
+              <h2 class="year-title">
+                <span class="year-number glow-primary">{year}</span>
+                <span class="year-count">
+                  {Object.values(postsByDate[year]).flat().length} tutorials
+                </span>
+              </h2>
+
+              <div class="months-container">
+                {months.map((month) => {
+                  const posts = postsByDate[year][month];
+
+                  return (
+                    <div class="month-section">
+                      <h3 class="month-title">
+                        <span class="terminal-prompt"></span>
+                        {month}
+                      </h3>
+
+                      <ul class="posts-list">
+                        {posts.map((post) => (
+                          <li class="post-item">
+                            <a href={`/posts/${post.slug}`} class="post-link terminal-hover">
+                              <span class="post-date">
+                                {post.data.pubDate.toLocaleDateString('en-US', {
+                                  month: 'short',
+                                  day: 'numeric'
+                                })}
+                              </span>
+                              <span class="post-title">{post.data.title}</span>
+                              <span class="post-category">{post.data.category}</span>
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
+          );
+        })}
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .archive-page {
+    padding: 2rem 0;
+  }
+
+  .page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .page-title {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .page-description {
+    color: var(--text-secondary);
+    font-size: 1.125rem;
+    font-family: var(--font-code);
+  }
+
+  .archive-content {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .year-section {
+    margin-bottom: 4rem;
+  }
+
+  .year-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--primary);
+    margin-bottom: 2rem;
+  }
+
+  .year-number {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    font-weight: 700;
+  }
+
+  .year-count {
+    font-family: var(--font-code);
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+  }
+
+  .months-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .month-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+  }
+
+  .month-title {
+    font-family: var(--font-code);
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    color: var(--primary);
+  }
+
+  .posts-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .post-item {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .post-item:last-child {
+    border-bottom: none;
+  }
+
+  .post-link {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1rem;
+    align-items: center;
+    padding: 0.75rem 0;
+    text-decoration: none;
+    color: var(--text);
+    transition: all 0.2s ease;
+  }
+
+  .post-link:hover {
+    color: var(--primary);
+    padding-left: 0.5rem;
+  }
+
+  .post-date {
+    font-family: var(--font-code);
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    min-width: 60px;
+  }
+
+  .post-title {
+    font-size: 1rem;
+    line-height: 1.4;
+  }
+
+  .post-category {
+    font-family: var(--font-code);
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    background: var(--code-bg);
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm);
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 768px) {
+    .page-title {
+      font-size: 2rem;
+    }
+
+    .year-number {
+      font-size: 2rem;
+    }
+
+    .post-link {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+    }
+
+    .post-date {
+      min-width: auto;
+    }
+
+    .post-category {
+      justify-self: start;
+    }
+  }
+</style>

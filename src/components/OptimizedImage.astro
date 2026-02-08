@@ -1,0 +1,51 @@
+---
+/**
+ * 优化的图片组件
+ * 自动转换为 WebP 格式，添加响应式支持，防止 CLS
+ */
+import { Image } from 'astro:assets';
+
+interface Props {
+  src: ImageMetadata | string;
+  alt: string;
+  width?: number;
+  height?: number;
+  class?: string;
+  loading?: 'lazy' | 'eager';
+  quality?: number;
+  format?: 'webp' | 'avif' | 'png' | 'jpg';
+}
+
+const {
+  src,
+  alt,
+  width = 1200,
+  height = 630,
+  class: className,
+  loading = 'lazy',
+  quality = 80,
+  format = 'webp',
+} = Astro.props;
+---
+
+{typeof src === 'string' ? (
+  <img
+    src={src}
+    alt={alt}
+    width={width}
+    height={height}
+    loading={loading}
+    class={className}
+  />
+) : (
+  <Image
+    src={src}
+    alt={alt}
+    width={width}
+    height={height}
+    format={format}
+    quality={quality}
+    loading={loading}
+    class={className}
+  />
+)}

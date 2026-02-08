@@ -1,0 +1,37 @@
+---
+/**
+ * BreadcrumbList Schema 组件
+ * 为面包屑导航添加结构化数据
+ */
+import { site } from '../../lib/config';
+
+interface BreadcrumbItem {
+  label: string;
+  href: string;
+}
+
+interface Props {
+  items: BreadcrumbItem[];
+}
+
+const { items } = Astro.props;
+
+// 添加首页作为第一项
+const breadcrumbItems = [
+  { label: 'Home', href: '/' },
+  ...items,
+];
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: breadcrumbItems.map((item, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    name: item.label,
+    item: `${site.url}${item.href}`,
+  })),
+};
+---
+
+<script type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />

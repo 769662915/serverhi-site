@@ -1,0 +1,182 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="404 - Page Not Found - ServerHi">
+  <div class="container">
+    <div class="error-page">
+      <div class="error-content terminal-window fade-in-up">
+        <div class="terminal-header">
+          <span class="terminal-dot red"></span>
+          <span class="terminal-dot yellow"></span>
+          <span class="terminal-dot green"></span>
+        </div>
+        <div class="error-body">
+          <div class="error-code glow-primary">404</div>
+          <h1 class="error-title">
+            <span class="terminal-prompt"></span>
+            Page Not Found
+          </h1>
+          <p class="error-message">
+            The page you're looking for doesn't exist or has been moved.
+          </p>
+
+          <div class="error-suggestions">
+            <h2>Try these instead:</h2>
+            <ul class="suggestions-list">
+              <li>
+                <a href="/" class="suggestion-link terminal-hover">
+                  <span class="link-icon">🏠</span>
+                  <span>Go to Homepage</span>
+                </a>
+              </li>
+              <li>
+                <a href="/posts" class="suggestion-link terminal-hover">
+                  <span class="link-icon">📚</span>
+                  <span>Browse All Tutorials</span>
+                </a>
+              </li>
+              <li>
+                <a href="/search" class="suggestion-link terminal-hover">
+                  <span class="link-icon">🔍</span>
+                  <span>Search Tutorials</span>
+                </a>
+              </li>
+              <li>
+                <a href="/category/docker" class="suggestion-link terminal-hover">
+                  <span class="link-icon">🐳</span>
+                  <span>Docker Tutorials</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="error-footer">
+            <p class="terminal-prompt">
+              If you believe this is an error, please <a href="/contact">contact us</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .error-page {
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 0;
+  }
+
+  .error-content {
+    max-width: 700px;
+    width: 100%;
+  }
+
+  .error-body {
+    padding: 3rem 2rem;
+    text-align: center;
+  }
+
+  .error-code {
+    font-family: var(--font-heading);
+    font-size: clamp(4rem, 15vw, 8rem);
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 1rem;
+  }
+
+  .error-title {
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    margin-bottom: 1rem;
+  }
+
+  .error-message {
+    color: var(--text-secondary);
+    font-size: 1.125rem;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+
+  .error-suggestions {
+    margin: 2rem 0;
+    text-align: left;
+  }
+
+  .error-suggestions h2 {
+    font-family: var(--font-code);
+    font-size: 1rem;
+    color: var(--primary);
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .suggestions-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .suggestion-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    color: var(--text);
+    transition: all 0.2s ease;
+  }
+
+  .suggestion-link:hover {
+    border-color: var(--primary);
+    background: var(--surface);
+    transform: translateX(4px);
+  }
+
+  .link-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  .error-footer {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .error-footer p {
+    font-family: var(--font-code);
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin: 0;
+  }
+
+  .error-footer a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .error-footer a:hover {
+    color: var(--primary);
+    text-decoration: underline;
+  }
+
+  @media (max-width: 768px) {
+    .error-body {
+      padding: 2rem 1.5rem;
+    }
+
+    .suggestion-link {
+      padding: 0.875rem 1rem;
+    }
+  }
+</style>

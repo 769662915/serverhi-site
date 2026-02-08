@@ -1,6 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ArticleCard from '../components/ArticleCard.astro';
+import OrganizationSchema from '../components/schema/OrganizationSchema.astro';
+import WebSiteSchema from '../components/schema/WebSiteSchema.astro';
 import { getAllPosts, getFeaturedPosts } from '../lib/posts';
 import { site } from '../lib/config';
 
@@ -9,6 +11,8 @@ const recentPosts = (await getAllPosts()).slice(0, 6);
 ---
 
 <BaseLayout>
+  <OrganizationSchema />
+  <WebSiteSchema />
   <!-- Hero Section -->
   <section class="hero">
     <div class="container">
@@ -22,7 +26,7 @@ const recentPosts = (await getAllPosts()).slice(0, 6);
           <div class="terminal-body">
             <h1 class="hero-title">
               <span class="terminal-prompt"></span>
-              <span class="glow-primary">{site.name}</span>
+              <span class="glow-primary">Linux Server Tutorials & Docker Guides</span>
               <span class="terminal-cursor"></span>
             </h1>
             <p class="hero-description">
