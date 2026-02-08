@@ -2,7 +2,7 @@
 title: "SSL/TLS Certificate Management: Let's Encrypt and Beyond"
 description: "Master SSL/TLS certificate management for web servers. Learn Let's Encrypt automation, certificate renewal, multiple domain certificates, and certificate chain configuration for Nginx and Apache."
 pubDate: 2026-02-08
-coverImage: "./cover.jpg"
+coverImage: "./cover.webp"
 coverImageAlt: "SSL certificate management terminal showing certificate issuance and renewal status"
 category: "server-config"
 tags: ["SSL", "TLS", "HTTPS", "certificates", "Let's Encrypt"]

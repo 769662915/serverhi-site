@@ -2,7 +2,7 @@
 title: "Docker Compose: Deploy Multi-Container Applications"
 description: "Learn how to use Docker Compose to define and run multi-container Docker applications with practical examples, production-ready configurations, and best practices for modern deployment."
 pubDate: 2026-02-08
-coverImage: "./cover.jpg"
+coverImage: "./cover.webp"
 coverImageAlt: "Docker Compose multi-container deployment illustration showing containers, networking, and volumes"
 category: "docker"
 tags: ["Docker", "Docker Compose", "Containers", "DevOps", "Tutorial"]

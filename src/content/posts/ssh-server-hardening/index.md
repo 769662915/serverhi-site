@@ -2,7 +2,7 @@
 title: "SSH Server Hardening: Securing Remote Server Access"
 description: "Protect your Linux servers from unauthorized access with comprehensive SSH hardening techniques. Learn about key-based authentication, fail2ban configuration, and advanced security measures for production environments."
 pubDate: 2026-02-08
-coverImage: "./cover.jpg"
+coverImage: "./cover.webp"
 coverImageAlt: "SSH server security terminal showing encrypted connections and key authentication"
 category: "security"
 tags: ["SSH", "security", "Linux", "server hardening", "authentication"]

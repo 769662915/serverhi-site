@@ -2,7 +2,7 @@
 title: "Network Diagnostics Guide: Essential Tools and Techniques"
 description: "Master Linux network diagnostics with comprehensive coverage of ping, traceroute, netstat, ss, tcpdump, and Wireshark. Learn troubleshooting methodologies that quickly identify connectivity issues."
 pubDate: 2026-02-08
-coverImage: "./cover.jpg"
+coverImage: "./cover.webp"
 coverImageAlt: "Network diagnostics terminal showing packet analysis and connectivity testing"
 category: "troubleshooting"
 tags: ["network", "troubleshooting", "Linux", "diagnostics", "tcpdump"]

@@ -2,7 +2,7 @@
 title: "CI/CD Pipeline Setup: Complete Guide to Automated Deployment"
 description: "Build a robust CI/CD pipeline for automated testing and deployment. This guide covers GitHub Actions, Docker integration, and deployment strategies."
 pubDate: 2026-02-08
-coverImage: "./cover.jpg"
+coverImage: "./cover.webp"
 coverImageAlt: "CI/CD pipeline visualization with build, test, and deploy stages"
 category: "devops"
 tags: ["CI/CD", "GitHub Actions", "DevOps", "automation", "deployment"]

@@ -2,7 +2,7 @@
 title: "Docker Container Health Checks: Best Practices"
 description: "Implement effective container health checks in Docker. This guide covers HEALTHCHECK instructions, monitoring strategies, and integration with orchestrators."
 pubDate: 2026-02-08
-coverImage: "./cover.jpg"
+coverImage: "./cover.webp"
 coverImageAlt: "Docker container health status visualization with check marks"
 category: "docker"
 tags: ["Docker", "containers", "health check", "monitoring", "orchestration", "DevOps"]

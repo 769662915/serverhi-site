@@ -2,7 +2,7 @@
 title: "Linux Security Hardening: Essential Practices for Production Servers"
 description: "Protect your Linux servers from common threats with this comprehensive security hardening guide. Covers firewall configuration, SSH hardening, intrusion detection, and proactive security measures."
 pubDate: 2026-02-08
-coverImage: "./cover.jpg"
+coverImage: "./cover.webp"
 coverImageAlt: "Linux security shield with lock icon representing server protection"
 category: "security"
 tags: ["Linux security", "server hardening", "SSH", "firewall", "sysadmin"]

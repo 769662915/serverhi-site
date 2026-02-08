@@ -2,7 +2,7 @@
 title: "Linux Troubleshooting: Essential Commands and Techniques"
 description: "Master Linux system troubleshooting with this comprehensive guide. Covers process monitoring, network diagnostics, disk analysis, and memory troubleshooting."
 pubDate: 2026-02-08
-coverImage: "./cover.jpg"
+coverImage: "./cover.webp"
 coverImageAlt: "Linux terminal troubleshooting command interface"
 category: "troubleshooting"
 tags: ["Linux", "troubleshooting", "system administration", "diagnostics", "monitoring"]

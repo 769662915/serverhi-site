@@ -2,7 +2,7 @@
 title: "Log Rotation with logrotate: Linux System Management"
 description: "Configure log rotation to manage disk space and maintain log files. This guide covers logrotate configuration, compression, retention policies, and automation."
 pubDate: 2026-02-08
-coverImage: "./cover.jpg"
+coverImage: "./cover.webp"
 coverImageAlt: "Linux log files with rotation cycle visualization"
 category: "linux"
 tags: ["logrotate", "logs", "Linux", "disk management", "automation", "system administration"]

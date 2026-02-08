@@ -2,7 +2,7 @@
 title: "Docker Swarm vs Kubernetes: Choosing Container Orchestration"
 description: "Compare Docker Swarm and Kubernetes for container orchestration. This guide analyzes deployment complexity, scalability, features, and use cases to help you choose the right platform."
 pubDate: 2026-02-08
-coverImage: "./cover.jpg"
+coverImage: "./cover.webp"
 coverImageAlt: "Docker Swarm and Kubernetes logos with container orchestration visualization"
 category: "devops"
 tags: ["Docker Swarm", "Kubernetes", "containers", "orchestration", "DevOps", "deployment"]

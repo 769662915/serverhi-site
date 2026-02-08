@@ -2,7 +2,7 @@
 title: "Nginx Reverse Proxy: Complete Setup and Configuration Guide"
 description: "Learn how to configure Nginx as a reverse proxy server with practical examples, security best practices, and performance optimization techniques for production environments."
 pubDate: 2026-02-07
-coverImage: "./cover.jpg"
+coverImage: "./cover.webp"
 coverImageAlt: "Nginx reverse proxy architecture with terminal aesthetics showing server connections"
 category: "server-config"
 tags: ["Nginx", "Reverse Proxy", "Server Configuration", "Load Balancing", "DevOps"]

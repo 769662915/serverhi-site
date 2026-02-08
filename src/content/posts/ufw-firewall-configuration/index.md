@@ -2,7 +2,7 @@
 title: "UFW Firewall Configuration: Securing Linux Servers"
 description: "Master UFW (Uncomplicated Firewall) for Linux server security. Learn rules configuration, rate limiting, application profiles, and integration with Docker networks for production environments."
 pubDate: 2026-02-08
-coverImage: "./cover.jpg"
+coverImage: "./cover.webp"
 coverImageAlt: "UFW firewall configuration terminal showing rules management and status"
 category: "security"
 tags: ["firewall", "UFW", "Linux", "security", "server hardening"]

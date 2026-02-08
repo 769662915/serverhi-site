@@ -2,7 +2,7 @@
 title: "Container Deployment Strategies: Production Patterns and Best Practices"
 description: "Master production container deployment with blue-green, canary, and rolling strategies. Learn how to release updates with zero downtime and minimal risk."
 pubDate: 2026-02-08
-coverImage: "./cover.jpg"
+coverImage: "./cover.webp"
 coverImageAlt: "Container deployment strategies visualization showing traffic routing"
 category: "docker"
 tags: ["Docker", "containers", "deployment", "DevOps", "release management"]

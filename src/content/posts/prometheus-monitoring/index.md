@@ -2,7 +2,7 @@
 title: "System Monitoring with Prometheus: Complete Setup Guide"
 description: "Deploy Prometheus for comprehensive system and application monitoring. Learn metric collection, alerting configuration, and integration with Grafana for visualization. Build observable infrastructure."
 pubDate: 2026-02-08
-coverImage: "./cover.jpg"
+coverImage: "./cover.webp"
 coverImageAlt: "Prometheus monitoring dashboard showing metrics visualization and alerting rules"
 category: "devops"
 tags: ["Prometheus", "monitoring", "DevOps", "metrics", "alerting"]

@@ -2,7 +2,7 @@
 title: "SSH Key-Based Authentication for Secure Server Access"
 description: "Implement passwordless SSH authentication using key pairs. This guide covers key generation, server configuration, and security best practices for production environments."
 pubDate: 2026-02-08
-coverImage: "./cover.jpg"
+coverImage: "./cover.webp"
 coverImageAlt: "SSH keys and terminal showing secure authentication process"
 category: "security"
 tags: ["SSH", "authentication", "keys", "Linux", "security", "server"]

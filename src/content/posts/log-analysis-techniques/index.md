@@ -2,7 +2,7 @@
 title: "Log Analysis Techniques: Parsing and Monitoring Server Logs"
 description: "Master Linux log analysis with grep, awk, journalctl, and specialized tools. Learn log parsing techniques, pattern recognition, and automated alerting for production server monitoring."
 pubDate: 2026-02-08
-coverImage: "./cover.jpg"
+coverImage: "./cover.webp"
 coverImageAlt: "Linux terminal showing log analysis with grep, awk, and visualization"
 category: "troubleshooting"
 tags: ["logs", "analysis", "Linux", "monitoring", "troubleshooting"]

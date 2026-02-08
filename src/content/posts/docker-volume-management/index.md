@@ -2,7 +2,7 @@
 title: "Docker Volume Management: Persistent Storage Guide"
 description: "Master Docker volume management for persistent data. This guide covers volume creation, backup, migration, and advanced storage configurations for production databases and applications."
 pubDate: 2026-02-08
-coverImage: "./cover.jpg"
+coverImage: "./cover.webp"
 coverImageAlt: "Docker volumes and data storage visualization"
 category: "docker"
 tags: ["Docker", "volumes", "storage", "persistent data", "backup", "data management"]

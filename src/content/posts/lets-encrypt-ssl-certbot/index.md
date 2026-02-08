@@ -2,7 +2,7 @@
 title: "Securing Websites with Let's Encrypt SSL Certificates"
 description: "Learn how to obtain and renew free SSL/TLS certificates using Certbot. This comprehensive guide covers automatic renewal, multiple domains, and production-ready configurations."
 pubDate: 2026-02-08
-coverImage: "./cover.jpg"
+coverImage: "./cover.webp"
 coverImageAlt: "Let's Encrypt SSL certificates securing website connections with lock icons"
 category: "security"
 tags: ["SSL", "TLS", "Certbot", "HTTPS", "Let's Encrypt", "Nginx", "security"]

@@ -2,7 +2,7 @@
 title: "Redis in Docker: Complete Container Deployment Guide"
 description: "Deploy Redis containers with Docker for caching, session storage, and message queuing. Learn configuration management, data persistence, and high availability patterns for production Redis deployments."
 pubDate: 2026-02-08
-coverImage: "./cover.jpg"
+coverImage: "./cover.webp"
 coverImageAlt: "Redis container deployment architecture showing cache clusters and persistence"
 category: "docker"
 tags: ["Redis", "Docker", "caching", "containers", "deployment"]

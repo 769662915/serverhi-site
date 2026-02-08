@@ -2,7 +2,7 @@
 title: "Ubuntu 22.04 Server Setup: Complete Configuration Guide"
 description: "A comprehensive guide to configuring a production-ready Ubuntu 22.04 server. From initial installation to security hardening and service configuration."
 pubDate: 2026-02-08
-coverImage: "./cover.jpg"
+coverImage: "./cover.webp"
 coverImageAlt: "Ubuntu 22.04 LTS server terminal configuration screen"
 category: "linux"
 tags: ["Ubuntu 22.04", "server setup", "Linux", "system administration", "Ubuntu LTS"]

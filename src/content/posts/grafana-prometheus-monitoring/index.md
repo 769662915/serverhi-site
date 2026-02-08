@@ -2,7 +2,7 @@
 title: "Monitoring Linux Servers with Grafana and Prometheus"
 description: "Set up comprehensive server monitoring using Grafana and Prometheus. This guide covers metric collection, dashboard creation, alert configuration, and production best practices."
 pubDate: 2026-02-08
-coverImage: "./cover.jpg"
+coverImage: "./cover.webp"
 coverImageAlt: "Grafana dashboard showing server metrics with graphs and charts"
 category: "devops"
 tags: ["Grafana", "Prometheus", "monitoring", "Linux", "metrics", "visualization"]

@@ -2,7 +2,7 @@
 title: "Container Deployment: Complete Guide"
 description: "Complete guide to container deployment. Everything you need to know, from basics to advanced techniques."
 pubDate: 2026-02-08
-coverImage: "./cover.jpg"
+coverImage: "./cover.webp"
 coverImageAlt: "container deployment - technical illustration"
 category: "docker"
 tags: ["container deployment", "guide", "docker"]

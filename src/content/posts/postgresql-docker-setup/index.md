@@ -2,7 +2,7 @@
 title: "PostgreSQL in Docker: Production Deployment Guide"
 description: "Deploy PostgreSQL containers with Docker for persistent database storage. Learn configuration management, backup strategies, high availability, and security hardening for production PostgreSQL deployments."
 pubDate: 2026-02-08
-coverImage: "./cover.jpg"
+coverImage: "./cover.webp"
 coverImageAlt: "PostgreSQL Docker container architecture showing persistent storage and replication"
 category: "docker"
 tags: ["PostgreSQL", "Docker", "database", "containers", "deployment"]

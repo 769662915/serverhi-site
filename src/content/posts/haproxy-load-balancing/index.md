@@ -2,7 +2,7 @@
 title: "Load Balancing with HAProxy: Production Guide"
 description: "Configure HAProxy for high availability and load distribution. This guide covers configuration, health checks, SSL termination, and advanced deployment patterns."
 pubDate: 2026-02-08
-coverImage: "./cover.jpg"
+coverImage: "./cover.webp"
 coverImageAlt: "HAProxy load balancer distributing traffic to multiple servers"
 category: "server-config"
 tags: ["HAProxy", "load balancing", "high availability", "reverse proxy", "deployment"]

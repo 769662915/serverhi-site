@@ -2,7 +2,7 @@
 title: "Systemd Service Management: Complete Guide for Linux Administrators"
 description: "Master systemd for managing services, daemons, and system resources on Linux. Learn unit file creation, service lifecycle management, and troubleshooting techniques."
 pubDate: 2026-02-08
-coverImage: "./cover.jpg"
+coverImage: "./cover.webp"
 coverImageAlt: "Systemd service management terminal interface"
 category: "linux"
 tags: ["systemd", "Linux", "service management", "daemon", "system administration"]

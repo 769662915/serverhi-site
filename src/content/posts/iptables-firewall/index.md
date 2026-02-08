@@ -2,7 +2,7 @@
 title: "Mastering iptables: Linux Firewall Fundamentals"
 description: "Learn to configure iptables for Linux server security. This comprehensive guide covers chain management, rule configuration, logging, and production deployment best practices."
 pubDate: 2026-02-08
-coverImage: "./cover.jpg"
+coverImage: "./cover.webp"
 coverImageAlt: "Linux iptables firewall rules visualization with packets"
 category: "linux"
 tags: ["iptables", "firewall", "Linux", "security", "networking", "server"]

@@ -2,7 +2,7 @@
 title: "Docker Compose on Ubuntu 22.04: A Complete Setup Guide"
 description: "Learn how to install and configure Docker Compose on Ubuntu 22.04. This step-by-step tutorial covers everything from basic installation to multi-container application deployment."
 pubDate: 2026-02-08
-coverImage: "./cover.jpg"
+coverImage: "./cover.webp"
 coverImageAlt: "Docker Compose running on Ubuntu 22.04 terminal showing container status"
 category: "docker"
 tags: ["Docker Compose", "Ubuntu 22.04", "Containerization", "Docker Tutorial", "DevOps"]

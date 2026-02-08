@@ -2,7 +2,7 @@
 title: "Kubernetes Basics: A Beginner's Guide to Container Orchestration"
 description: "Master Kubernetes fundamentals including pods, services, deployments, and ingress controllers. This tutorial covers essential concepts and practical configurations for container orchestration."
 pubDate: 2026-02-08
-coverImage: "./cover.jpg"
+coverImage: "./cover.webp"
 coverImageAlt: "Kubernetes cluster architecture with pods and services"
 category: "devops"
 tags: ["Kubernetes", "K8s", "container orchestration", "Docker", "DevOps"]

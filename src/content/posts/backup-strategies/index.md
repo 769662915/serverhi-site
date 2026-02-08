@@ -2,7 +2,7 @@
 title: "Server Backup Strategies: Comprehensive Data Protection Guide"
 description: "Implement robust server backup strategies for Linux servers. Learn backup tools, retention policies, offsite storage, and disaster recovery procedures for production environments."
 pubDate: 2026-02-08
-coverImage: "./cover.jpg"
+coverImage: "./cover.webp"
 coverImageAlt: "Backup strategy visualization showing local, cloud, and hybrid storage approaches"
 category: "devops"
 tags: ["backup", "recovery", "Linux", "disaster recovery", "data protection"]

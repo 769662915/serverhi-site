@@ -2,7 +2,7 @@
 title: "Nginx Reverse Proxy Configuration: Complete Implementation Guide"
 description: "Learn how to configure Nginx as a reverse proxy for web applications, APIs, and microservices. This guide covers SSL termination, load balancing, and advanced routing."
 pubDate: 2026-02-08
-coverImage: "./cover.jpg"
+coverImage: "./cover.webp"
 coverImageAlt: "Nginx reverse proxy architecture diagram showing traffic flow"
 category: "server-config"
 tags: ["Nginx", "reverse proxy", "load balancing", "web server", "API gateway"]

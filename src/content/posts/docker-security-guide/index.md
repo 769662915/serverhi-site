@@ -2,7 +2,7 @@
 title: "Docker Security Best Practices: Protecting Containerized Applications"
 description: "Secure your Docker containers with essential security practices. Learn about image scanning, container isolation, secrets management, and runtime protection."
 pubDate: 2026-02-08
-coverImage: "./cover.jpg"
+coverImage: "./cover.webp"
 coverImageAlt: "Docker security shield with container protection icons"
 category: "security"
 tags: ["Docker", "container security", "security scanning", "DevOps", "containers"]
