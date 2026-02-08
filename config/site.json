@@ -4,7 +4,6 @@
   "title": "ServerHi - Linux Server Tutorials & DevOps Guides",
   "description": "Professional tutorials on Linux server management, Docker containerization, DevOps tools, and system administration. From basics to advanced configurations.",
   "url": "https://serverhi.com",
-
   "contentFocus": {
     "primary": "Linux server management and Docker containerization tutorials",
     "secondary": [
@@ -16,7 +15,6 @@
     "targetAudience": "Beginners to intermediate developers, system administrators, and DevOps engineers",
     "tone": "Clear, practical, and technically accurate with step-by-step guidance"
   },
-
   "keywords": {
     "primary": [
       "Linux tutorial",
@@ -44,17 +42,22 @@
       "systemd service management"
     ]
   },
-
   "author": {
     "name": "ServerHi Editorial Team"
   },
-
   "postsPerPage": 12,
   "relatedPostsCount": 3,
-
   "features": {
     "search": true,
     "darkMode": true,
     "newsletter": false
-  }
+  },
+  "categories": [
+    "docker",
+    "linux",
+    "server-config",
+    "devops",
+    "security",
+    "troubleshooting"
+  ]
 }
