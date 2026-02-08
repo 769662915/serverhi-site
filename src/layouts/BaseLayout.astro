@@ -40,8 +40,13 @@ const { title, description, image, article, publishedTime, modifiedTime } = Astr
     <Footer />
 
     <style is:global>
+      /* 确保 astro-island 不影响布局 */
+      astro-island {
+        display: contents;
+      }
+
       .theme-toggle {
-        display: flex;
+        display: flex !important;
         align-items: center;
         gap: 0.5rem;
         padding: 0.5rem 1rem;

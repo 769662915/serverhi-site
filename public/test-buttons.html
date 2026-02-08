@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>按钮测试页面</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #0d1117;
+            color: #e6edf3;
+        }
+
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 2px solid #00d97e;
+            border-radius: 8px;
+        }
+
+        h1, h2 {
+            color: #00d97e;
+            margin-bottom: 15px;
+        }
+
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 4px;
+            color: #e6edf3;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .theme-toggle:hover {
+            border-color: #00d97e;
+            box-shadow: 0 0 10px rgba(0, 217, 126, 0.2);
+        }
+
+        .mobile-menu-toggle {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            width: 2rem;
+            height: 2rem;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .hamburger-line {
+            width: 2rem;
+            height: 2px;
+            background: #00d97e;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .info {
+            margin-top: 10px;
+            padding: 10px;
+            background: #161b22;
+            border-left: 3px solid #00d97e;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-only {
+                display: block;
+            }
+            .desktop-only {
+                display: none;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .mobile-only {
+                display: none;
+            }
+            .desktop-only {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 按钮测试页面</h1>
+
+    <div class="test-section">
+        <h2>1. 主题切换按钮测试</h2>
+        <button class="theme-toggle">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-label">Light</span>
+        </button>
+        <div class="info">
+            ✅ 如果你能看到这个按钮，说明 theme-toggle 样式正常工作
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>2. 汉堡菜单按钮测试</h2>
+        <button class="mobile-menu-toggle">
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+        </button>
+        <div class="info">
+            ✅ 如果你能看到三条绿色横线，说明 mobile-menu-toggle 样式正常工作
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>3. 响应式测试</h2>
+        <div class="desktop-only">
+            <p>🖥️ 当前是桌面端视图（宽度 > 768px）</p>
+        </div>
+        <div class="mobile-only">
+            <p>📱 当前是移动端视图（宽度 ≤ 768px）</p>
+        </div>
+        <div class="info">
+            当前窗口宽度: <span id="width"></span>px
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>4. 返回主站</h2>
+        <p><a href="/" style="color: #00d97e;">← 返回首页</a></p>
+    </div>
+
+    <script>
+        // 显示窗口宽度
+        function updateWidth() {
+            document.getElementById('width').textContent = window.innerWidth;
+        }
+        updateWidth();
+        window.addEventListener('resize', updateWidth);
+
+        // 测试按钮点击
+        document.querySelector('.theme-toggle').addEventListener('click', function() {
+            alert('主题切换按钮被点击了！');
+        });
+
+        document.querySelector('.mobile-menu-toggle').addEventListener('click', function() {
+            alert('汉堡菜单按钮被点击了！');
+        });
+    </script>
+</body>
+</html>
