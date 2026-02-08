@@ -4,7 +4,7 @@ description: "Learn how to install and configure Docker Compose on Ubuntu 22.04.
 pubDate: 2026-02-08
 coverImage: "./cover.jpg"
 coverImageAlt: "Docker Compose running on Ubuntu 22.04 terminal showing container status"
-category: "tutorial"
+category: "docker"
 tags: ["Docker Compose", "Ubuntu 22.04", "Containerization", "Docker Tutorial", "DevOps"]
 ---
 
