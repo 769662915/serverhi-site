@@ -5,7 +5,7 @@ pubDate: 2026-02-07
 coverImage: "./cover.webp"
 coverImageAlt: "Nginx reverse proxy architecture with terminal aesthetics showing server connections"
 category: "server-config"
-tags: ["Nginx", "Reverse Proxy", "Server Configuration", "Load Balancing", "DevOps"]
+tags: ["Nginx", "reverse proxy", "server configuration", "load balancing", "DevOps"]
 author: "ServerHi Editorial Team"
 featured: false
 draft: false

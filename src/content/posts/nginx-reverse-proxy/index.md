@@ -321,6 +321,5 @@ Continue exploring Nginx capabilities as your infrastructure grows. Consider imp
 ---
 
 **Related Posts:**
-- [Docker Compose Tutorial](/posts/docker-compose-tutorial)
 - [Ubuntu 22.04 Server Setup](/posts/ubuntu-22-04-server-setup)
 - [CI/CD Pipeline Setup](/posts/cicd-pipeline-setup)

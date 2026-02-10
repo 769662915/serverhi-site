@@ -477,6 +477,5 @@ Some organizations use both platforms for different workloads. Development envir
 ---
 
 **Related Guides:**
-- [Docker Compose Tutorial](/posts/docker-compose-tutorial)
 - [Kubernetes Basics](/posts/kubernetes-basics)
 - [Container Deployment Strategies](/posts/container-deployment-strategies)

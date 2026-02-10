@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
 import { formatDate } from '../lib/posts';
 import { getCategoryColor, getCategoryIcon } from '../lib/config';
 import { getDifficultyColor, getDifficultyLabel } from '../lib/utils';
@@ -16,7 +17,15 @@ const { title, description, pubDate, coverImage, coverImageAlt, category, tags, 
   <a href={`/posts/${post.slug}`} class="card-link">
     {coverImage && (
       <div class="card-image">
-        <img src={coverImage.src} alt={coverImageAlt} loading="lazy" />
+        <Image
+          src={coverImage}
+          alt={coverImageAlt}
+          width={640}
+          height={360}
+          format="webp"
+          quality={80}
+          loading="lazy"
+        />
         <div class="image-overlay"></div>
       </div>
     )}

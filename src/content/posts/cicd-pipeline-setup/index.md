@@ -367,6 +367,5 @@ Continue exploring pipeline capabilities as your requirements grow. Advanced fea
 ---
 
 **Related Posts:**
-- [Docker Compose Tutorial](/posts/docker-compose-tutorial)
 - [Kubernetes Basics](/posts/kubernetes-basics)
 - [Docker Security Best Practices](/posts/docker-security-guide)

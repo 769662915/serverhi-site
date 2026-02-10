@@ -320,6 +320,5 @@ Effective monitoring combines appropriate alert thresholds, thoughtful dashboard
 ---
 
 **Related Posts:**
-- [Docker Compose Tutorial](/posts/docker-compose-tutorial)
 - [Linux Troubleshooting](/posts/linux-troubleshooting)
 - [CI/CD Pipeline Setup](/posts/cicd-pipeline-setup)

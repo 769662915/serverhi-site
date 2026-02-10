@@ -667,6 +667,5 @@ Consider managed Redis services like AWS ElastiCache or Redis Cloud when operati
 ---
 
 **Related Posts:**
-- [Docker Compose Tutorial](/posts/docker-compose-tutorial)
 - [Container Deployment Strategies](/posts/container-deployment-strategies)
 - [Docker Security Best Practices](/posts/docker-security-guide)

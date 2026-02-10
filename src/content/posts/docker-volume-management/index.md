@@ -234,7 +234,7 @@ services:
       - app_data:/var/log/myapp
       - ./config:/etc/myapp:ro
     environment:
-      - DATABASE_URL=postgres://appuser:password@postgres:5432/myapp
+      - DATABASE_URL=postgres://appuser:${POSTGRES_PASSWORD}@postgres:5432/myapp
       - REDIS_URL=redis://redis:6379
 
 volumes:
@@ -615,6 +615,5 @@ For production databases and critical services, consider enterprise storage solu
 ---
 
 **Related Guides:**
-- [Docker Compose Tutorial](/posts/docker-compose-tutorial)
 - [PostgreSQL Docker Setup](/posts/postgresql-docker-setup)
 - [Docker Security Best Practices](/posts/docker-security-guide)

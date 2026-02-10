@@ -486,6 +486,5 @@ Update health checks as applications evolve. New features may require new checks
 ---
 
 **Related Guides:**
-- [Docker Compose Tutorial](/posts/docker-compose-tutorial)
 - [Docker Security Guide](/posts/docker-security-guide)
 - [Container Deployment Strategies](/posts/container-deployment-strategies)

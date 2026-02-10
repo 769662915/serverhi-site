@@ -5,7 +5,7 @@ pubDate: 2026-02-08
 coverImage: "./cover.webp"
 coverImageAlt: "Docker Compose multi-container deployment illustration showing containers, networking, and volumes"
 category: "docker"
-tags: ["Docker", "Docker Compose", "Containers", "DevOps", "Tutorial"]
+tags: ["Docker", "Docker Compose", "containers", "DevOps", "tutorial"]
 author: "ServerHi Editorial Team"
 featured: false
 draft: false
@@ -358,7 +358,7 @@ services:
     build: ./backend
     container_name: backend_api
     environment:
-      DATABASE_URL: postgresql://appuser:securepassword@postgres:5432/myapp
+      DATABASE_URL: postgresql://appuser:${POSTGRES_PASSWORD}@postgres:5432/myapp
       NODE_ENV: development
       PORT: 3000
     depends_on:
@@ -682,7 +682,7 @@ docker-compose exec backend ping postgres
 
 # 确保使用正确的连接字符串
 # 使用服务名而非 localhost
-DATABASE_URL=postgresql://user:pass@postgres:5432/db
+DATABASE_URL=postgresql://<db_user>:<db_password>@postgres:5432/db
 ```
 
 ### Issue 4: Volume Permission Denied

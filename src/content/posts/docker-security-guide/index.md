@@ -403,6 +403,5 @@ Effective container security balances protection with operational requirements. 
 ---
 
 **Related Posts:**
-- [Docker Compose Tutorial](/posts/docker-compose-tutorial)
 - [Kubernetes Basics](/posts/kubernetes-basics)
 - [Linux Security Hardening](/posts/linux-security-hardening)

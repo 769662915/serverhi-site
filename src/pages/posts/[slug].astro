@@ -5,7 +5,8 @@ import ArticleCard from '../../components/ArticleCard.astro';
 import Breadcrumb from '../../components/Breadcrumb.astro';
 import ArticleSchema from '../../components/schema/ArticleSchema.astro';
 import BreadcrumbSchema from '../../components/schema/BreadcrumbSchema.astro';
-import { formatDate, getRelatedPosts } from '../../lib/posts';
+import ArticleCoverImage from '../../components/ArticleCoverImage.astro';
+import { formatDate, getRelatedPosts, tagToSlug } from '../../lib/posts';
 import { getCategoryColor, getCategoryIcon, getCategoryBySlug, site } from '../../lib/config';
 import { getDifficultyColor, getDifficultyLabel } from '../../lib/utils';
 
@@ -135,7 +136,7 @@ const articleUrl = `${site.url}/posts/${post.slug}`;
       <!-- Cover Image -->
       {coverImage && (
         <div class="article-cover fade-in-up">
-          <img src={coverImage.src} alt={coverImageAlt} />
+          <ArticleCoverImage src={coverImage} alt={coverImageAlt} />
         </div>
       )}
 
@@ -150,7 +151,7 @@ const articleUrl = `${site.url}/posts/${post.slug}`;
           <h3 class="tags-title">Tags</h3>
           <div class="tags-list">
             {tags.map(tag => (
-              <a href={`/tag/${encodeURIComponent(tag)}`} class="tag terminal-hover">
+              <a href={`/tag/${tagToSlug(tag)}`} class="tag terminal-hover">
                 #{tag}
               </a>
             ))}

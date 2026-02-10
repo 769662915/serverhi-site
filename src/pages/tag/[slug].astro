@@ -1,20 +1,25 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumb from '../../components/Breadcrumb.astro';
-import { getAllPosts, getPostsByTag } from '../../lib/posts';
+import { getAllPosts, getPostsByTag, tagToSlug } from '../../lib/posts';
 import type { CollectionEntry } from 'astro:content';
 
 export async function getStaticPaths() {
   const allPosts = await getAllPosts();
-  const tags = new Set<string>();
+  const tagMap = new Map<string, string>();
 
   allPosts.forEach((post: CollectionEntry<'posts'>) => {
-    post.data.tags.forEach((tag: string) => tags.add(tag));
+    post.data.tags.forEach((tag: string) => {
+      const slug = tagToSlug(tag);
+      if (!tagMap.has(slug)) {
+        tagMap.set(slug, tag);
+      }
+    });
   });
 
-  return Array.from(tags).map(tag => ({
-    params: { slug: encodeURIComponent(tag) },
-    props: { originalTag: tag }
+  return Array.from(tagMap.entries()).map(([slug, displayTag]) => ({
+    params: { slug },
+    props: { originalTag: displayTag }
   }));
 }
 

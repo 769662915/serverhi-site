@@ -138,8 +138,8 @@ Create an environment file for sensitive configuration:
 
 ```bash
 # /etc/myapp/environment.conf
-DATABASE_URL=postgresql://user:password@localhost:5432/myapp
-SECRET_KEY=your-secret-key-here
+DATABASE_URL=postgresql://<db_user>:<db_password>@localhost:5432/myapp
+SECRET_KEY=<your-secret-key>
 LOG_LEVEL=info
 ```
 
