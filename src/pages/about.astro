@@ -11,9 +11,32 @@ import { site } from '../lib/config';
           <span class="terminal-prompt"></span>
           About ServerHi
         </h1>
+        <p class="page-subtitle">Your trusted resource for Linux, DevOps, and server management tutorials</p>
       </header>
 
       <div class="content-wrapper">
+        <!-- Stats Section -->
+        <section class="stats-section fade-in-up">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <span class="stat-number glow-primary">50+</span>
+              <span class="stat-label">Tutorials</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-number glow-primary">6</span>
+              <span class="stat-label">Categories</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-number glow-primary">2024</span>
+              <span class="stat-label">Founded</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-number glow-primary">Daily</span>
+              <span class="stat-label">Updates</span>
+            </div>
+          </div>
+        </section>
+
         <section class="about-section fade-in-up">
           <div class="terminal-window">
             <div class="terminal-header">
@@ -32,6 +55,41 @@ import { site } from '../lib/config';
                 administration should be accessible to everyone, from beginners taking
                 their first steps to experienced professionals seeking advanced techniques.
               </p>
+              <p>
+                Our goal is to bridge the gap between complex documentation and real-world
+                implementation. Every tutorial is tested, practical, and designed to get you
+                from "what is this?" to "it's working!" as quickly as possible.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section class="about-section fade-in-up">
+          <h2 class="section-title">
+            <span class="terminal-prompt"></span>
+            Our Story
+          </h2>
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-marker"></div>
+              <div class="timeline-content">
+                <h3>2024 — The Beginning</h3>
+                <p>ServerHi started as a small collection of personal notes accumulated over years of working with Linux servers. What began as a personal wiki quickly grew into something others found useful.</p>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-marker"></div>
+              <div class="timeline-content">
+                <h3>2025 — Growing the Library</h3>
+                <p>We expanded beyond basic Linux tutorials to include Docker, Kubernetes, CI/CD, and security hardening. The community feedback drove us to organize content into clear categories.</p>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-marker"></div>
+              <div class="timeline-content">
+                <h3>2026 — Present Day</h3>
+                <p>Today, ServerHi serves thousands of developers and sysadmins every month. We continue publishing fresh content covering the latest tools and best practices, from Ubuntu 24.04 to MCP servers.</p>
+              </div>
             </div>
           </div>
         </section>
@@ -52,7 +110,8 @@ import { site } from '../lib/config';
               <div class="topic-content">
                 <span class="topic-icon">🐳</span>
                 <h3>Docker & Containers</h3>
-                <p>Containerization, Docker Compose, orchestration, and best practices</p>
+                <p>Containerization fundamentals, Docker Compose, orchestration best practices, security scanning, and production deployments</p>
+                <span class="topic-count">12 tutorials</span>
               </div>
             </div>
 
@@ -65,7 +124,8 @@ import { site } from '../lib/config';
               <div class="topic-content">
                 <span class="topic-icon">🐧</span>
                 <h3>Linux Systems</h3>
-                <p>Ubuntu, CentOS, Debian, and system administration fundamentals</p>
+                <p>Ubuntu, CentOS, Debian system administration, user management, process monitoring, and troubleshooting</p>
+                <span class="topic-count">8 tutorials</span>
               </div>
             </div>
 
@@ -78,7 +138,8 @@ import { site } from '../lib/config';
               <div class="topic-content">
                 <span class="topic-icon">⚙️</span>
                 <h3>Server Configuration</h3>
-                <p>Nginx, Apache, databases, and essential server software setup</p>
+                <p>Nginx, Apache, reverse proxies, databases, SSL/TLS certificates, and performance optimization</p>
+                <span class="topic-count">10 tutorials</span>
               </div>
             </div>
 
@@ -91,7 +152,36 @@ import { site } from '../lib/config';
               <div class="topic-content">
                 <span class="topic-icon">🚀</span>
                 <h3>DevOps & Automation</h3>
-                <p>CI/CD pipelines, automation tools, and modern DevOps workflows</p>
+                <p>CI/CD pipelines, GitHub Actions, GitLab CI, automation tools, Infrastructure as Code, and modern workflows</p>
+                <span class="topic-count">8 tutorials</span>
+              </div>
+            </div>
+
+            <div class="topic-card terminal-window">
+              <div class="terminal-header">
+                <span class="terminal-dot red"></span>
+                <span class="terminal-dot yellow"></span>
+                <span class="terminal-dot green"></span>
+              </div>
+              <div class="topic-content">
+                <span class="topic-icon">🔒</span>
+                <h3>Security & Hardening</h3>
+                <p>SSH hardening, firewall configuration, fail2ban, SELinux, AppArmor, and server security best practices</p>
+                <span class="topic-count">6 tutorials</span>
+              </div>
+            </div>
+
+            <div class="topic-card terminal-window">
+              <div class="terminal-header">
+                <span class="terminal-dot red"></span>
+                <span class="terminal-dot yellow"></span>
+                <span class="terminal-dot green"></span>
+              </div>
+              <div class="topic-content">
+                <span class="topic-icon">🔧</span>
+                <h3>Troubleshooting</h3>
+                <p>Network diagnostics, log analysis, performance profiling, debugging techniques, and common solutions</p>
+                <span class="topic-count">5 tutorials</span>
               </div>
             </div>
           </div>
@@ -108,7 +198,7 @@ import { site } from '../lib/config';
               <span class="approach-number glow-primary">01</span>
               <div class="approach-content">
                 <h3>Practical & Hands-On</h3>
-                <p>Every tutorial includes real-world examples and step-by-step instructions you can follow immediately.</p>
+                <p>Every tutorial includes real-world examples and step-by-step instructions you can follow immediately. We believe in learning by doing — not just reading theory.</p>
               </div>
             </div>
 
@@ -116,7 +206,7 @@ import { site } from '../lib/config';
               <span class="approach-number glow-primary">02</span>
               <div class="approach-content">
                 <h3>Clear Explanations</h3>
-                <p>We explain not just the "how" but also the "why" behind each command and configuration.</p>
+                <p>We explain not just the "how" but also the "why" behind each command and configuration. Understanding the reasoning helps you adapt solutions to your specific needs.</p>
               </div>
             </div>
 
@@ -124,7 +214,7 @@ import { site } from '../lib/config';
               <span class="approach-number glow-primary">03</span>
               <div class="approach-content">
                 <h3>Best Practices</h3>
-                <p>Learn industry-standard approaches to security, performance, and maintainability.</p>
+                <p>Learn industry-standard approaches to security, performance, and maintainability. Our tutorials reflect real-world production environments, not just test labs.</p>
               </div>
             </div>
 
@@ -132,8 +222,40 @@ import { site } from '../lib/config';
               <span class="approach-number glow-primary">04</span>
               <div class="approach-content">
                 <h3>Regularly Updated</h3>
-                <p>Our tutorials stay current with the latest versions and best practices in the industry.</p>
+                <p>Technology moves fast. We update our tutorials to cover new versions (Ubuntu 24.04, Docker 27.x, etc.) and emerging best practices as they emerge.</p>
               </div>
+            </div>
+
+            <div class="approach-item">
+              <span class="approach-number glow-primary">05</span>
+              <div class="approach-content">
+                <h3>Tested Solutions</h3>
+                <p>Every command and configuration in our tutorials has been tested in actual environments. If it doesn't work in our tests, it doesn't go on the site.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="about-section fade-in-up">
+          <h2 class="section-title">
+            <span class="terminal-prompt"></span>
+            Why We Do This
+          </h2>
+          <div class="why-grid">
+            <div class="why-card">
+              <span class="why-icon">💡</span>
+              <h3>Knowledge Sharing</h3>
+              <p>Technology improves when knowledge is freely shared. We believe everyone benefits from a more informed community.</p>
+            </div>
+            <div class="why-card">
+              <span class="why-icon">🎯</span>
+              <h3>Reducing Friction</h3>
+              <p>Getting started with server administration shouldn't require years of experience. We make the basics accessible.</p>
+            </div>
+            <div class="why-card">
+              <span class="why-icon">🤝</span>
+              <h3>Community First</h3>
+              <p>Your feedback shapes our content. Tutorial requests, corrections, and suggestions directly influence what we publish.</p>
             </div>
           </div>
         </section>
@@ -186,6 +308,105 @@ import { site } from '../lib/config';
 
   .page-title {
     font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .page-subtitle {
+    color: var(--text-secondary);
+    font-size: 1.125rem;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  /* Stats Section */
+  .stats-section {
+    margin-bottom: 4rem;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+
+  .stat-card:hover {
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px rgba(var(--primary-rgb), 0.15);
+  }
+
+  .stat-number {
+    display: block;
+    font-size: 2rem;
+    font-weight: 700;
+    font-family: var(--font-heading);
+    margin-bottom: 0.5rem;
+  }
+
+  .stat-label {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    font-family: var(--font-code);
+  }
+
+  /* Timeline */
+  .timeline {
+    position: relative;
+    padding-left: 2rem;
+    margin-top: 2rem;
+  }
+
+  .timeline::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--border);
+  }
+
+  .timeline-item {
+    position: relative;
+    padding-bottom: 2.5rem;
+  }
+
+  .timeline-item:last-child {
+    padding-bottom: 0;
+  }
+
+  .timeline-marker {
+    position: absolute;
+    left: -2rem;
+    top: 0.25rem;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--primary);
+    border: 3px solid var(--background);
+  }
+
+  .timeline-content h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+  }
+
+  .timeline-content p {
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin: 0;
   }
 
   .about-section {
@@ -205,6 +426,11 @@ import { site } from '../lib/config';
     font-size: 1.125rem;
     line-height: 1.8;
     color: var(--text-secondary);
+    margin-bottom: 1rem;
+  }
+
+  .terminal-content p:last-child {
+    margin-bottom: 0;
   }
 
   .topics-grid {
@@ -243,7 +469,17 @@ import { site } from '../lib/config';
     color: var(--text-secondary);
     font-size: 0.9rem;
     line-height: 1.6;
-    margin: 0;
+    margin: 0 0 1rem;
+  }
+
+  .topic-count {
+    display: inline-block;
+    font-family: var(--font-code);
+    font-size: 0.75rem;
+    color: var(--primary);
+    background: rgba(var(--primary-rgb), 0.1);
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-sm);
   }
 
   .approach-list {
@@ -275,6 +511,45 @@ import { site } from '../lib/config';
   .approach-content p {
     color: var(--text-secondary);
     line-height: 1.7;
+    margin: 0;
+  }
+
+  /* Why Section */
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .why-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+
+  .why-card:hover {
+    border-color: var(--primary);
+  }
+
+  .why-icon {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  .why-card h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+    color: var(--text);
+  }
+
+  .why-card p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.6;
     margin: 0;
   }
 
@@ -362,6 +637,10 @@ import { site } from '../lib/config';
       font-size: 1.5rem;
     }
 
+    .stats-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
     .topics-grid {
       grid-template-columns: 1fr;
     }
@@ -373,6 +652,10 @@ import { site } from '../lib/config';
 
     .approach-number {
       font-size: 2rem;
+    }
+
+    .why-grid {
+      grid-template-columns: 1fr;
     }
   }
 </style>
