@@ -1,0 +1,386 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Author - ServerHi">
+  <div class="container">
+    <article class="author-page">
+      <header class="page-header fade-in-up">
+        <h1 class="page-title">
+          <span class="terminal-prompt"></span>
+          Our Editorial Team
+        </h1>
+        <p class="page-subtitle">Meet the people behind ServerHi's tutorials and guides</p>
+      </header>
+
+      <div class="content-wrapper">
+        <section class="author-section fade-in-up">
+          <div class="terminal-window">
+            <div class="terminal-header">
+              <span class="terminal-dot red"></span>
+              <span class="terminal-dot yellow"></span>
+              <span class="terminal-dot green"></span>
+            </div>
+            <div class="terminal-content">
+              <h2 class="section-title">
+                <span class="terminal-prompt"></span>
+                Who We Are
+              </h2>
+              <p>
+                ServerHi is created and maintained by a dedicated team of Linux system administrators,
+                DevOps engineers, and technology educators. Our editorial team brings decades of combined
+                experience in server management, containerization, cloud infrastructure, and automation.
+              </p>
+              <p>
+                Every tutorial on ServerHi is written, tested, and reviewed by professionals who work with
+                these technologies in production environments daily. We believe that the best learning
+                resources come from people who actually use what they teach.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section class="author-section fade-in-up">
+          <h2 class="section-title">
+            <span class="terminal-prompt"></span>
+            Our Expertise
+          </h2>
+
+          <div class="expertise-grid">
+            <div class="expertise-card">
+              <span class="expertise-icon">🐧</span>
+              <h3>Linux System Administration</h3>
+              <p>Deep knowledge of Ubuntu, Debian, CentOS, and RHEL ecosystems, covering everything from user management to kernel tuning.</p>
+            </div>
+
+            <div class="expertise-card">
+              <span class="expertise-icon">🐳</span>
+              <h3>Containerization & Orchestration</h3>
+              <p>Hands-on experience with Docker, Docker Compose, Kubernetes, and container security best practices.</p>
+            </div>
+
+            <div class="expertise-card">
+              <span class="expertise-icon">🚀</span>
+              <h3>DevOps & CI/CD</h3>
+              <p>Building and maintaining CI/CD pipelines with GitHub Actions, GitLab CI, Jenkins, and Infrastructure as Code tools.</p>
+            </div>
+
+            <div class="expertise-card">
+              <span class="expertise-icon">🔒</span>
+              <h3>Security & Hardening</h3>
+              <p>Implementing security best practices including SSH hardening, firewall configuration, SELinux, and vulnerability management.</p>
+            </div>
+
+            <div class="expertise-card">
+              <span class="expertise-icon">☁️</span>
+              <h3>Cloud Infrastructure</h3>
+              <p>Experience with AWS, GCP, and Azure services, including serverless architecture and multi-cloud deployments.</p>
+            </div>
+
+            <div class="expertise-card">
+              <span class="expertise-icon">⚙️</span>
+              <h3>Web Servers & Databases</h3>
+              <p>Configuring and optimizing Nginx, Apache, MySQL, PostgreSQL, Redis, and other essential server software.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="author-section fade-in-up">
+          <h2 class="section-title">
+            <span class="terminal-prompt"></span>
+            Our Editorial Process
+          </h2>
+
+          <div class="process-list">
+            <div class="process-item">
+              <span class="process-number glow-primary">01</span>
+              <div class="process-content">
+                <h3>Topic Selection</h3>
+                <p>We choose topics based on real-world demand, community requests, and emerging technologies that server administrators need to know about.</p>
+              </div>
+            </div>
+
+            <div class="process-item">
+              <span class="process-number glow-primary">02</span>
+              <div class="process-content">
+                <h3>Research & Testing</h3>
+                <p>Every tutorial is researched thoroughly and tested on actual systems. We don't publish untested commands or theoretical configurations.</p>
+              </div>
+            </div>
+
+            <div class="process-item">
+              <span class="process-number glow-primary">03</span>
+              <div class="process-content">
+                <h3>Writing & Review</h3>
+                <p>Content is written clearly and reviewed by team members for accuracy, completeness, and readability before publication.</p>
+              </div>
+            </div>
+
+            <div class="process-item">
+              <span class="process-number glow-primary">04</span>
+              <div class="process-content">
+                <h3>Updates & Maintenance</h3>
+                <p>As software versions evolve, we update our tutorials to reflect the latest best practices and version-specific changes.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="author-section fade-in-up">
+          <h2 class="section-title">
+            <span class="terminal-prompt"></span>
+            Get in Touch
+          </h2>
+
+          <div class="contact-box terminal-window">
+            <div class="terminal-header">
+              <span class="terminal-dot red"></span>
+              <span class="terminal-dot yellow"></span>
+              <span class="terminal-dot green"></span>
+            </div>
+            <div class="terminal-content">
+              <p>Have questions about our content or suggestions for new tutorials?</p>
+              <ul class="contact-list">
+                <li>
+                  <span class="contact-label">Email:</span>
+                  <a href="mailto:editorial@serverhi.com">editorial@serverhi.com</a>
+                </li>
+                <li>
+                  <span class="contact-label">General:</span>
+                  <a href="mailto:contact@serverhi.com">contact@serverhi.com</a>
+                </li>
+              </ul>
+              <div class="cta-buttons">
+                <a href="/contact" class="btn btn-primary terminal-hover">Contact Us</a>
+                <a href="/about" class="btn btn-secondary terminal-hover">About ServerHi</a>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </article>
+  </div>
+</BaseLayout>
+
+<style>
+  .author-page {
+    padding: 2rem 0;
+  }
+
+  .page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .page-title {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .page-subtitle {
+    color: var(--text-secondary);
+    font-size: 1.125rem;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .author-section {
+    margin-bottom: 4rem;
+  }
+
+  .section-title {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .terminal-content {
+    padding: 2rem;
+  }
+
+  .terminal-content p {
+    font-size: 1.125rem;
+    line-height: 1.8;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+  }
+
+  .terminal-content p:last-child {
+    margin-bottom: 0;
+  }
+
+  .expertise-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .expertise-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+
+  .expertise-card:hover {
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px rgba(var(--primary-rgb), 0.15);
+  }
+
+  .expertise-icon {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  .expertise-card h3 {
+    font-size: 1.125rem;
+    margin-bottom: 0.75rem;
+    color: var(--text);
+  }
+
+  .expertise-card p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .process-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .process-item {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+  }
+
+  .process-number {
+    font-family: var(--font-heading);
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .process-content h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+  }
+
+  .process-content p {
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  .contact-box {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .contact-list {
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0;
+  }
+
+  .contact-list li {
+    padding: 0.5rem 0;
+    color: var(--text-secondary);
+  }
+
+  .contact-label {
+    font-family: var(--font-code);
+    font-weight: 600;
+    color: var(--text);
+    margin-right: 0.5rem;
+  }
+
+  .contact-list a {
+    color: var(--accent);
+    text-decoration: none;
+    font-family: var(--font-code);
+  }
+
+  .contact-list a:hover {
+    color: var(--primary);
+    text-decoration: underline;
+  }
+
+  .cta-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-code);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border: none;
+    cursor: pointer;
+  }
+
+  .btn-primary {
+    background: var(--primary);
+    color: var(--background);
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 0 20px var(--primary);
+    transform: translateY(-2px);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--primary);
+    border: 1px solid var(--primary);
+  }
+
+  .btn-secondary:hover {
+    background: rgba(var(--primary-rgb), 0.1);
+  }
+
+  .glow-primary {
+    color: var(--primary);
+    text-shadow: 0 0 10px rgba(var(--primary-rgb), 0.3);
+  }
+
+  @media (max-width: 768px) {
+    .page-title {
+      font-size: 2rem;
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+    }
+
+    .process-item {
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .process-number {
+      font-size: 2rem;
+    }
+
+    .terminal-content {
+      padding: 1.5rem;
+    }
+  }
+</style>

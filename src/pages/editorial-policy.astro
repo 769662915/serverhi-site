@@ -1,0 +1,184 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Editorial Policy - ServerHi">
+  <div class="container">
+    <article class="legal-page">
+      <header class="page-header fade-in-up">
+        <h1 class="page-title">
+          <span class="terminal-prompt"></span>
+          Editorial Policy
+        </h1>
+        <p class="last-updated">Last updated: June 18, 2026</p>
+      </header>
+
+      <div class="content-wrapper">
+        <div class="legal-content fade-in-up">
+          <section class="legal-section">
+            <h2>Our Commitment to Quality</h2>
+            <p>
+              At ServerHi, we are committed to producing accurate, practical, and reliable tutorials
+              for Linux server management, DevOps practices, and containerization. This editorial policy
+              outlines the standards and processes that guide our content creation.
+            </p>
+          </section>
+
+          <section class="legal-section">
+            <h2>Content Creation Standards</h2>
+            <p>Every article published on ServerHi meets the following standards:</p>
+            <ul>
+              <li><strong>Tested Content:</strong> All commands, configurations, and code examples are tested in real environments before publication</li>
+              <li><strong>Clear Instructions:</strong> Step-by-step tutorials with explanations of the "why" behind each step</li>
+              <li><strong>Version Accuracy:</strong> Content specifies the software versions and OS distributions it applies to</li>
+              <li><strong>Best Practices:</strong> We follow industry-standard approaches to security, performance, and maintainability</li>
+              <li><strong>Regular Updates:</strong> Articles are reviewed and updated when software versions change or better methods emerge</li>
+            </ul>
+          </section>
+
+          <section class="legal-section">
+            <h2>Editorial Process</h2>
+            <p>Our content follows a structured editorial workflow:</p>
+            <ul>
+              <li><strong>Topic Selection:</strong> Based on community requests, industry trends, and practical need</li>
+              <li><strong>Research:</strong> Drawing from official documentation, real-world testing, and community knowledge</li>
+              <li><strong>Drafting:</strong> Written by team members with direct experience in the topic area</li>
+              <li><strong>Technical Review:</strong> Peer-reviewed by another team member who tests the instructions independently</li>
+              <li><strong>Publication:</strong> Formatted, tagged, and published with appropriate metadata</li>
+              <li><strong>Ongoing Maintenance:</strong> Monitored for accuracy and updated as needed</li>
+            </ul>
+          </section>
+
+          <section class="legal-section">
+            <h2>Independence & Transparency</h2>
+            <p>
+              ServerHi maintains editorial independence. Our tutorials and recommendations are based on
+              technical merit, not commercial relationships. When we mention specific products, services,
+              or tools, our assessment is based on our hands-on experience and objective evaluation.
+            </p>
+            <p>
+              If we ever receive compensation, free services, or other benefits related to content
+              creation, we will clearly disclose this in the relevant article.
+            </p>
+          </section>
+
+          <section class="legal-section">
+            <h2>Corrections & Updates</h2>
+            <p>
+              We strive for accuracy, but technology evolves rapidly. If you find an error in our content:
+            </p>
+            <ul>
+              <li>Report it through our <a href="/contact">contact page</a></li>
+              <li>We will investigate and correct confirmed errors promptly</li>
+              <li>Significant corrections will be noted at the top of the article with the update date</li>
+              <li>Articles display their original publication date and most recent update date</li>
+            </ul>
+          </section>
+
+          <section class="legal-section">
+            <h2>Authorship</h2>
+            <p>
+              Content on ServerHi is produced by our editorial team of Linux administrators, DevOps
+              engineers, and technology educators. Individual articles may list a specific author,
+              but all content is reviewed and approved by the editorial team before publication.
+            </p>
+          </section>
+
+          <section class="legal-section">
+            <h2>Contact the Editorial Team</h2>
+            <p>For editorial inquiries, corrections, or content suggestions:</p>
+            <ul>
+              <li>Email: <a href="mailto:editorial@serverhi.com">editorial@serverhi.com</a></li>
+              <li>Contact Form: <a href="/contact">Contact Us</a></li>
+            </ul>
+          </section>
+        </div>
+      </div>
+    </article>
+  </div>
+</BaseLayout>
+
+<style>
+  .legal-page {
+    padding: 2rem 0;
+  }
+
+  .page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .page-title {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .last-updated {
+    color: var(--text-secondary);
+    font-family: var(--font-code);
+    font-size: 0.9rem;
+  }
+
+  .legal-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .legal-section {
+    margin-bottom: 3rem;
+  }
+
+  .legal-section h2 {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+    color: var(--primary);
+  }
+
+  .legal-section h3 {
+    font-size: 1.25rem;
+    margin: 1.5rem 0 0.75rem;
+    color: var(--text);
+  }
+
+  .legal-section p {
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin-bottom: 1rem;
+  }
+
+  .legal-section ul {
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin-bottom: 1rem;
+    padding-left: 2rem;
+  }
+
+  .legal-section li {
+    margin-bottom: 0.5rem;
+  }
+
+  .legal-section a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .legal-section a:hover {
+    color: var(--primary);
+    text-decoration: underline;
+  }
+
+  .legal-section strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  @media (max-width: 768px) {
+    .page-title {
+      font-size: 2rem;
+    }
+
+    .legal-section h2 {
+      font-size: 1.5rem;
+    }
+  }
+</style>
