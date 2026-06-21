@@ -4,7 +4,7 @@ description: "As AI tools become integral to CI/CD workflows, the artifact suppl
 pubDate: 2026-06-12
 author: "ServerHi Editorial Team"
 category: "devops"
-coverImage: "./cover.webp"
+coverImage: "../docker-compose-multi-container-tutorial/cover.webp"
 coverImageAlt: "A secure CI/CD pipeline with lock icons protecting code artifacts flowing through build and deploy stages"
 tags: ["DevOps", "Security", "CI/CD", "AI", "Supply Chain", "DevSecOps"]
 difficulty: "intermediate"

@@ -1,0 +1,50 @@
+{
+  "query": "container security vulnerabilities docker Kubernetes CVE 2026",
+  "follow_up_questions": null,
+  "answer": null,
+  "images": [],
+  "results": [
+    {
+      "url": "https://www.securityweek.com/cisco-patches-another-sd-wan-zero-day-exploited-in-attacks/amp/",
+      "title": "Cisco Patches Another SD-WAN Zero-Day Exploited in Attacks - SecurityWeek",
+      "score": 0.3670439,
+      "published_date": "Tue, 16 Jun 2026 06:20:18 GMT",
+      "content": "# Cisco Patches Another SD-WAN Zero-Day Exploited in Attacks. Cisco recently became aware of the exploitation of CVE-2026-20262, a Catalyst SD-WAN Manager zero-day that allows arbitrary file write. **Cisco on Monday warned customers about yet another SD-WAN product zero-day exploited in attacks.**. The flaw, tracked as CVE-2026-20262, has been described as a medium-severity arbitrary file write issue affecting Catalyst SD-WAN Manager. Cisco said it discovered the vulnerability internally and became aware of its exploitation in June 2026. It’s unclear whether CVE-2026-20262 has been chained with other vulnerabilities or whether the attackers abused compromised credentials. This is the eighth Cisco SD-WAN vulnerability whose exploitation was detected in 2026. CVE-2026-20245 was disclosed by Cisco on June 4 as a zero-day, but it took nearly a week for the company to start releasing patches. **Related**: Google Confirms Exploitation of Oracle PeopleSoft Zero-Day by ShinyHunters. In this article:Cisco, exploited, Featured, SD-WAN, Zero-Day. Oracle has released mitigations for CVE-2026-35273, but it has not said whether it’s a zero-day exploited in ShinyHunters attacks.",
+      "raw_content": null
+    },
+    {
+      "url": "https://cyberscoop.com/fortinet-fortisandbox-vulnerabilities-exploits/",
+      "title": "Attackers hit pair of critical Fortinet vulnerabilities the vendor disclosed in April - CyberScoop",
+      "score": 0.32769033,
+      "published_date": "Wed, 17 Jun 2026 15:42:46 GMT",
+      "content": "# Attackers hit pair of critical Fortinet vulnerabilities the vendor disclosed in April. Multiple firms have observed active exploitation of the FortiSandbox defects, and warn that the attacks originate from multiple sources, not a single campaign. Attackers are actively exploiting a pair of critical Fortinet vulnerabilities in FortiSandbox, a security product customers use to identify and defend against emerging threats across their network, according to researchers. Fortinet disclosed and patched the vulnerabilities — CVE-2026-39808 and CVE-2026-39813 — in April, but it hasn’t confirmed exploitation. Researchers at threat intelligence firm Defused confirmed exploitation of the same defect June 11, and observed CVE-2026-39813, a path-traversal vulnerability, on June 15. The exploits, which multiple research firms have observed in honeypots, mark the early stages of another potential wave of attacks targeting Fortinet customers. The defect marks the seventh actively exploited zero-day in Cisco SD-WANs this year, and the vendor has yet to release a patch.",
+      "raw_content": null
+    },
+    {
+      "url": "https://www.securityweek.com/3-recently-patched-fortinet-fortisandbox-vulnerabilities-in-hacker-crosshairs/",
+      "title": "3 Recently Patched Fortinet FortiSandbox Vulnerabilities in Hacker Crosshairs - SecurityWeek",
+      "score": 0.30872193,
+      "published_date": "Wed, 17 Jun 2026 06:53:58 GMT",
+      "content": "SOCRadar has detected 30,000 compromised Fortinet firewalls that expose networks to hacking. **Three recently patched Fortinet FortiSandbox vulnerabilities are being targeted in the wild, according to exploit intelligence company Defused.**. Defused’s honeypots have been seeing attempts to exploit CVE-2026-39808, CVE-2026-39813, and CVE-2026-25089. CVE-2026-39813 and CVE-2026-39808 were both rated ‘critical severity’ and patched in April. CVE-2026-25089 was patched by Fortinet with its June 2026 Patch Tuesday updates. Defused noted that the exploit for CVE-2026-25089 appears to have been created using AI and did not work when first observed by the company. According to the security firm, a threat actor has been systematically hacking Fortinet firewalls and VPN gateways, compiling a database of verified credentials that can be used to access them. Subscribe to the SecurityWeek Email Briefing for the latest cybersecurity threats, trends, and expert insights. Subscribe to the SecurityWeek Email Briefing to stay informed on the latest cybersecurity news, threats, and expert insights.",
+      "raw_content": null
+    },
+    {
+      "url": "https://www.securityweek.com/splunk-enterprise-vulnerability-exploited-in-attacks-days-after-disclosure/amp/",
+      "title": "Splunk Enterprise Vulnerability Exploited in Attacks Days After Disclosure - SecurityWeek",
+      "score": 0.27460706,
+      "published_date": "Fri, 19 Jun 2026 04:10:34 GMT",
+      "content": "# Splunk Enterprise Vulnerability Exploited in Attacks Days After Disclosure. CISA has given federal agencies only three days to patch CVE-2026-20253, which can be exploited for unauthenticated remote code execution. **A critical Splunk Enterprise vulnerability is being exploited in attacks only days after its public disclosure, and organizations have been urged to patch it immediately.**. The vulnerability is tracked as CVE-2026-20253 and Splunk’s advisory says it can be exploited by an unauthenticated attacker to create or truncate arbitrary files via a PostgreSQL sidecar service endpoint. Two days after its disclosure, researchers at cybersecurity firm WatchTowr demonstrated how CVE-2026-20253 can be exploited by an unauthenticated attacker for remote code execution, publishing technical details and PoC code. CISA added CVE-2026-20253 to its Known Exploited Vulnerabilities (KEV) catalog on June 18 and instructed federal agencies to address it by June 21. **Related**: Atlassian, Splunk Patch Critical Vulnerabilities. **Related**: F5 Patches Critical, High-Severity NGINX Vulnerabilities. **Related**: Critical Command Execution Vulnerability Patched in Cisco ISE. ## Atlassian, Splunk Patch Critical Vulnerabilities.",
+      "raw_content": null
+    },
+    {
+      "url": "https://www.securityweek.com/f5-patches-critical-high-severity-nginx-vulnerabilities/",
+      "title": "F5 Patches Critical, High-Severity NGINX Vulnerabilities - SecurityWeek",
+      "score": 0.25869846,
+      "published_date": "Thu, 18 Jun 2026 09:39:24 GMT",
+      "content": "# F5 Patches Critical, High-Severity NGINX Vulnerabilities. Critical flaws in NGINX could allow remote, unauthenticated attackers to cause a restart and potentially execute arbitrary code. **F5 on Wednesday released out-of-band security updates to resolve multiple NGINX vulnerabilities, including critical flaws that could lead to code execution.**. The company also rolled out fixes for CVE-2026-11311 and CVE-2026-50107, two high-severity vulnerabilities in NGINX Gateway Fabric that could allow authenticated attackers to inject arbitrary NGINX configuration directives. Additionally, the cybersecurity company announced patches for two medium-severity NGINX flaws that allow remote attackers to disclose memory contents or restart the NGINX worker process, or cause a DoS condition. F5 makes no mention of any of these vulnerabilities being exploited in the wild, but it’s important that users install the patches as NGINX has recently been targeted in attacks. **Related:** Chrome and Firefox Updated to Patch Critical, High-Severity Vulnerabilities. Subscribe to the SecurityWeek Email Briefing for the latest cybersecurity threats, trends, and expert insights.",
+      "raw_content": null
+    }
+  ],
+  "response_time": 1.55,
+  "request_id": "9db9e0d2-33df-40bd-8639-d66a11cb9248"
+}

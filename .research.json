@@ -1,0 +1,50 @@
+{
+  "query": "linux server security hardening best practices 2026",
+  "follow_up_questions": null,
+  "answer": null,
+  "images": [],
+  "results": [
+    {
+      "url": "https://gizmodo.com/best-vpn/how-to-torrent-safely",
+      "title": "How to Torrent Safely and Anonymously: Best Practices for 2026 - Gizmodo",
+      "score": 0.22265828,
+      "published_date": "Tue, 16 Jun 2026 06:10:51 GMT",
+      "content": "Best VPN How to Torrent Safely and Anonymously: Best Practices for 2026. # How to Torrent Safely and Anonymously: Best Practices for 2026. How to torrent safely is something every downloader should understand before grabbing their first file, because the convenience of peer-to-peer sharing comes with risks if you’re not careful. When you torrent, your IP address is visible to everyone else in the swarm, your internet provider can monitor your traffic, and a careless click can land malware on your device. ## How to Torrent Safely With VPN: Download Torrents Anonymously. NordVPN at 75% off with 3 free months on top is the best option in 2026. 4. Enable the **kill switch** and **virus/malware protection** (available in NordVPN and other VPNs optimized for torrenting safely). ## Best Practices for Safe Torrenting 2026: Torrent Guide. The best VPNs for torrenting in 2026 are:. Subscribe to the VPN, download its app on the device you’ll use to torrent safely, and connect to a server.",
+      "raw_content": null
+    },
+    {
+      "url": "https://www.foxnews.com/tech/fbi-says-russian-hackers-hijacked-old-wi-fi-routers",
+      "title": "FBI says Russian hackers hijacked old Wi-Fi routers - Fox News",
+      "score": 0.15498921,
+      "published_date": "Sun, 14 Jun 2026 17:01:20 GMT",
+      "content": "This material may not be published, broadcast, rewritten, or redistributed. ©2026 FOX News Network, LLC. * #### Beware of hackers showing up pretending to be IT. * #### Fox News AI Newsletter: Top 12 takeaways from Apple's new AI features. * #### 12 biggest Apple WWDC 2026 takeaways you need to know. * #### 8 apps that can help you cut your food bill. * #### Why your VPN keeps getting blocked and the simple fix. Your Wi-Fi router may be the least glamorous gadget in your home. The Justice Department and FBI say they disrupted the U.S. portion of the network in April. But if your router is outdated and poorly protected, your network still has a soft spot. A router’s admin settings can become a security weak spot when firmware is outdated or default passwords are never changed. The good news is that you do not need to be a cybersecurity expert to lower the risk.",
+      "raw_content": null
+    },
+    {
+      "url": "https://thehackernews.com/2026/06/china-linked-hackers-backdoored-linux.html",
+      "title": "China-Linked Hackers Backdoored Linux Login Software to Hide for Nearly a Decade - The Hacker News",
+      "score": 0.1520955,
+      "published_date": "Fri, 12 Jun 2026 18:17:00 GMT",
+      "content": "Instead of hiding on the laptops and servers defenders watch most closely, a China-nexus group spent close to a decade hidden inside the Linux login system itself. Sygnia, which tracks the group as **Velvet Ant**, says it backdoored the PAM and OpenSSH components that decide who is allowed to sign in, planting its access where ordinary cleanup could not reach it. The network it targeted had no direct internet access, so the group first staged through internet-facing systems to get there. Instead of dropping new malware that a scanner might catch, the attacker changed the trusted login programs themselves. The attacker used other disguised tools and an internet-facing web server as a bridge, passing commands through it to open remote sessions deep inside the segment that had no direct internet access. Later that year, it reported the group exploiting a Cisco NX-OS flaw, CVE-2024-20399, to plant a backdoor on the switches.",
+      "raw_content": null
+    },
+    {
+      "url": "https://www.csoonline.com/article/4184637/governing-the-ghost-workforce.html",
+      "title": "Governing the ghost workforce - csoonline.com",
+      "score": 0.12541868,
+      "published_date": "Mon, 15 Jun 2026 00:00:00 GMT",
+      "content": "## Why non-human identities are your biggest business continuity risk in 2026. Every enterprise security team is fighting a workforce problem they cannot see on any org chart. Bots, service accounts, API keys, OAuth tokens, machine certificates — non-human identities now outnumber human ones in most large organisations, often by a factor of ten to one. They authenticate constantly, operate across every environment, and when forgotten, they do not retire gracefully. Security practitioners have taken to calling them ghost identities — and the name fits. It just has not acted on it. They slipped in, found machine identities with significant access, and used them the way they were designed to be used — quietly, legitimately, invisibly. They were just there, unmonitored, doing what attackers needed them to do. Calling this a security problem is not wrong. In 2026, the consequences of unmanaged non-human identities take a new form.",
+      "raw_content": null
+    },
+    {
+      "url": "https://edtechmagazine.com/higher/article/2026/06/new-campus-reality-building-cyber-resilience-against-ongoing-threats",
+      "title": "The New Campus Reality: Building Cyber Resilience Against Ongoing Threats - EdTech Magazine",
+      "score": 0.11833437,
+      "published_date": "Thu, 18 Jun 2026 19:05:22 GMT",
+      "content": "It’s not a matter of if, but when. They are continuing to experience a significant uptick in attacks, numbering about 4,200 per week in 2026 across higher education institutions, according to Randy Rose, vice president of security operations and intelligence at the Center for Internet Security (CIS). “We’re holding steady for 2026, but that’s not necessarily a good thing,” says Rose. This heightened threat environment forces universities to look beyond prevention and focus more of their security strategy around continuity in the wake of an attack. “When we think about cybersecurity, it’s not just about protecting the systems, it’s about maintaining continuity — that trust, that ability of the faculty and students to do innovative work,” says Ravi Pendse, vice president for IT and CIO at the University of Michigan. In addition to building a stronger security mindset within the campus community, universities need to look beyond the campus for support with continuity planning and intelligence sharing.",
+      "raw_content": null
+    }
+  ],
+  "response_time": 0.33,
+  "request_id": "4d1c68a2-608b-4606-a2e0-71f3d43b6df0"
+}

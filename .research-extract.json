@@ -1,0 +1,13 @@
+{
+  "results": [
+    {
+      "url": "https://www.securityweek.com/f5-patches-critical-high-severity-nginx-vulnerabilities/",
+      "title": "F5 Patches Critical, High-Severity NGINX Vulnerabilities - SecurityWeek",
+      "raw_content": "### Vulnerabilities\n\n# F5 Patches Critical, High-Severity NGINX Vulnerabilities\n\nCritical flaws in NGINX could allow remote, unauthenticated attackers to cause a restart and potentially execute arbitrary code.\n\nBy\n\nIonut Arghire\n\n|\n\n + Flipboard + Reddit + Whatsapp + Whatsapp + Email\n\nNginx vulnerability\n\nF5 on Wednesday released out-of-band security updates to resolve multiple NGINX vulnerabilities, including critical flaws that could lead to code execution.\n\nThe most severe are CVE-2026-42530 and CVE-2026-42055 (CVSS score of 9.2), two bugs affecting HTTP modules that could be exploited without authentication to trigger a use-after-free or a heap-based buffer overflow, respectively. [...] Successful exploitation of these issues would result in the NGINX worker process restarting, causing a denial-of-service (DoS) condition. If Address Space Layout Randomization (ASLR) is disabled or can be bypassed, the attacker can execute arbitrary code.\n\nF5 has released updated versions of NGINX Plus, NGINX Open Source, and NGINX Gateway Fabric that address these security defects.\n\nThe company also rolled out fixes for CVE-2026-11311 and CVE-2026-50107, two high-severity vulnerabilities in NGINX Gateway Fabric that could allow authenticated attackers to inject arbitrary NGINX configuration directives. [...] “Successful exploitation may allow the attacker to expose sensitive data from the NGINX pod filesystem, proxy traffic to attacker-controlled endpoints, or cause a denial-of-service (DoS) condition by injecting configuration that prevents NGINX from reloading,” F5 explains.\n\nAdvertisement. Scroll to continue reading.\n\nAdditionally, the cybersecurity company announced patches for two medium-severity NGINX flaws that allow remote attackers to disclose memory contents or restart the NGINX worker process, or cause a DoS condition.\n\nF5 makes no mention of any of these vulnerabilities being exploited in the wild, but it’s important that users install the patches as NGINX has recently been targeted in attacks.\n\nAdditional information can be found in the company’s security notification.",
+      "images": []
+    }
+  ],
+  "failed_results": [],
+  "response_time": 0.12,
+  "request_id": "af2c1b75-04cb-4028-a131-c8751a902dff"
+}
