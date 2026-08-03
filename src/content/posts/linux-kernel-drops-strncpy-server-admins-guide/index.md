@@ -1,7 +1,7 @@
 ---
 title: "Linux Kernel Drops strncpy After Six Years: What Server Admins Need to Know"
 description: "Linux 7.2 finally removes the decades-old strncpy API after 360+ patches. Here's why this matters for your servers and what you should check before upgrading."
-pubDate: "2026-06-23"
+pubDate: 2026-06-23
 coverImage: "./cover.webp"
 coverImageAlt: "Linux kernel code being refactored showing modern C string functions replacing legacy strncpy calls"
 category: linux

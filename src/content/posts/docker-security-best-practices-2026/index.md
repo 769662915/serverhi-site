@@ -1,7 +1,7 @@
 ---
 title: "7 Docker Security Best Practices You Should Implement Before Your Next Deployment"
 description: "Container security isn't optional anymore. From image scanning to network policies, these seven practices will harden your Docker deployments against the most common attack vectors in 2026."
-pubDate: "2026-06-15"
+pubDate: 2026-06-15
 coverImage: "./cover.webp"
 coverImageAlt: "A terminal screen showing Docker container security scan results with green checkmarks and red warnings"
 category: "docker"
