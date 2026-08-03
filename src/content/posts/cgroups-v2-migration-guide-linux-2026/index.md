@@ -1,7 +1,7 @@
 ---
 title: "Migrating from cgroups v1 to v2: A Step-by-Step Guide for Linux Servers"
 description: "Your distro is switching to cgroups v2 whether you like it or not. Here is how to migrate without breaking your containers, Kubernetes clusters, or monitoring tools."
-publishDate: 2026-08-02
+pubDate: 2026-08-02
 coverImage: "./cover.webp"
 coverImageAlt: "Terminal window showing cgroups v2 migration commands on a dark background"
 category: "linux"
