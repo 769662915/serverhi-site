@@ -55,3 +55,7 @@ public/pagefind/
 # package-lock.json
 # yarn.lock
 # pnpm-lock.yaml
+
+# Research temp files
+.tvly-*.json
+.tvly_*.json
