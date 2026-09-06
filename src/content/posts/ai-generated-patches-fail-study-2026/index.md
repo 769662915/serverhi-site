@@ -1,9 +1,8 @@
----
-title: "Why AI-Generated Security Patches Fail 74% of the Time (And What to Do Instead)"
+---title: "Why AI-Generated Security Patches Fail 74% of the Time (And What to Do Instead)"
 description: "A new study of 6,000+ patches reveals AI models can't reliably fix security vulnerabilities. Here's what server administrators and DevOps engineers need to know."
 pubDate: 2026-08-13
 coverImage: "./cover.webp"
-coverImageAlt: "Terminal screen showing failed patch compilation errors with red warning text"
+coverImageAlt: "Engineer marking failed code diffs with a red pen beside a laptop showing failing tests"
 category: "security"
 tags: ["AI security", "vulnerability patching", "DevOps", "Linux security", "LLM"]
 author: "ServerHi Editorial Team"

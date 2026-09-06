@@ -1,9 +1,8 @@
----
-title: "DNS Resolution Failures: A Systematic Guide to Diagnosing and Fixing DNS Issues on Linux"
+---title: "DNS Resolution Failures: A Systematic Guide to Diagnosing and Fixing DNS Issues on Linux"
 description: "Your server can't reach the internet but the network is fine? DNS is probably the problem. Here's a methodical approach to diagnosing and fixing DNS resolution failures."
 pubDate: 2026-08-31
 coverImage: "./cover.webp"
-coverImageAlt: "Terminal screen showing DNS resolution commands and diagnostic output"
+coverImageAlt: "Sysadmin desk with dual monitors showing DNS lookup terminals and a coiled network cable"
 category: "troubleshooting"
 tags: ["DNS", "Linux", "troubleshooting", "networking", "systemd-resolved"]
 author: "ServerHi Editorial Team"

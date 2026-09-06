@@ -1,9 +1,8 @@
----
-title: "Docker Hardened Images: What They Are and Why Your Production Containers Need Them"
+---title: "Docker Hardened Images: What They Are and Why Your Production Containers Need Them"
 description: "Docker's new Hardened Images (DHIs) bring signed attestations, distroless variants, and compliance-ready configurations to container security. Here's what sysadmins and DevOps engineers need to know about deploying them in production."
 pubDate: 2026-07-25
 coverImage: "./cover.webp"
-coverImageAlt: "Terminal-style visualization of a Docker container with a shield icon, green-on-black terminal aesthetic with security lock symbols"
+coverImageAlt: "Warehouse aisle of labeled boxes with a clipboard security checklist"
 category: "docker"
 tags: ["Docker", "Security", "Container", "DevOps", "Production", "DHI"]
 author: "ServerHi Editorial Team"

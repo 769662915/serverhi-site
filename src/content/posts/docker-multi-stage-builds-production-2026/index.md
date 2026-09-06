@@ -1,9 +1,8 @@
----
-title: "Docker Multi-Stage Builds: A Practical Guide to Production-Ready Images"
+---title: "Docker Multi-Stage Builds: A Practical Guide to Production-Ready Images"
 description: "Master multi-stage builds to create smaller, more secure Docker images. Learn builder patterns, caching strategies, and real-world examples."
 pubDate: 2026-08-29
 coverImage: "./cover.webp"
-coverImageAlt: "Terminal showing Docker multi-stage build process with green text on dark background"
+coverImageAlt: "Nested cardboard boxes packed beside a laptop showing a Dockerfile"
 category: "docker"
 tags: ["Docker", "multi-stage builds", "containers", "DevOps", "production"]
 author: "ServerHi Editorial Team"

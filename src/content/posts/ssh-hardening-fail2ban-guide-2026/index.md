@@ -1,9 +1,8 @@
----
-title: "SSH Hardening with Fail2Ban: A Complete Guide to Blocking Brute Force Attacks"
+---title: "SSH Hardening with Fail2Ban: A Complete Guide to Blocking Brute Force Attacks"
 description: "Stop SSH brute force attacks cold. This guide covers key-based auth, fail2ban configuration, firewall rules, and advanced hardening for production Linux servers."
 pubDate: 2026-08-30
 coverImage: "./cover.webp"
-coverImageAlt: "Terminal showing fail2ban log output with banned IP addresses"
+coverImageAlt: "Locked server-room door with a laptop showing an SSH terminal session"
 category: "security"
 tags: ["SSH", "fail2ban", "Linux security", "firewall", "server hardening"]
 author: "ServerHi Editorial Team"

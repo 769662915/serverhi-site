@@ -1,9 +1,8 @@
----
-title: "Your CI/CD Pipeline Is the Next Target: Lessons from the TeamPCP Supply Chain Attack"
+---title: "Your CI/CD Pipeline Is the Next Target: Lessons from the TeamPCP Supply Chain Attack"
 description: "How 2,500+ companies lost 78,330 secrets through a single compromised dependency - and the practical steps to protect your pipelines."
 pubDate: 2026-08-18
 coverImage: "./cover.webp"
-coverImageAlt: "CI/CD pipeline security concept with shield and pipeline visualization"
+coverImageAlt: "Server racks with blinking status lights and a laptop showing a build pipeline list"
 category: "devops"
 tags: ["CI/CD", "Supply Chain Security", "DevOps", "Security", "Pipeline", "TeamPCP", "LiteLLM"]
 author: "ServerHi Editorial Team"

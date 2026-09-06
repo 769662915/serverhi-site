@@ -1,9 +1,8 @@
----
-title: "Docker VMM: How to Switch to Docker's New Virtualization Engine"
+---title: "Docker VMM: How to Switch to Docker's New Virtualization Engine"
 description: "Docker has replaced its third-party virtualization library with a first-party hypervisor. Here's what changed, why it matters, and how to switch."
 pubDate: 2026-08-14
 coverImage: "./cover.webp"
-coverImageAlt: "Docker Desktop interface showing VMM settings"
+coverImageAlt: "Laptop virtualization settings next to a compact mini-PC on a standing desk"
 category: "docker"
 tags: ["Docker", "virtualization", "VMM", "Docker Desktop", "containers", "2026"]
 author: "ServerHi Editorial Team"

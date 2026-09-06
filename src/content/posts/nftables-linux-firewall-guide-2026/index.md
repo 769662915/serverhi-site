@@ -1,9 +1,8 @@
----
-title: "How to Set Up nftables as Your Linux Firewall in 2026"
+---title: "How to Set Up nftables as Your Linux Firewall in 2026"
 description: "nftables is replacing iptables as the standard Linux firewall. Here's how to install, configure, and migrate to nftables on modern Linux servers."
 pubDate: 2026-08-17
 coverImage: "./cover.webp"
-coverImageAlt: "nftables firewall configuration terminal screenshot"
+coverImageAlt: "Network closet with ethernet patch panel, labeled cables, and a small firewall appliance"
 category: "security"
 tags: ["nftables", "firewall", "Linux", "security", "iptables"]
 author: "ServerHi Editorial Team"
