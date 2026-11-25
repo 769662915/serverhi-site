@@ -1,4 +1,5 @@
 ---
+import PublicEmail from '../components/PublicEmail.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
@@ -111,7 +112,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
               <li><strong>Withdraw Consent:</strong> Withdraw consent for processing based on consent</li>
               <li><strong>Complain:</strong> File a complaint with a data protection authority</li>
             </ul>
-            <p>To exercise these rights, please contact us at <a href="mailto:privacy@serverhi.com">privacy@serverhi.com</a>.</p>
+            <p>To exercise these rights, please contact us at <PublicEmail address="privacy@serverhi.com" />.</p>
           </section>
 
           <section id="gdpr" class="legal-section">
@@ -148,7 +149,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             <p>
               <strong>We do not sell your personal information.</strong> Under CCPA, "sale" does not include disclosures to service providers who need the data to provide services.
             </p>
-            <p>To exercise your CCPA rights, contact us at <a href="mailto:privacy@serverhi.com">privacy@serverhi.com</a>.</p>
+            <p>To exercise your CCPA rights, contact us at <PublicEmail address="privacy@serverhi.com" />.</p>
           </section>
 
           <section id="children" class="legal-section">
@@ -189,8 +190,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             <p>If you have questions about this Privacy Policy or want to exercise your rights, please contact us:</p>
             <div class="contact-box">
               <ul>
-                <li><strong>Email:</strong> <a href="mailto:privacy@serverhi.com">privacy@serverhi.com</a></li>
-                <li><strong>General Contact:</strong> <a href="mailto:contact@serverhi.com">contact@serverhi.com</a></li>
+                <li><strong>Email:</strong> <PublicEmail address="privacy@serverhi.com" /></li>
+                <li><strong>General Contact:</strong> <PublicEmail address="contact@serverhi.com" /></li>
                 <li><strong>Website:</strong> <a href="/contact/">Contact options</a></li>
               </ul>
             </div>

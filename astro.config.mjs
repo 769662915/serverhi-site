@@ -1,6 +1,7 @@
 import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
+import preserveLiteralAddresses from './src/lib/rehype-literal-addresses.mjs';
 
 export default defineConfig({
   site: 'https://serverhi.com',
@@ -18,6 +19,7 @@ export default defineConfig({
     },
   },
   markdown: {
+    rehypePlugins: [preserveLiteralAddresses],
     shikiConfig: {
       theme: 'github-dark',
       wrap: true,

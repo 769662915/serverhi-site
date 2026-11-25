@@ -1,0 +1,9 @@
+---
+interface Props {
+  address: string;
+}
+const { address } = Astro.props;
+const startMarker = '<!--email_off-->';
+const endMarker = '<!--/email_off-->';
+---
+<Fragment set:html={startMarker} /><a href={`mailto:${address}`}>{address}</a><Fragment set:html={endMarker} />

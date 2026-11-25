@@ -1,4 +1,5 @@
 ---
+import PublicEmail from '../components/PublicEmail.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
@@ -105,7 +106,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             <h2>Contact</h2>
             <p>If you have questions about this disclaimer, please contact us:</p>
             <ul>
-              <li>Email: <a href="mailto:legal@serverhi.com">legal@serverhi.com</a></li>
+              <li>Email: <PublicEmail address="legal@serverhi.com" /></li>
               <li>Editorial contact: <a href="/contact/">Contact Us</a></li>
             </ul>
           </section>
