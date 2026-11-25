@@ -554,5 +554,5 @@ Always test rollback procedures before production deployments. Document deployme
 ---
 
 **Related Posts:**
-- [Docker Security Best Practices](/posts/docker-security-guide)
-- [CI/CD Pipeline Setup](/posts/cicd-pipeline-setup)
+- [Docker Security Best Practices](/posts/docker-security-guide/)
+- [CI/CD Pipeline Setup](/posts/cicd-pipeline-setup/)

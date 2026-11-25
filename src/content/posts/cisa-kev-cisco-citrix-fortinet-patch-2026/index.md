@@ -15,7 +15,7 @@ prerequisites: ["Admin on Cisco FMC, Citrix NetScaler, or Fortinet boxes you act
 osCompatibility: ["Cisco Secure Firewall Management Center", "Citrix NetScaler", "Fortinet firewalls/management listed in CVE-2025-25249"]
 ---
 
-[Last week's F5 piece was about a rootkit that hashes will not catch](/posts/f5-big-ip-poisonedrefresh-rootkit-2026). This week is dumber and more urgent. CISA put three appliance bugs in KEV and told federal civilian agencies to patch by 12 September. Today is the 15th. If you run Cisco FMC, Citrix NetScaler, or a Fortinet box and you treated that date as someone else's problem, you are late on a bug with a score of ten.
+[Last week's F5 piece was about a rootkit that hashes will not catch](/posts/f5-big-ip-poisonedrefresh-rootkit-2026/). This week is dumber and more urgent. CISA put three appliance bugs in KEV and told federal civilian agencies to patch by 12 September. Today is the 15th. If you run Cisco FMC, Citrix NetScaler, or a Fortinet box and you treated that date as someone else's problem, you are late on a bug with a score of ten.
 
 [The Hacker News summarized the add](https://thehackernews.com/2026/09/cisa-flags-exploited-cisco-citrix.html). [Security Affairs printed the identifiers](https://securityaffairs.com/198850/security/u-s-cisa-adds-cisco-google-chromium-v8-fortinet-and-citrix-netscaler-flaws-to-its-known-exploited-vulnerabilities-catalog.html). You need the identifiers, not the vibes.
 
@@ -41,7 +41,7 @@ If you still have 2012 in the rack, that SSU is your problem. If you do not, do 
 
 Inventory first. Names, versions, whether the management interface is on a public address. You cannot patch a box you think is "behind the VPN" if the VPN is the box.
 
-Cisco FMC. Pull Cisco's advisory for CVE-2026-20079 and match your exact train. Upgrade. Then confirm the GUI build string, not the calendar you remember. If FMC was reachable from the internet in August, you are in incident process, not patch process. Look at admin logs for unauthenticated hits. Do not factory-reset as a personality. Do export config, rebuild from known-good if the logs are a mess. Management-plane root is [HAProxy-Ted territory](/posts/haproxy-ted-backdoor-verify-builds-2026): the control plane is the prize.
+Cisco FMC. Pull Cisco's advisory for CVE-2026-20079 and match your exact train. Upgrade. Then confirm the GUI build string, not the calendar you remember. If FMC was reachable from the internet in August, you are in incident process, not patch process. Look at admin logs for unauthenticated hits. Do not factory-reset as a personality. Do export config, rebuild from known-good if the logs are a mess. Management-plane root is [HAProxy-Ted territory](/posts/haproxy-ted-backdoor-verify-builds-2026/): the control plane is the prize.
 
 NetScaler. Advisory for CVE-2026-19490. Build number, not marketing name. Take a screenshot of the firmware page before and after. If the box terminates ICA or is a gateway, schedule the reboot like you mean it. Honeypot volume on 8 September is your argument to the change board.
 

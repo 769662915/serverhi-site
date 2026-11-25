@@ -2,6 +2,7 @@
 title: "Ubuntu Pro Edge archive offers opt-in Surge patches before stable promotion"
 description: "Canonical's 12 November 2026 Edge archive lets Ubuntu Pro users opt into machine-generated userspace CVE patches before qualification. Stable updates stay human-validated, and kernel CVEs stay off Surge."
 pubDate: 2026-11-14
+updatedDate: 2026-11-25
 coverImage: "./cover.webp"
 coverImageAlt: "A closed laptop and a blank paper checklist on a steel rack shelf beside a dark network switch, cool aisle light, no logos and no readable text."
 category: server-config
@@ -43,7 +44,7 @@ Canonical's own kernel section, later in the same post, uses pocket names. Kerne
 
 That distinction matters on a host that already has Ubuntu Pro attached for ESM, Livepatch, or the ordinary security pocket. Attaching Pro does not, on the text of this announcement, enable Edge. Edge is a further choice. If an unattended-upgrades policy is already pointed at a security origin, that policy does not start pulling Edge packages because a blog post exists. Something has to add the archive. The something is the procedure on the Discourse topic, not a mental note that Pro attachment and Edge are the same switch.
 
-The announcement also says Ubuntu Pro remains free for personal use, and that researchers and power users can assess the machine-generated fixes in real environments while Canonical qualifies them for promotion to general Ubuntu LTS availability. Personal use is a lab path. It is not a reason to enable Edge on every Pro host in a fleet because the subscription line item already says Pro. A personal laptop and a shared database host can both be "Ubuntu Pro" on an invoice and still deserve opposite answers.
+[Canonical’s personal plan](https://ubuntu.com/pricing/pro) covers up to five machines free for personal use. The announcement says researchers and power users can assess the machine-generated fixes in real environments while Canonical qualifies them for promotion to general Ubuntu LTS availability. Personal use is a lab path. It is not a reason to enable Edge on every Pro host in a fleet because the subscription line item already says Pro. A personal laptop and a shared database host can both be "Ubuntu Pro" on an invoice and still deserve opposite answers.
 
 The blog does not name a release series. It does not say 22.04, 24.04, or 26.04. It does not publish a package list, a CVE count for the archive on day one, or a version string to grep. The "double the security fixes" line is a throughput claim about the security team versus last year. It is not a catalog size for Edge. If a dashboard needs a count of Edge packages, that count is not in this announcement, and it should not be filled in from the throughput sentence. Leave the count blank until an origin you actually enabled lists packages. This note does not supply that list, because the 12 November post does not either.
 
@@ -137,7 +138,7 @@ Promotion is the event the blog keeps separate from publication. A fix can sit i
 
 If qualification never arrives, the blog does not describe a forced replacement. Your pin, or your decision to leave the package in place, is then yours. Leaving a preview package installed after you have decided the canary failed is drift, not a Canonical status. Record the removal, or record the accepted exception with an owner and an expiry. Do not let the original early-access sentence stand as the exception text six weeks later. That sentence authorized a test. It did not authorize an indefinite fork of the security pocket.
 
-This is also why Edge should not be the only archive in the mental model of a patched host. [The APT retry note on this site](/posts/patching-apt-vulnerability-usn-8996-1) is about a flaw in the tool that installs packages, not about which pocket is trustworthy. The delivery tool and the origin policy are different controls. A careful origin choice still runs through apt. A careful apt upgrade still has to know which origin it trusted. Edge adds an origin. It does not retire the need to know what apt did, and it does not retire the need to patch apt itself when a notice says to.
+This is also why Edge should not be the only archive in the mental model of a patched host. [The APT retry note on this site](/posts/patching-apt-vulnerability-usn-8996-1/) is about a flaw in the tool that installs packages, not about which pocket is trustworthy. The delivery tool and the origin policy are different controls. A careful origin choice still runs through apt. A careful apt upgrade still has to know which origin it trusted. Edge adds an origin. It does not retire the need to know what apt did, and it does not retire the need to patch apt itself when a notice says to.
 
 When a human-validated notice does appear for the same package, prefer the notice's version string in any exhibit, and keep the Edge version in the operational log. Averaging them, or writing only the newer of the two without saying which origin supplied it, hides the preview window. The preview window is the fact a later reader needs if the host misbehaved between enablement and promotion.
 
@@ -145,7 +146,7 @@ When a human-validated notice does appear for the same package, prefer the notic
 
 November on this site has already split "apply the fix" into different shapes. Using the wrong shape produces a tidy ticket that does not match the vendor text.
 
-[The Alpine OpenSSH note](/posts/openssh-10-6p2-cve-2026-123158-alpine) is a version pin. The identifier and the package version are the ticket. That shape does not fit here. Canonical did not publish an Edge package version in the 12 November post. Asking an operator to "upgrade to the Surge version" asks for a string the announcement does not contain.
+[The Alpine OpenSSH note](/posts/openssh-10-6p2-cve-2026-123158-alpine/) is a version pin. The identifier and the package version are the ticket. That shape does not fit here. Canonical did not publish an Edge package version in the 12 November post. Asking an operator to "upgrade to the Surge version" asks for a string the announcement does not contain.
 
 A human-validated USN is a distribution build you can match against a notice table. Edge is upstream of that shape. Using a USN template for an Edge package will invent a notice ID the announcement does not have. If you need a notice ID, you are still on the traditional channel, and Edge has not replaced it.
 

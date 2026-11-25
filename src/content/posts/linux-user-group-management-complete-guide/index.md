@@ -236,7 +236,7 @@ sudo find / -perm -4000 -type f 2>/dev/null
 sudo chmod g+s /shared/project-files
 ```
 
-SUID files are a common escalation vector. Regularly auditing them is a security essential — see our [Linux security hardening guide](/posts/linux-security-hardening) for a full checklist.
+SUID files are a common escalation vector. Regularly auditing them is a security essential — see our [Linux security hardening guide](/posts/linux-security-hardening/) for a full checklist.
 
 ## Configuring Sudo Access
 
@@ -331,7 +331,7 @@ PAM integrates with SSH to enforce additional restrictions. In `/etc/pam.d/sshd`
 auth required pam_listfile.so item=user sense=allow file=/etc/ssh/users_allowed
 ```
 
-This is a powerful pattern: instead of managing SSH access through firewall rules alone, you control it at the PAM layer. Combined with our [SSH server hardening guide](/posts/ssh-server-hardening), this creates multiple layers of access control.
+This is a powerful pattern: instead of managing SSH access through firewall rules alone, you control it at the PAM layer. Combined with our [SSH server hardening guide](/posts/ssh-server-hardening/), this creates multiple layers of access control.
 
 ## Managing System Accounts and Service Users
 
@@ -391,7 +391,7 @@ The `-r` flag in `useradd` creates a system account with a UID from the system r
 
 ## User Namespace Isolation for Containers
 
-Modern container runtimes use Linux user namespaces to isolate container processes from the host. This is especially relevant in 2026 as [Docker rootless mode](/posts/docker-rootless-mode-setup) and Podman become standard practice.
+Modern container runtimes use Linux user namespaces to isolate container processes from the host. This is especially relevant in 2026 as [Docker rootless mode](/posts/docker-rootless-mode-setup/) and Podman become standard practice.
 
 ### How User Namespaces Work
 
@@ -419,7 +419,7 @@ cat /etc/subuid
 cat /etc/subgid
 ```
 
-This configuration allows the `deploy` user to run rootless Docker or Podman containers with proper UID mapping, reducing the attack surface significantly. See our [Docker VMM guide](/posts/docker-vmm-virtualization-engine-2026) for details on Docker's latest virtualization changes.
+This configuration allows the `deploy` user to run rootless Docker or Podman containers with proper UID mapping, reducing the attack surface significantly. See our [Docker VMM guide](/posts/docker-vmm-virtualization-engine-2026/) for details on Docker's latest virtualization changes.
 
 ## Troubleshooting Common User Management Issues
 
@@ -511,6 +511,6 @@ The investment in proper user management pays off when something goes wrong. A c
 
 ## Further Reading
 
-- [Linux Security Hardening: Essential Practices for Production Servers](/posts/linux-security-hardening) — Complete hardening checklist including user management
-- [SSH Server Hardening: Securing Remote Server Access](/posts/ssh-server-hardening) — SSH-specific access control and authentication
-- [Docker Rootless Mode Setup](/posts/docker-rootless-mode-setup) — Running containers without root privileges
+- [Linux Security Hardening: Essential Practices for Production Servers](/posts/linux-security-hardening/) — Complete hardening checklist including user management
+- [SSH Server Hardening: Securing Remote Server Access](/posts/ssh-server-hardening/) — SSH-specific access control and authentication
+- [Docker Rootless Mode Setup](/posts/docker-rootless-mode-setup/) — Running containers without root privileges

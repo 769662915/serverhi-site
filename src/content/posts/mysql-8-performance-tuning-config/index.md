@@ -1,7 +1,8 @@
 ---
-title: "MySQL 8 Performance Tuning: InnoDB Buffer Pool, Query Cache, and Connection Pooling"
-description: "A hands-on guide covering configuration, troubleshooting, and best practices for mysql 8 performance tuning - innodb buffer pool, query cache, and connection pooling."
+title: "Read InnoDB buffer pool pressure before tuning MySQL 8"
+description: "Compare interval read counters on a repeatable workload, check the server memory budget, and rehearse a reversible InnoDB buffer pool resize."
 pubDate: 2026-04-16
+updatedDate: 2026-11-25
 coverImage: "./cover.webp"
 coverImageAlt: "Terminal-style illustration for MySQL 8 Performance Tuning: InnoDB Buffer Pool, Query Cache, and Connection Pooling"
 category: "server-config"
@@ -11,64 +12,44 @@ featured: false
 draft: false
 ---
 
-## Overview
+The InnoDB buffer pool holds table and index pages. A growing lifetime read counter cannot tell you whether a report running now is short of memory. Take two measurements around the same workload. MySQL 8 removed the old query cache; options for that cache in a MySQL 5 configuration are obsolete.
 
-A hands-on guide to mysql 8 performance tuning: innodb buffer pool, query cache, and connection pooling, with step-by-step instructions, configuration examples, and troubleshooting advice for production environments.
+## Collect one interval
 
-## Prerequisites
+On a non-production MySQL 8 server, record the version and current allocation. Keep the administrative connection open so the saved value is available for rollback.
 
-- Ubuntu 22.04 or later (Debian 11/12 compatible)
-- Root or sudo access
-- Familiarity with the Linux command line
-
-## Getting Started
-
-Check your current system state before making changes:
-
-```bash
-uname -a
-systemctl status
-df -h && free -m
+```sql
+SELECT VERSION(), @@GLOBAL.innodb_buffer_pool_size, @@GLOBAL.max_connections;
+SET @saved_pool = @@GLOBAL.innodb_buffer_pool_size;
+SHOW GLOBAL STATUS WHERE Variable_name IN
+  ('Innodb_buffer_pool_reads','Innodb_buffer_pool_read_requests',
+   'Threads_connected','Threads_running');
 ```
 
-## Core Implementation
+Run a representative **read-only** application query with the same filter and data in each trial. Record elapsed time, its execution plan, and the counters immediately afterward. Subtract the first snapshot from the second. `Innodb_buffer_pool_reads` counts logical reads that had to be read from disk, while `Innodb_buffer_pool_read_requests` counts logical read requests. For example, 80 additional disk reads out of 20,000 requests is 0.4% for the interval. If the request delta is zero there is no ratio. On a shared instance other sessions contribute, so label the observation accordingly. [MySQL status variables](https://dev.mysql.com/doc/refman/8.4/en/server-status-variables.html)
 
-```bash
-# Install required packages
-sudo apt update && sudo apt install -y relevant-packages
+## Try a bounded change
 
-# Create configuration
-sudo mkdir -p /etc/mysql/8/performance/tuning/config
+Only use the following **256 MiB lab example** if the machine or container has enough memory above that allocation for the operating system, per-connection buffers, and other services. Check peak usage under load. The server rounds requested sizes to the supported allocation granularity. Use a dedicated admin session with permission to change dynamic global variables.
+
+```sql
+SET GLOBAL innodb_buffer_pool_size = 268435456;
+SHOW GLOBAL STATUS LIKE 'Innodb_buffer_pool_resize_status';
+SELECT @@GLOBAL.innodb_buffer_pool_size;
 ```
 
-## Verification Steps
+Wait for the resize to finish. Warm each workload in the same way, repeat the measurement, and compare disk-read deltas and latency at the same concurrency. A full table scan or a badly chosen index can dominate both results. For a connection backlog, inspect pool limits and `Threads_running` before using scarce memory for more simultaneous sessions.
 
-After each change, verify it works:
+Restore the previous setting in the original admin connection and verify the effective size and resize status again:
 
-```bash
-sudo systemctl restart relevant-service
-journalctl -u relevant-service -n 20 --no-pager
-sudo systemctl status relevant-service
+```sql
+SET GLOBAL innodb_buffer_pool_size = @saved_pool;
+SELECT @@GLOBAL.innodb_buffer_pool_size;
+SHOW GLOBAL STATUS LIKE 'Innodb_buffer_pool_resize_status';
 ```
 
-## Troubleshooting
+Persist a change in the appropriate instance configuration only after a measured improvement fits the memory budget. A `SET GLOBAL` used in this drill is temporary. [MySQL online buffer pool resizing](https://dev.mysql.com/doc/refman/8.4/en/innodb-buffer-pool-resize.html)
 
-Common issues and their fixes:
+## Verification on November 25, 2026
 
-- **Permission denied**: Check file ownership and permissions with `ls -la`
-- **Port in use**: Run `ss -tlnp | grep :PORT` and stop conflicting services
-- **Config syntax error**: Use service-specific validation commands before restarting
-
-## Monitoring
-
-For production environments, set up:
-- Prometheus metrics for key performance indicators
-- Alert rules for error rates and resource thresholds
-- Log aggregation to track issues over time
-
-## Security
-
-- Always run services under non-root users
-- Restrict network binding to localhost when possible
-- Enable audit logging
-- Apply the principle of least privilege to all configurations
+On MySQL 8.0.46 in a disposable Ubuntu VM, the requested 128 MiB pool grew to 256 MiB and returned to 128 MiB. A repeated, warmed primary-key lookup returned the same row. The global physical buffer-pool read counter stayed at 822 between those samples. This small workload showed no reduction in physical reads.

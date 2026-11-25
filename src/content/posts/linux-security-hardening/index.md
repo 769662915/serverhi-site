@@ -460,6 +460,6 @@ The time invested in security hardening pays dividends through reduced incident 
 ---
 
 **Related Posts:**
-- [Ubuntu 22.04 Server Setup](/posts/ubuntu-22-04-server-setup)
-- [Systemd Service Management](/posts/systemd-service-management)
-- [Docker Security Best Practices](/posts/docker-security-guide)
+- [Ubuntu 22.04 Server Setup](/posts/ubuntu-22-04-server-setup/)
+- [Systemd Service Management](/posts/systemd-service-management/)
+- [Docker Security Best Practices](/posts/docker-security-guide/)

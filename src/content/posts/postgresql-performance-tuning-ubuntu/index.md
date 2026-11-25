@@ -1,7 +1,8 @@
 ---
-title: "PostgreSQL Performance Tuning on Ubuntu: Configuration Parameters That Matter"
-description: "A hands-on guide covering configuration, troubleshooting, and best practices for postgresql performance tuning on ubuntu - configuration parameters that matter."
+title: "PostgreSQL tuning on Ubuntu: measure a sort before changing work_mem"
+description: "Use EXPLAIN to compare a disk-spilling sort with an in-memory sort, then roll back a session-level change and estimate the cost of concurrent queries."
 pubDate: 2026-04-11
+updatedDate: 2026-11-25
 coverImage: "./cover.webp"
 coverImageAlt: "Terminal-style illustration for PostgreSQL Performance Tuning on Ubuntu: Configuration Parameters That Matter"
 category: "server-config"
@@ -11,61 +12,39 @@ featured: false
 draft: false
 ---
 
-## Overview
+A slow report sorts a large result. Before allocating memory globally, find out whether that sort spills to disk. A sequential scan, a poor cardinality estimate or a client waiting on a lock calls for a different fix. This exercise uses PostgreSQL 16 and a temporary table to keep the input constant.
 
-A practical guide for postgresql performance tuning on ubuntu: configuration parameters that matter, covering production-ready configuration, common pitfalls, and verified best practices.
+## Reproduce one sort
 
-## Prerequisites
+Connect with `psql` to a disposable database on Ubuntu. Run the whole exercise in the **same connection**. The first part builds 100,000 moderately wide keys. A sufficiently small memory setting should force the sort to use temporary files.
 
-- Ubuntu 22.04 or later
-- Root or sudo access
-- Basic server-config knowledge
+```sql
+SHOW work_mem;
+BEGIN;
+CREATE TEMP TABLE sort_lab AS
+  SELECT md5(i::text) AS sort_key FROM generate_series(1, 100000) AS g(i);
+ANALYZE sort_lab;
+SET LOCAL max_parallel_workers_per_gather = 0;
+SET LOCAL work_mem = '64kB';
 
-## Step 1: Assess Current State
+EXPLAIN (ANALYZE, BUFFERS, TIMING OFF)
+  SELECT sort_key FROM sort_lab ORDER BY sort_key;
 
-```bash
-systemctl status 2>/dev/null
-df -h && free -m
-ss -tlnp
+SET LOCAL work_mem = '32MB';
+EXPLAIN (ANALYZE, BUFFERS, TIMING OFF)
+  SELECT sort_key FROM sort_lab ORDER BY sort_key;
+ROLLBACK;
+SHOW work_mem;
 ```
 
-## Step 2: Core Configuration
+Read the `Sort Method` line. An external merge with a `Disk` figure identifies a spill; quicksort with a `Memory` figure identifies an in-memory sort. Compare the rows returned and any temporary blocks read or written. If both runs fit in memory or the plan has no sort, the example has not demonstrated a benefit from raising this limit. The final `SHOW` should match the initial value. [PostgreSQL EXPLAIN](https://www.postgresql.org/docs/16/sql-explain.html)
 
-```bash
-sudo mkdir -p /etc/postgresql/performance/tuning/ubuntu
-sudo chmod 750 /etc/postgresql/performance/tuning/ubuntu
-```
+## Decide how widely to apply the result
 
-Testing configuration changes:
+`work_mem` applies to individual operations. Multiple sorts or hash operations and multiple workers can allocate memory within one query; several concurrent reports multiply demand again. For example, eight active sessions each using two 32 MiB sorts can use roughly 512 MiB for those sorts alone. Budget the rest of the server separately, including shared buffers and other processes. Hash operations have their own multiplier. [PostgreSQL memory settings](https://www.postgresql.org/docs/current/runtime-config-resource.html)
 
-```bash
-sudo systemctl restart relevant-service
-journalctl -u relevant-service -n 20
-```
+For one reporting job, measure a transaction-local change using its actual data and concurrent workload. Compare repeated runs in alternating order and record the plan and temporary I/O. If latency barely changes, investigate the rest of the plan before changing the instance default. An index that supplies the required order may let the database avoid the sort entirely.
 
-## Step 3: Verification and Monitoring
+## Verification on November 25, 2026
 
-Always verify after changes. Set up basic monitoring:
-
-```bash
-watch -n 5 'systemctl status relevant-service'
-```
-
-For production, integrate with Prometheus/Grafana and alert on error rates, restarts, and resource exhaustion.
-
-## Common Pitfalls
-
-- **File permissions**: Service users must read their config files. `chmod 600` on a config read by a system user causes silent failures.
-- **Port conflicts**: Verify ports are free: `ss -tlnp | grep :PORT`.
-- **Config syntax**: Use built-in test commands (`nginx -t`, `sshd -t`) before restarting services.
-
-## Security Considerations
-
-- Run services under dedicated non-root users
-- Bind to localhost unless remote access is needed
-- Enable audit logging for sensitive operations
-- Set resource limits (MemoryMax, CPUQuota) to prevent DoS
-
-## Next Steps
-
-Once working, consider: automated configuration management (Ansible), high availability, CI/CD integration, and performance tuning based on production metrics.
+In PostgreSQL 16.15 the first query used an external merge with 3,680 kB of disk. With the larger session setting it used quicksort with 7,760 kB of memory. The recorded single executions took 36.363 ms and 28.517 ms respectively. Their sort methods are reproducible checks; the timings include the effects of this VM and cache state.

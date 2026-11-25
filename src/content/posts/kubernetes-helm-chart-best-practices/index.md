@@ -1,7 +1,8 @@
 ---
-title: "Kubernetes Helm Chart Best Practices: Templates, Values, and Structure"
-description: "A hands-on guide covering configuration, troubleshooting, and best practices for kubernetes helm chart best practices - templates, values, and structure."
+title: "Test Helm chart values, upgrades and rollback with a ConfigMap"
+description: "Create a small chart, render two value sets, install it into a disposable namespace, then read the live object before and after rollback."
 pubDate: 2026-04-16
+updatedDate: 2026-11-25
 coverImage: "./cover.webp"
 coverImageAlt: "Terminal-style illustration for Kubernetes Helm Chart Best Practices: Templates, Values, and Structure"
 category: "devops"
@@ -11,64 +12,63 @@ featured: false
 draft: false
 ---
 
-## Overview
+A values file can parse correctly and still fail to change the Kubernetes object you expected. A small ConfigMap makes the path from default value to rendered manifest to live object easy to inspect. This example uses Helm 3 and an existing disposable Kubernetes context with permission to create one namespace.
 
-A hands-on guide to kubernetes helm chart best practices: templates, values, and structure, with step-by-step instructions, configuration examples, and troubleshooting advice for production environments.
+Create `demo/Chart.yaml`:
 
-## Prerequisites
-
-- Ubuntu 22.04 or later (Debian 11/12 compatible)
-- Root or sudo access
-- Familiarity with the Linux command line
-
-## Getting Started
-
-Check your current system state before making changes:
-
-```bash
-uname -a
-systemctl status
-df -h && free -m
+```yaml
+apiVersion: v2
+name: demo
+description: A configuration-value rehearsal
+type: application
+version: 0.1.0
 ```
 
-## Core Implementation
+Create `demo/values.yaml` with the default setting:
 
-```bash
-# Install required packages
-sudo apt update && sudo apt install -y relevant-packages
-
-# Create configuration
-sudo mkdir -p /etc/kubernetes/helm/chart/best/practices
+```yaml
+message: daily
 ```
 
-## Verification Steps
+Create `demo/templates/settings.yaml`. Using the release name in the object name lets separate releases coexist in the same namespace. Quoting the value keeps a string such as `"true"` a string in the resulting manifest.
 
-After each change, verify it works:
-
-```bash
-sudo systemctl restart relevant-service
-journalctl -u relevant-service -n 20 --no-pager
-sudo systemctl status relevant-service
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-settings
+data:
+  message: {{ .Values.message | quote }}
 ```
 
-## Troubleshooting
+## Render before contacting the cluster
 
-Common issues and their fixes:
+Save `message: hourly` in `hourly.yaml` beside the chart directory. Run:
 
-- **Permission denied**: Check file ownership and permissions with `ls -la`
-- **Port in use**: Run `ss -tlnp | grep :PORT` and stop conflicting services
-- **Config syntax error**: Use service-specific validation commands before restarting
+```bash
+helm lint ./demo
+helm template schedule ./demo
+helm template schedule ./demo -f hourly.yaml
+```
 
-## Monitoring
+The first manifest should contain `message: "daily"` and the second `message: "hourly"` under `data`. If the manifest still says daily, check the key's name and nesting. Linting alone cannot tell you that a valid but unused override reached the template. [Helm values files](https://helm.sh/docs/chart_template_guide/values_files/)
 
-For production environments, set up:
-- Prometheus metrics for key performance indicators
-- Alert rules for error rates and resource thresholds
-- Log aggregation to track issues over time
+## Read the live object at each revision
 
-## Security
+Check `kubectl config current-context`. In a fresh namespace reserved for this drill, install the chart, upgrade it, then roll back:
 
-- Always run services under non-root users
-- Restrict network binding to localhost when possible
-- Enable audit logging
-- Apply the principle of least privilege to all configurations
+```bash
+helm install schedule ./demo --namespace serverhi-helm-lab --create-namespace
+kubectl -n serverhi-helm-lab get configmap schedule-settings -o jsonpath='{.data.message}{"\n"}'
+helm upgrade schedule ./demo --namespace serverhi-helm-lab -f hourly.yaml
+helm history schedule --namespace serverhi-helm-lab
+kubectl -n serverhi-helm-lab get configmap schedule-settings -o jsonpath='{.data.message}{"\n"}'
+helm rollback schedule 1 --namespace serverhi-helm-lab
+kubectl -n serverhi-helm-lab get configmap schedule-settings -o jsonpath='{.data.message}{"\n"}'
+```
+
+Expect daily, hourly and daily for a new release whose first revision you verified. For an existing release, identify the intended revision from its history. A manifest rollback cannot undo a database migration or external side effect. Remove the lab release with `helm uninstall schedule -n serverhi-helm-lab` and remove the namespace only if it was created exclusively for the exercise.
+
+## Verification on November 25, 2026
+
+Helm 3.22.1 installed the ConfigMap into a disposable K3s namespace. Revision 2 changed the observed value from `daily` to `hourly`. Rolling back to revision 1 returned the live value to `daily`. This chart tests API configuration and has no application Pod to check.

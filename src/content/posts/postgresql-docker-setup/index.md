@@ -474,5 +474,5 @@ Evaluate managed PostgreSQL services when operational overhead exceeds team capa
 ---
 
 **Related Posts:**
-- [Docker Volume Management](/posts/docker-volume-management)
-- [Docker Security Best Practices](/posts/docker-security-guide)
+- [Docker Volume Management](/posts/docker-volume-management/)
+- [Docker Security Best Practices](/posts/docker-security-guide/)

@@ -509,6 +509,6 @@ For critical production deployments, implement high availability through keepali
 ---
 
 **Related Guides:**
-- [Nginx Reverse Proxy Configuration](/posts/nginx-reverse-proxy)
-- [Docker Swarm vs Kubernetes](/posts/docker-swarm-vs-kubernetes)
-- [CI/CD Pipeline Setup](/posts/cicd-pipeline-setup)
+- [Nginx Reverse Proxy Configuration](/posts/nginx-reverse-proxy/)
+- [Docker Swarm vs Kubernetes](/posts/docker-swarm-vs-kubernetes/)
+- [CI/CD Pipeline Setup](/posts/cicd-pipeline-setup/)

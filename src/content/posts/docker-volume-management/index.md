@@ -615,5 +615,5 @@ For production databases and critical services, consider enterprise storage solu
 ---
 
 **Related Guides:**
-- [PostgreSQL Docker Setup](/posts/postgresql-docker-setup)
-- [Docker Security Best Practices](/posts/docker-security-guide)
+- [PostgreSQL Docker Setup](/posts/postgresql-docker-setup/)
+- [Docker Security Best Practices](/posts/docker-security-guide/)

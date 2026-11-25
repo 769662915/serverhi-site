@@ -403,6 +403,6 @@ Consider implementing configuration management tools like Ansible or Puppet for 
 ---
 
 **Related Posts:**
-- [Linux Security Hardening Guide](/posts/linux-security-hardening)
-- [Nginx Reverse Proxy Configuration](/posts/nginx-reverse-proxy)
-- [Systemd Service Management](/posts/systemd-service-management)
+- [Linux Security Hardening Guide](/posts/linux-security-hardening/)
+- [Nginx Reverse Proxy Configuration](/posts/nginx-reverse-proxy/)
+- [Systemd Service Management](/posts/systemd-service-management/)

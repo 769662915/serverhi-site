@@ -4,19 +4,6 @@ import type { CollectionEntry } from 'astro:content';
 export type Post = CollectionEntry<'posts'>;
 
 /**
- * 规范化标签名称，用于大小写不敏感匹配。
- *
- * Args:
- *   tag: 原始标签字符串
- *
- * Returns:
- *   小写并去除首尾空格的标签字符串
- */
-export function normalizeTag(tag: string): string {
-  return tag.toLowerCase().trim();
-}
-
-/**
  * 将标签转换为 URL 安全的 slug。
  * 处理特殊字符（如 CI/CD 中的 /）。
  *
@@ -43,7 +30,8 @@ export async function getAllPosts(): Promise<Post[]> {
   });
 
   return posts.sort((a, b) => {
-    return b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
+    const byDate = b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
+    return byDate || a.slug.localeCompare(b.slug, 'en');
   });
 }
 
@@ -57,19 +45,13 @@ export async function getPostsByCategory(category: string): Promise<Post[]> {
   return posts.filter(post => post.data.category === category);
 }
 
-export async function getPostsByTag(tag: string): Promise<Post[]> {
-  const posts = await getAllPosts();
-  const normalizedTag = normalizeTag(tag);
-  return posts.filter(post =>
-    post.data.tags.some(t => normalizeTag(t) === normalizedTag)
-  );
-}
-
 export async function getRelatedPosts(currentPost: Post, limit: number = 3): Promise<Post[]> {
   const allPosts = await getAllPosts();
 
   // Filter out current post
   const otherPosts = allPosts.filter(post => post.slug !== currentPost.slug);
+
+  const currentTagSlugs = new Set(currentPost.data.tags.map(tagToSlug));
 
   // Score posts by relevance
   const scoredPosts = otherPosts.map(post => {
@@ -81,9 +63,7 @@ export async function getRelatedPosts(currentPost: Post, limit: number = 3): Pro
     }
 
     // Shared tags: +2 points per tag
-    const sharedTags = post.data.tags.filter(tag =>
-      currentPost.data.tags.includes(tag)
-    );
+    const sharedTags = [...new Set(post.data.tags.map(tagToSlug))].filter(slug => currentTagSlugs.has(slug));
     score += sharedTags.length * 2;
 
     return { post, score };
@@ -96,26 +76,40 @@ export async function getRelatedPosts(currentPost: Post, limit: number = 3): Pro
     .map(item => item.post);
 }
 
-export async function getAllTags(): Promise<string[]> {
-  const posts = await getAllPosts();
-  const tagMap = new Map<string, string>();
+interface TagGroup {
+  slug: string;
+  name: string;
+  posts: Post[];
+}
 
-  posts.forEach(post => {
-    post.data.tags.forEach(tag => {
-      const normalized = normalizeTag(tag);
-      if (!tagMap.has(normalized)) {
-        tagMap.set(normalized, tag);
+const composeWatchAliases = new Set(['compose', 'development', 'hot-reload', 'sync', 'watch']);
+
+export function isNavigationOnlyTag(group: TagGroup): boolean {
+  return composeWatchAliases.has(group.slug)
+    && group.posts.length === 1
+    && group.posts[0].slug === 'docker-compose-watch-hot-reload';
+}
+
+export function groupPostsByTag(posts: Post[]): TagGroup[] {
+  const groups = new Map<string, TagGroup>();
+  for (const post of posts) {
+    for (const tag of post.data.tags) {
+      const slug = tagToSlug(tag);
+      if (!slug) continue;
+      let group = groups.get(slug);
+      if (!group) {
+        group = { slug, name: tag, posts: [] };
+        groups.set(slug, group);
       }
-    });
-  });
-
-  return Array.from(tagMap.values()).sort((a, b) =>
-    a.toLowerCase().localeCompare(b.toLowerCase())
-  );
+      if (group.posts[group.posts.length - 1] !== post) group.posts.push(post);
+    }
+  }
+  return [...groups.values()];
 }
 
 export function formatDate(date: Date): string {
   return new Intl.DateTimeFormat('en-US', {
+    timeZone: 'UTC',
     year: 'numeric',
     month: 'long',
     day: 'numeric',

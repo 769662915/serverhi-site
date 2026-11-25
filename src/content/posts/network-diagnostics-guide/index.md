@@ -511,6 +511,6 @@ Integrate diagnostics into monitoring and alerting systems. Automated diagnostic
 ---
 
 **Related Posts:**
-- [Linux Troubleshooting](/posts/linux-troubleshooting)
-- [Systemd Service Management](/posts/systemd-service-management)
-- [Ubuntu 22.04 Server Setup](/posts/ubuntu-22-04-server-setup)
+- [Linux Troubleshooting](/posts/linux-troubleshooting/)
+- [Systemd Service Management](/posts/systemd-service-management/)
+- [Ubuntu 22.04 Server Setup](/posts/ubuntu-22-04-server-setup/)

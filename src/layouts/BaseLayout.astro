@@ -11,9 +11,10 @@ interface Props {
   article?: boolean;
   publishedTime?: string;
   modifiedTime?: string;
+  noindex?: boolean;
 }
 
-const { title, description, image, article, publishedTime, modifiedTime } = Astro.props;
+const { title, description, image, article, publishedTime, modifiedTime, noindex } = Astro.props;
 ---
 
 <!DOCTYPE html>
@@ -30,6 +31,7 @@ const { title, description, image, article, publishedTime, modifiedTime } = Astr
       article={article}
       publishedTime={publishedTime}
       modifiedTime={modifiedTime}
+      noindex={noindex}
     />
   </head>
   <body>

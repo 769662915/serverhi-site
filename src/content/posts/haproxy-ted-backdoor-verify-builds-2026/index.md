@@ -105,11 +105,11 @@ Same string, different inode. If you compile with `USE_OBLIGATORY_PROFILING` jok
 
 The operational failure here is not "forgot to patch HAProxy." It is "the reverse proxy host was a compiler, a git client, and a place you debug with wget."
 
-Build HAProxy in CI. Pin a git tag. Sign the artifact. Deploy with the same mechanism you use for nginx, which we already treated as [a config surface, not a pet](/posts/nginx-security-hardening-guide-2026). The HAProxy host should not have a compiler, should not have a world-writable build directory, and should not be the box your Groupware portal shares with the internet.
+Build HAProxy in CI. Pin a git tag. Sign the artifact. Deploy with the same mechanism you use for nginx, which we already treated as [a config surface, not a pet](/posts/nginx-security-hardening-guide-2026/). The HAProxy host should not have a compiler, should not have a world-writable build directory, and should not be the box your Groupware portal shares with the internet.
 
 If a developer "just needed to test a Lua filter" on prod, that is how you get a 2.8.12 with a custom filter you did not write. Ted's authors used the filter API because it was there.
 
-Rootless and socket discipline still apply. Last week's note on [not handing AI agents the host Docker socket](/posts/docker-socket-ai-agent-isolation-2026) is the same instinct: the process that touches raw traffic should not also be able to rewrite `/usr/sbin`. Kernel issues like [CVE-2026-53362](/posts/linux-cve-2026-53362-ipv6-privilege-escalation) are a different ticket. Close them. They are not a substitute for knowing the bytes in `haproxy`.
+Rootless and socket discipline still apply. Last week's note on [not handing AI agents the host Docker socket](/posts/docker-socket-ai-agent-isolation-2026/) is the same instinct: the process that touches raw traffic should not also be able to rewrite `/usr/sbin`. Kernel issues like [CVE-2026-53362](/posts/linux-cve-2026-53362-ipv6-privilege-escalation/) are a different ticket. Close them. They are not a substitute for knowing the bytes in `haproxy`.
 
 ## Logs that still help when the binary lies
 

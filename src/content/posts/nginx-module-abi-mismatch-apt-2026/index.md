@@ -26,9 +26,9 @@ The site can look fine while `nginx` is already half-configured, and the NGINX m
 nginx: [emerg] module "/usr/share/nginx/modules/ngx_http_brotli_filter_module.so" version 1029008 instead of 1031005
 ```
 
-1029008 is 1.29.8. 1031005 is 1.31.5. NGINX wants those integers to match. A packaging label that still says `nginx-abi-1.25.0-1` on both sides will not stop the upgrade. This is a config and package problem. It is not [the CVE-2026-42533 patch note](/posts/nginx-cve-2026-42533-patch-upgrade-guide). Do not mix the tickets.
+1029008 is 1.29.8. 1031005 is 1.31.5. NGINX wants those integers to match. A packaging label that still says `nginx-abi-1.25.0-1` on both sides will not stop the upgrade. This is a config and package problem. It is not [the CVE-2026-42533 patch note](/posts/nginx-cve-2026-42533-patch-upgrade-guide/). Do not mix the tickets.
 
-We have already had the "the box answers, the control path does not" shape in [the management-console piece](/posts/infratrust-management-console-config-2026) and, on a different clock, in [the two Azure incidents](/posts/azure-two-incidents-gateway-regions-2026). Same habit here. Ask the binary on disk before you trust the process in memory.
+We have already had the "the box answers, the control path does not" shape in [the management-console piece](/posts/infratrust-management-console-config-2026/) and, on a different clock, in [the two Azure incidents](/posts/azure-two-incidents-gateway-regions-2026/). Same habit here. Ask the binary on disk before you trust the process in memory.
 
 ## What the NGINX module version check actually compares
 

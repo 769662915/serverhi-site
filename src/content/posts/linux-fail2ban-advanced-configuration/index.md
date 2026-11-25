@@ -1,7 +1,8 @@
 ---
-title: "Advanced Fail2ban Configuration: Custom Jails, Filters, and Actions"
-description: "A hands-on guide covering configuration, troubleshooting, and best practices for advanced fail2ban configuration - custom jails, filters, and actions."
+title: "Test a Fail2Ban filter against real log shapes before enabling a jail"
+description: "Build a filter for an application-owned denial log, test positive and negative fixtures, and check a jail's effective configuration and recovery path."
 pubDate: 2026-04-10
+updatedDate: 2026-11-25
 coverImage: "./cover.webp"
 coverImageAlt: "Terminal-style illustration for Advanced Fail2ban Configuration: Custom Jails, Filters, and Actions"
 category: "security"
@@ -11,61 +12,49 @@ featured: false
 draft: false
 ---
 
-## Overview
+Fail2Ban relies on a log producer, a matching filter and a jail action. If a log line does not match the filter, increasing the ban time will make no difference. If an untrusted client can choose the address the application logs as its peer, the filter may identify somebody else. Begin with a log field supplied by a trusted server or proxy.
 
-A practical guide for advanced fail2ban configuration: custom jails, filters, and actions, covering production-ready configuration, common pitfalls, and verified best practices.
+## Write an offline fixture
 
-## Prerequisites
+These two example records use documentation addresses. Adjust the filter to a sample from your own application and keep success events alongside failures in the test file.
 
-- Ubuntu 22.04 or later
-- Root or sudo access
-- Basic security knowledge
-
-## Step 1: Assess Current State
-
-```bash
-systemctl status 2>/dev/null
-df -h && free -m
-ss -tlnp
+```text
+2026-11-25 10:11:12 serverhi-login: denied user=alice peer=192.0.2.10
+2026-11-25 10:12:13 serverhi-login: accepted user=bob peer=192.0.2.11
 ```
 
-## Step 2: Core Configuration
+Save the records as `login-sample.log` and the following as `serverhi-login.conf`. The filter matches a bounded username and the server's terminal peer field. Fail2Ban's date detector consumes the timestamp before it evaluates the expression.
 
-```bash
-sudo mkdir -p /etc/linux/fail2ban/advanced/configuration
-sudo chmod 750 /etc/linux/fail2ban/advanced/configuration
+```ini
+[Definition]
+failregex = ^\s*serverhi-login: denied user=[A-Za-z0-9_-]+ peer=<HOST>\s*$
+ignoreregex =
 ```
 
-Testing configuration changes:
-
 ```bash
-sudo systemctl restart relevant-service
-journalctl -u relevant-service -n 20
+fail2ban-regex login-sample.log ./serverhi-login.conf --print-all-matched
 ```
 
-## Step 3: Verification and Monitoring
+Expect one match and one miss. Verify that the host extracted belongs to the denied record; the accepted address should never be selected. Add examples for the actual timestamp, IPv6 and service restart messages before pointing the filter at production. [fail2ban-regex manual](https://manpages.debian.org/bookworm/fail2ban/fail2ban-regex.1.en.html)
 
-Always verify after changes. Set up basic monitoring:
+## Assemble a jail in a test VM
 
-```bash
-watch -n 5 'systemctl status relevant-service'
+Install the filter in `/etc/fail2ban/filter.d/serverhi-login.conf`. The example below is for a real application writing that exact format to `/var/log/serverhi-login.log`. The file must exist and be readable. Start with the jail disabled, choose the correct firewall action for your distribution, and keep an independent console session. The values here represent five failures in ten minutes followed by a five-minute ban.
+
+```ini
+[serverhi-login]
+enabled = false
+filter = serverhi-login
+backend = polling
+logpath = /var/log/serverhi-login.log
+port = https
+findtime = 10m
+maxretry = 5
+bantime = 5m
 ```
 
-For production, integrate with Prometheus/Grafana and alert on error rates, restarts, and resource exhaustion.
+Place that stanza in `/etc/fail2ban/jail.d/serverhi-login.local`. In a disposable VM with a valid log and an approved recovery address, set `enabled = true`, run `sudo fail2ban-client -t`, and reload the service only after the check succeeds. Confirm the jail is listed by `sudo fail2ban-client status serverhi-login`. For a mistaken ban use the verified console to run `sudo fail2ban-client set serverhi-login unbanip ADDRESS` with the actual address. Recheck the log and filter before re-enabling an overbroad rule. [Fail2Ban project's configuration reference](https://github.com/fail2ban/fail2ban/blob/master/man/jail.conf.5)
 
-## Common Pitfalls
+## Verification on November 25, 2026
 
-- **File permissions**: Service users must read their config files. `chmod 600` on a config read by a system user causes silent failures.
-- **Port conflicts**: Verify ports are free: `ss -tlnp | grep :PORT`.
-- **Config syntax**: Use built-in test commands (`nginx -t`, `sshd -t`) before restarting services.
-
-## Security Considerations
-
-- Run services under dedicated non-root users
-- Bind to localhost unless remote access is needed
-- Enable audit logging for sensitive operations
-- Set resource limits (MemoryMax, CPUQuota) to prevent DoS
-
-## Next Steps
-
-Once working, consider: automated configuration management (Ansible), high availability, CI/CD integration, and performance tuning based on production metrics.
+On Ubuntu 24.04.5 the supplied two-line fixture produced one match and one miss. `fail2ban-client -t` validated the jail configuration. No firewall ban was applied to a real client.

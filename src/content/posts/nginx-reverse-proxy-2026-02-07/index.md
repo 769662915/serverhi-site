@@ -1,7 +1,8 @@
 ---
-title: "Nginx Reverse Proxy: Complete Setup and Configuration Guide"
-description: "Learn how to configure Nginx as a reverse proxy server with practical examples, security best practices, and performance optimization techniques for production environments."
+title: "Deploy an Nginx reverse proxy and verify its cache"
+description: "Bring up a first upstream, verify proxy headers and TLS, and check when Nginx can safely cache a response."
 pubDate: 2026-02-07
+updatedDate: 2026-11-25
 coverImage: "./cover.webp"
 coverImageAlt: "Nginx reverse proxy architecture with terminal aesthetics showing server connections"
 category: "server-config"
@@ -18,6 +19,8 @@ prerequisites:
   - "Root or sudo access"
 osCompatibility: ["Ubuntu 22.04", "Ubuntu 20.04", "Debian 11", "CentOS 8"]
 ---
+
+Start with one upstream and validate a request before enabling caching. For multiple backends and path-based selection, see [routing and load balancing](/posts/nginx-reverse-proxy/).
 
 ## Introduction
 
@@ -245,50 +248,37 @@ server {
 
 ## Step 6: Caching Configuration
 
-Implement caching to improve performance:
+Use a path that serves identical public content to every reader. Keep sign-in, account and API responses outside this cache. In the `http` context define the cache and a bypass for any request with cookies or an Authorization header:
 
 ```nginx
-# Define cache path
-proxy_cache_path /var/cache/nginx levels=1:2 keys_zone=my_cache:10m max_size=1g inactive=60m use_temp_path=off;
-
-server {
-    listen 80;
-    server_name example.com;
-
-    location / {
-        proxy_pass http://localhost:8000;
-        
-        # Cache configuration
-        proxy_cache my_cache;
-        proxy_cache_valid 200 60m;
-        proxy_cache_valid 404 10m;
-        proxy_cache_use_stale error timeout updating http_500 http_502 http_503 http_504;
-        proxy_cache_background_update on;
-        proxy_cache_lock on;
-        
-        # Add cache status header
-        add_header X-Cache-Status $upstream_cache_status;
-        
-        # Standard headers
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-    }
-    
-    # Bypass cache for specific paths
-    location /api/ {
-        proxy_pass http://localhost:8000;
-        proxy_cache_bypass 1;
-        proxy_no_cache 1;
-    }
+proxy_cache_path /var/cache/nginx levels=1:2 keys_zone=my_cache:10m max_size=1g inactive=60m;
+map "$http_authorization:$http_cookie" $skip_public_cache {
+    ":"     0;
+    default 1;
 }
 ```
 
-Create cache directory:
+In the existing server block, proxy the application normally and enable caching only for the selected public path. Preserve the upstream's `Cache-Control` and `Set-Cookie` behavior.
 
-```bash
-sudo mkdir -p /var/cache/nginx
-sudo chown www-data:www-data /var/cache/nginx
+```nginx
+location / {
+    proxy_pass http://localhost:8000;
+    proxy_set_header Host $host;
+}
+
+location /public/ {
+    proxy_pass http://localhost:8000;
+    proxy_set_header Host $host;
+    proxy_cache my_cache;
+    proxy_cache_key "$scheme$host$request_uri";
+    proxy_cache_valid 200 10m;
+    proxy_cache_bypass $skip_public_cache;
+    proxy_no_cache $skip_public_cache;
+    add_header X-Cache-Status $upstream_cache_status always;
+}
 ```
+
+Choose an existing public file the backend permits caching. After checking `nginx -t` and reloading, request the same URL twice and inspect `X-Cache-Status` for `MISS` then `HIT`. A request with a test cookie should show `BYPASS`. Check that the uncached default location never returns another user's response. If the public file stays a miss, inspect its response headers before altering the cache policy. [Nginx proxy cache directives](https://nginx.org/en/docs/http/ngx_http_proxy_module.html)
 
 ## Step 7: Advanced Configuration
 
@@ -564,6 +554,10 @@ Start with a basic configuration and gradually add features as your needs grow. 
 ---
 
 **Related Tutorials:**
-- [Nginx Load Balancing: Advanced Techniques](/posts/nginx-load-balancing)
-- [SSL/TLS Configuration: Complete Guide](/posts/ssl-tls-configuration)
-- [Nginx Performance Tuning](/posts/nginx-performance-tuning)
+- [Choose an upstream balancing method](/posts/nginx-reverse-proxy/#load-balancing-strategies)
+- [SSL/TLS Configuration: Complete Guide](/posts/ssl-tls-certificate-management/)
+- [Nginx HTTP proxy buffering and timeouts](https://nginx.org/en/docs/http/ngx_http_proxy_module.html)
+
+## Cache verification on November 25, 2026
+
+With Nginx 1.24.0, two requests for the same public file on an isolated proxy returned the expected body and the cache headers `MISS` and `HIT`. Adding a test cookie returned `BYPASS`.

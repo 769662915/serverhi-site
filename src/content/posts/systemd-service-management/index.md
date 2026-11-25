@@ -407,6 +407,6 @@ Continue exploring systemd's capabilities as your requirements grow. Advanced fe
 ---
 
 **Related Posts:**
-- [Linux Security Hardening](/posts/linux-security-hardening)
-- [Ubuntu 22.04 Server Setup](/posts/ubuntu-22-04-server-setup)
-- [Docker Security Best Practices](/posts/docker-security-guide)
+- [Linux Security Hardening](/posts/linux-security-hardening/)
+- [Ubuntu 22.04 Server Setup](/posts/ubuntu-22-04-server-setup/)
+- [Docker Security Best Practices](/posts/docker-security-guide/)

@@ -1,12 +1,15 @@
 ---
-title: "Nginx Reverse Proxy Configuration: Complete Implementation Guide"
-description: "Learn how to configure Nginx as a reverse proxy for web applications, APIs, and microservices. This guide covers SSL termination, load balancing, and advanced routing."
+title: "Nginx reverse proxy routing and load-balancing strategies"
+description: "Choose URI routing, upstream groups and balancing methods for several backends behind Nginx."
 pubDate: 2026-02-08
+updatedDate: 2026-11-25
 coverImage: "./cover.webp"
 coverImageAlt: "Nginx reverse proxy architecture diagram showing traffic flow"
 category: "server-config"
 tags: ["Nginx", "reverse proxy", "load balancing", "web server", "API gateway"]
 ---
+
+Use this guide when more than one upstream or path needs a routing rule. For the first single-backend deployment, see [the setup and cache walkthrough](/posts/nginx-reverse-proxy-2026-02-07/).
 
 ## Introduction
 
@@ -321,5 +324,5 @@ Continue exploring Nginx capabilities as your infrastructure grows. Consider imp
 ---
 
 **Related Posts:**
-- [Ubuntu 22.04 Server Setup](/posts/ubuntu-22-04-server-setup)
-- [CI/CD Pipeline Setup](/posts/cicd-pipeline-setup)
+- [Ubuntu 22.04 Server Setup](/posts/ubuntu-22-04-server-setup/)
+- [CI/CD Pipeline Setup](/posts/cicd-pipeline-setup/)

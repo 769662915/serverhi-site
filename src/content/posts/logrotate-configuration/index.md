@@ -456,6 +456,6 @@ For distributed systems, consider centralized logging solutions that aggregate l
 ---
 
 **Related Guides:**
-- [Log Analysis Techniques](/posts/log-analysis-techniques)
-- [Systemd Service Management](/posts/systemd-service-management)
-- [Linux Troubleshooting Guide](/posts/linux-troubleshooting)
+- [Log Analysis Techniques](/posts/log-analysis-techniques/)
+- [Systemd Service Management](/posts/systemd-service-management/)
+- [Linux Troubleshooting Guide](/posts/linux-troubleshooting/)

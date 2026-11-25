@@ -2,6 +2,7 @@
 title: "NVIDIA's Sept. 30 List: Four Driver Builds, Then Update"
 description: "GamingOnLinux lists four safe NVIDIA Linux driver builds from the Sept. 30 bulletin. The high scores are local memory bugs. Guest drivers are a separate row."
 pubDate: 2026-10-02
+updatedDate: 2026-11-25
 coverImage: "./cover.webp"
 coverImageAlt: "A server chassis with the side panel off and a GPU seated in the tray, cool white bench light, no vendor logos and no readable text on the board."
 category: troubleshooting
@@ -24,7 +25,7 @@ The NVIDIA host driver is the thing to patch. The container that happens to see 
 
 [NVIDIA's own bulletin](https://nvidia.custhelp.com/app/answers/detail/a_id/5861/~/security-bulletin%3A-nvidia-gpu-display-driver---september-2026) is a set of wide tables. The Linux branch header I could read covers R595, R580, and R570, and then a long CVE list. A guest-driver row I could read pairs "all versions prior to and including 20.1" with 595.71.05 on one side and 20.2 / 595.91.07 on the other. I am not going to pretend I retyped every cell. The operational sentence I will use is GamingOnLinux's, because it is a sentence and not a table I might mis-align. The bulletin is the primary page. The four builds are the check.
 
-We already had this shape once this month. [CVE-2026-80521 was a kernel bug, and the Docker version was the wrong place to look](/posts/ubuntu-cve-2026-80521-docker-hosts). Same habit here. `nvidia-smi` on the container is often the host driver leaking through. The version that matters is the one the host is running. The bulletin does not print a shell one-liner. Reading the running driver and comparing it to those four floors is the whole troubleshooting step.
+We already had this shape once this month. [CVE-2026-80521 was a kernel bug, and the Docker version was the wrong place to look](/posts/ubuntu-cve-2026-80521-docker-hosts/). Same habit here. `nvidia-smi` on the container is often the host driver leaking through. The version that matters is the one the host is running. The bulletin does not print a shell one-liner. Reading the running driver and comparing it to those four floors is the whole troubleshooting step.
 
 ## The four NVIDIA driver floors, and the branch you are not on
 
@@ -48,13 +49,13 @@ The medium cluster is mostly denial of service, score 5.5, and it is where a sha
 
 CVE-2026-47517: a local user submits a crafted ioctl, null pointer dereference, denial of service. CVE-2026-47534: divide by zero in the kernel-mode layer, Windows and Linux, denial of service. CVE-2026-47557: an unprivileged user causes a NULL pointer dereference, denial of service. CVE-2026-47566: an unprivileged user triggers a memory leak on error paths, kernel memory exhaustion, denial of service. CVE-2026-47567: uncontrolled resource consumption by exhausting the DRM VMA offset address space, denial of service. CVE-2026-47568: uncontrolled kernel log generation from an interface that emits unrate-limited error messages, denial of service.
 
-Read that last pair as capacity bugs. A process that can open the driver interface can burn kernel memory or fill the log disk. On a single-user workstation that is an annoyance. On a multi-tenant GPU host it is a noisy neighbor with a kernel path. [The kernel deadline note from earlier this month](/posts/cisa-kernel-kev-deadline-passed-2026) was about a different bug and a CISA date. This bulletin, in the text I have, does not say these CVEs are in the KEV catalog. Do not file them as known-exploited because a newsletter was long. File them because the driver branch is below the floor and the interface is reachable by accounts you do not fully trust.
+Read that last pair as capacity bugs. A process that can open the driver interface can burn kernel memory or fill the log disk. On a single-user workstation that is an annoyance. On a multi-tenant GPU host it is a noisy neighbor with a kernel path. This bulletin, in the text I have, does not say these CVEs are in the KEV catalog. Do not file them as known-exploited because a newsletter was long. File them because the driver branch is below the floor and the interface is reachable by accounts you do not fully trust.
 
 ## A use-after-free that I will not assign to your branch
 
 [Red Hat's page for CVE-2026-47579](https://access.redhat.com/security/cve/cve-2026-47579) describes a use-after-free in the NVIDIA GPU display driver's kernel mode: a local user gets the system to touch memory after it was freed. Successful exploitation could mean code execution, privilege escalation, tampering, information disclosure, or denial of service. The page I could read did not give a fixed build, and it did not say the flaw is Linux-only.
 
-In the NVIDIA bulletin extract, 47579 appears in the Windows branch CVE list, not in the Linux branch list I was able to read. I am not going to move it. If your scanner flags 47579 on a Linux host, the next click is the bulletin row for your branch, not this paragraph. A scanner that marks "under investigation" on a Red Hat product is telling you Red Hat has not finished the mapping. That is a status, not a patch command. We hit the same class of kernel privilege bug in [CVE-2026-53362](/posts/linux-cve-2026-53362-ipv6-privilege-escalation), and the lesson was the same: the CVE name is not the package name.
+In the NVIDIA bulletin extract, 47579 appears in the Windows branch CVE list, not in the Linux branch list I was able to read. I am not going to move it. If your scanner flags 47579 on a Linux host, the next click is the bulletin row for your branch, not this paragraph. A scanner that marks "under investigation" on a Red Hat product is telling you Red Hat has not finished the mapping. That is a status, not a patch command. We hit the same class of kernel privilege bug in [CVE-2026-53362](/posts/linux-cve-2026-53362-ipv6-privilege-escalation/), and the lesson was the same: the CVE name is not the package name.
 
 ## The check, in the order that does not close the wrong ticket
 

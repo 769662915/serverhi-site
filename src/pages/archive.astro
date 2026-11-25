@@ -74,7 +74,7 @@ const monthOrder = [
                       <ul class="posts-list">
                         {posts.map((post) => (
                           <li class="post-item">
-                            <a href={`/posts/${post.slug}`} class="post-link terminal-hover">
+                            <a href={`/posts/${post.slug}/`} class="post-link terminal-hover">
                               <span class="post-date">
                                 {post.data.pubDate.toLocaleDateString('en-US', {
                                   month: 'short',

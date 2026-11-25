@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="404 - Page Not Found - ServerHi">
+<BaseLayout noindex title="404 - Page Not Found - ServerHi">
   <div class="container">
     <div class="error-page">
       <div class="error-content terminal-window fade-in-up">
@@ -31,19 +31,19 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                 </a>
               </li>
               <li>
-                <a href="/posts" class="suggestion-link terminal-hover">
+                <a href="/posts/" class="suggestion-link terminal-hover">
                   <span class="link-icon">📚</span>
                   <span>Browse All Tutorials</span>
                 </a>
               </li>
               <li>
-                <a href="/search" class="suggestion-link terminal-hover">
+                <a href="/search/" class="suggestion-link terminal-hover">
                   <span class="link-icon">🔍</span>
                   <span>Search Tutorials</span>
                 </a>
               </li>
               <li>
-                <a href="/category/docker" class="suggestion-link terminal-hover">
+                <a href="/category/docker/" class="suggestion-link terminal-hover">
                   <span class="link-icon">🐳</span>
                   <span>Docker Tutorials</span>
                 </a>
@@ -53,7 +53,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
           <div class="error-footer">
             <p class="terminal-prompt">
-              If you believe this is an error, please <a href="/contact">contact us</a>.
+              If you believe this is an error, please <a href="/contact/">contact us</a>.
             </p>
           </div>
         </div>

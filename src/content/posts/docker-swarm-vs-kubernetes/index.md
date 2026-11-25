@@ -477,5 +477,5 @@ Some organizations use both platforms for different workloads. Development envir
 ---
 
 **Related Guides:**
-- [Kubernetes Basics](/posts/kubernetes-basics)
-- [Container Deployment Strategies](/posts/container-deployment-strategies)
+- [Kubernetes Basics](/posts/kubernetes-basics/)
+- [Container Deployment Strategies](/posts/container-deployment-strategies/)

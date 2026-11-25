@@ -2,6 +2,7 @@
 title: "Docker Compose on Ubuntu 22.04: A Complete Setup Guide"
 description: "Learn how to install and configure Docker Compose on Ubuntu 22.04. This step-by-step tutorial covers everything from basic installation to multi-container application deployment."
 pubDate: 2026-02-08
+updatedDate: 2026-11-25
 coverImage: "./cover.webp"
 coverImageAlt: "Docker Compose running on Ubuntu 22.04 terminal showing container status"
 category: "docker"
@@ -409,6 +410,6 @@ As you continue exploring Docker Compose, experiment with more complex configura
 ---
 
 **Related Tutorials:**
-- [Getting Started with Docker Containers](/posts/docker-containers-ubuntu)
-- [Nginx Reverse Proxy with Docker Compose](/posts/nginx-reverse-proxy-docker)
-- [Docker Networking Deep Dive](/posts/docker-networking-guide)
+- [Docker’s first-container workshop](https://docs.docker.com/get-started/workshop/)
+- [Connect services by name in Compose](https://docs.docker.com/compose/how-tos/networking/)
+- [Docker Networking Deep Dive](/posts/docker-networking-guide/)

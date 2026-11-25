@@ -2,6 +2,7 @@
 title: "Linux Process Management: A Complete Guide to htop, systemctl, and Beyond"
 description: "Master Linux process management from basic signals to advanced cgroup controls. This guide covers htop, ps, kill, nice, and systemd service management for production servers."
 pubDate: 2026-08-27
+updatedDate: 2026-11-25
 coverImage: "./cover.webp"
 coverImageAlt: "Terminal window displaying htop process viewer with color-coded CPU and memory bars"
 category: "linux"
@@ -374,4 +375,4 @@ ulimit -n 65536
 
 ---
 
-*Related reads: [Linux User and Group Management: A Complete Server Administration Guide](/linux/linux-user-group-management-complete-guide/) | [Linux Log Rotation and Disk Space Management: A Practical Guide](/linux/linux-log-rotation-disk-space-management/) | [Linux Swap and ZRAM: A Complete Configuration Guide for Server Performance](/server-config/linux-swap-zram-configuration-guide-2026/)*
+*Related reads: [Linux User and Group Management: A Complete Server Administration Guide](/posts/linux-user-group-management-complete-guide/) | [Linux Log Rotation and Disk Space Management: A Practical Guide](/posts/linux-log-rotation-disk-space-management/) | [Linux Swap and ZRAM: A Complete Configuration Guide for Server Performance](/posts/linux-swap-zram-configuration-guide-2026/)*
