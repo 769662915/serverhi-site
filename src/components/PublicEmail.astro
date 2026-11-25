@@ -1,0 +1,7 @@
+---
+interface Props {
+  address: string;
+}
+const { address } = Astro.props;
+---
+<Fragment set:html="<!--email_off-->" /><a href={`mailto:${address}`}>{address}</a><Fragment set:html="<!--/email_off-->" />

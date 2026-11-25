@@ -22,6 +22,7 @@
   "devDependencies": {
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
-    "pagefind": "1.6.0"
+    "pagefind": "1.6.0",
+    "unist-util-visit": "5.1.0"
   }
 }

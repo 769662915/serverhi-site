@@ -1,4 +1,5 @@
 ---
+import PublicEmail from '../components/PublicEmail.astro';
 import PublicationPage from '../layouts/PublicationPage.astro';
 ---
 <PublicationPage title="Contact and corrections" description="Send an editorial correction, report a broken link or contact ServerHi privately.">
@@ -6,6 +7,6 @@ import PublicationPage from '../layouts/PublicationPage.astro';
   <p><a href="https://github.com/769662915/serverhi-site/issues">Open the ServerHi issue tracker</a> to read existing reports or file a new issue with a GitHub account. Include the article URL, the passage or step, the software version when relevant, and what you expected and observed.</p>
   <p>Issues are public. Redact credentials, personal information and private hostnames before posting a log or screenshot.</p>
   <h2>Send a private message</h2>
-  <p>For personal information or a private editorial inquiry, email <a href="mailto:contact@serverhi.com">contact@serverhi.com</a>. Include a short subject and the article URL if your message concerns a guide.</p>
+  <p>For personal information or a private editorial inquiry, email <PublicEmail address="contact@serverhi.com" />. Include a short subject and the article URL if your message concerns a guide.</p>
   <p>See the <a href="/editorial-policy/">editorial policy</a> for the corrections process and the <a href="/privacy/">privacy policy</a> for information about these channels.</p>
 </PublicationPage>
