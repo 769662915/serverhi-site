@@ -1,7 +1,14 @@
 ---
 import { site } from '../lib/config';
 import ThemeToggle from './ThemeToggle';
-import MobileMenu from './MobileMenu';
+const navigation = [
+  { href: '/', label: 'Home', icon: '🏠' },
+  { href: '/posts/', label: 'Tutorials', icon: '📚' },
+  { href: '/category/docker/', label: 'Docker', icon: '🐳' },
+  { href: '/category/linux/', label: 'Linux', icon: '🐧' },
+  { href: '/category/devops/', label: 'DevOps', icon: '🚀' },
+  { href: '/search/', label: 'Search', icon: '🔍' },
+];
 ---
 
 <header class="site-header">
@@ -13,24 +20,52 @@ import MobileMenu from './MobileMenu';
         <span class="logo-bracket">]</span>
       </a>
 
-      <nav class="main-nav">
-        <a href="/" class="nav-link terminal-hover">Home</a>
-        <a href="/posts/" class="nav-link terminal-hover">Tutorials</a>
-        <a href="/category/docker/" class="nav-link terminal-hover">Docker</a>
-        <a href="/category/linux/" class="nav-link terminal-hover">Linux</a>
-        <a href="/category/devops/" class="nav-link terminal-hover">DevOps</a>
-        <a href="/search/" class="nav-link terminal-hover">Search</a>
+      <nav class="main-nav" aria-label="Main navigation">
+        {navigation.map(item => <a href={item.href} class="nav-link terminal-hover">{item.label}</a>)}
       </nav>
 
       <div class="header-actions">
         <ThemeToggle client:load />
-        <div class="mobile-menu-wrapper">
-          <MobileMenu client:load />
-        </div>
+        <details class="mobile-menu-wrapper" id="mobile-menu">
+          <summary class="mobile-menu-toggle" aria-label="Toggle menu">
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+          </summary>
+          <div class="mobile-menu-overlay">
+            <nav class="mobile-nav" aria-label="Main navigation">
+              {navigation.map(item => (
+                <a href={item.href} class="mobile-nav-link terminal-hover">
+                  <span class="nav-icon" aria-hidden="true">{item.icon}</span>
+                  <span>{item.label}</span>
+                </a>
+              ))}
+            </nav>
+          </div>
+        </details>
       </div>
     </div>
   </div>
 </header>
+
+<script>
+  const menu = document.querySelector<HTMLDetailsElement>('#mobile-menu');
+  if (menu) {
+    menu.addEventListener('click', event => {
+      if (event.target instanceof Element && event.target.matches('.mobile-menu-overlay')) {
+        menu.open = false;
+        menu.querySelector('summary')?.focus();
+      }
+    });
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && menu.open) {
+        menu.open = false;
+        menu.querySelector('summary')?.focus();
+      }
+    });
+    window.addEventListener('pagehide', () => { menu.open = false; });
+  }
+</script>
 
 <style>
   .site-header {
@@ -142,6 +177,12 @@ import MobileMenu from './MobileMenu';
     position: relative;
   }
 
+  .mobile-menu-toggle::-webkit-details-marker { display: none; }
+
+  @media (max-width: 768px) {
+    body:has(.mobile-menu-wrapper[open]) { overflow: hidden; }
+  }
+
   .hamburger-line {
     width: 2rem;
     height: 2px;
@@ -151,15 +192,15 @@ import MobileMenu from './MobileMenu';
     transform-origin: center;
   }
 
-  .mobile-menu-toggle.active .hamburger-line:nth-child(1) {
+  .mobile-menu-wrapper[open] .mobile-menu-toggle .hamburger-line:nth-child(1) {
     transform: rotate(45deg) translateY(0.5rem);
   }
 
-  .mobile-menu-toggle.active .hamburger-line:nth-child(2) {
+  .mobile-menu-wrapper[open] .mobile-menu-toggle .hamburger-line:nth-child(2) {
     opacity: 0;
   }
 
-  .mobile-menu-toggle.active .hamburger-line:nth-child(3) {
+  .mobile-menu-wrapper[open] .mobile-menu-toggle .hamburger-line:nth-child(3) {
     transform: rotate(-45deg) translateY(-0.5rem);
   }
 
@@ -184,7 +225,7 @@ import MobileMenu from './MobileMenu';
     align-items: flex-start;
   }
 
-  .mobile-menu-overlay.active {
+  .mobile-menu-wrapper[open] .mobile-menu-overlay {
     opacity: 1;
     visibility: visible;
   }
