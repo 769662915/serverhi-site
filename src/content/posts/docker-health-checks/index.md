@@ -2,6 +2,7 @@
 title: "Docker Container Health Checks: Best Practices"
 description: "Implement effective container health checks in Docker. This guide covers HEALTHCHECK instructions, monitoring strategies, and integration with orchestrators."
 pubDate: 2026-02-08
+updatedDate: 2026-11-25
 coverImage: "./cover.webp"
 coverImageAlt: "Docker container health status visualization with check marks"
 category: "docker"
@@ -10,11 +11,11 @@ tags: ["Docker", "containers", "health check", "monitoring", "orchestration", "D
 
 ## Introduction
 
-Container health checks enable Docker to distinguish between running containers and those actively serving traffic. Without health checks, Docker considers a container running as long as its main process exists, regardless of whether the application inside functions correctly. Health checks solve this problem by defining commands that verify actual application health, enabling Docker to restart unhealthy containers and orchestrators to route traffic away from failing instances.
+A standalone Docker health check records whether a probe succeeds inside the container. A failed probe can mark the container `unhealthy` while its main process keeps running. Engine restart policies respond to the main process exiting. Docker Compose can wait for a healthy dependency at startup.
 
-Health checks matter critically in production environments. Applications crash, hang, run out of resources, or enter degraded states where the process runs but serves errors. Health checks detect these conditions and trigger appropriate responses. Orchestrators like Docker Swarm and Kubernetes use health status to make load balancing decisions, removing unhealthy containers from service rotation automatically.
+To see the difference, run the [two-service Compose rehearsal](/posts/docker-compose-health-checks-guide/) and compare health status with the restart count. Kubernetes configures readiness and liveness probes in the Pod specification. Readiness controls service endpoints, while repeated liveness failures can trigger a container restart. [Docker restart policies](https://docs.docker.com/engine/containers/start-containers-automatically/) · [Kubernetes probe behavior](https://kubernetes.io/docs/concepts/configuration/liveness-readiness-startup-probes/)
 
-This comprehensive guide covers health check implementation in Dockerfiles, Docker Compose, and runtime configurations. You will learn to write effective health check commands, configure appropriate intervals and timeouts, handle edge cases, and integrate health status with monitoring systems. By implementing proper health checks, your containers achieve self-healing behavior that reduces operational burden.
+For a separate action on repeated health failures, see the [guide to monitoring and recovery controllers](/posts/docker-healthcheck-auto-healing-containers-2026/). A controller needs an explicit, bounded recovery policy.
 
 ## Understanding Docker Health Checks
 
@@ -22,7 +23,7 @@ Health checks extend Docker's awareness of container state beyond simple process
 
 When you define a health check, Docker executes the specified command inside the container at configured intervals. The command returns an exit code indicating health status: 0 means healthy, 1 means unhealthy. Docker tracks these results and updates container status accordingly.
 
-Health check results affect container lifecycle in several ways. Docker Compose reports container health in status output. Docker Swarm uses health status to determine service task readiness. Kubernetes requires health checks for rolling updates and readiness probes. Monitoring systems can query health status through the Docker API.
+Health check results affect container lifecycle in several ways. Docker Compose reports container health in status output. Docker Swarm uses health status to determine service task readiness. Kubernetes uses probes configured separately in the Pod specification. Monitoring systems can query health status through the Docker API.
 
 Three components define health check behavior. The test command specifies what to execute. The interval defines how frequently checks run. The timeout determines how long to wait for command completion. Retries specify consecutive failures before marking unhealthy. Start period provides initialization buffer before checks begin.
 
@@ -421,7 +422,7 @@ Swarm uses health status to determine service readiness. Unhealthy tasks are rem
 ### Container Restart Policies
 
 ```bash
-# Restart containers based on health status
+# Record health independently; restart on a nonzero main-process exit
 docker run \
   --restart=on-failure:3 \
   --health-cmd="curl -f http://localhost/health || exit 1" \
@@ -486,5 +487,9 @@ Update health checks as applications evolve. New features may require new checks
 ---
 
 **Related Guides:**
-- [Docker Security Guide](/posts/docker-security-guide)
-- [Container Deployment Strategies](/posts/container-deployment-strategies)
+- [Docker Security Guide](/posts/docker-security-guide/)
+- [Container Deployment Strategies](/posts/container-deployment-strategies/)
+
+## Restart policy verification on November 25, 2026
+
+With Docker Engine 29.1.3 the failed readiness probe left the main process running with zero restarts. In a separate container with `--restart=on-failure:1`, a main process that exited with status 7 after eleven seconds was restarted once.

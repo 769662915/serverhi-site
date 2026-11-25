@@ -490,6 +490,6 @@ Automation through scripts and dashboards scales log analysis beyond manual revi
 ---
 
 **Related Posts:**
-- [Linux Troubleshooting](/posts/linux-troubleshooting)
-- [Network Diagnostics Guide](/posts/network-diagnostics-guide)
-- [System Monitoring with Prometheus](/posts/prometheus-monitoring)
+- [Linux Troubleshooting](/posts/linux-troubleshooting/)
+- [Network Diagnostics Guide](/posts/network-diagnostics-guide/)
+- [System Monitoring with Prometheus](/posts/prometheus-monitoring/)

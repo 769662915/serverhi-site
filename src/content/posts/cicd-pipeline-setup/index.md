@@ -367,5 +367,5 @@ Continue exploring pipeline capabilities as your requirements grow. Advanced fea
 ---
 
 **Related Posts:**
-- [Kubernetes Basics](/posts/kubernetes-basics)
-- [Docker Security Best Practices](/posts/docker-security-guide)
+- [Kubernetes Basics](/posts/kubernetes-basics/)
+- [Docker Security Best Practices](/posts/docker-security-guide/)

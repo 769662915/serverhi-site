@@ -1,584 +1,114 @@
 ---
-title: "Server Backup Strategies: Comprehensive Data Protection Guide"
-description: "Implement robust server backup strategies for Linux servers. Learn backup tools, retention policies, offsite storage, and disaster recovery procedures for production environments."
+title: "Server backups you can restore: a PostgreSQL drill and off-site copy"
+description: "Build a versioned PostgreSQL backup, restore the downloaded copy into an empty database, and make upload, integrity or application checks fail the job."
 pubDate: 2026-02-08
+updatedDate: 2026-11-25
 coverImage: "./cover.webp"
 coverImageAlt: "Backup strategy visualization showing local, cloud, and hybrid storage approaches"
 category: "devops"
 tags: ["backup", "recovery", "Linux", "disaster recovery", "data protection"]
 ---
 
-## Introduction
+**Correction, November 25, 2026.** The earlier verification script accepted a gzip file containing invalid SQL. The upload step could also finish successfully after a remote error. If you adopted either example, restore an existing off-site copy before treating the job's last green run as a recovery point.
 
-Data protection requires systematic backup strategies matching recovery requirements. Backups protect against hardware failure, human error, ransomware, and natural disasters. This guide covers backup methodologies, tool selection, retention policies, and disaster recovery planning for production Linux servers.
+## Choose a recovery point you can afford
 
-Backup strategies balance data protection against storage costs and operational complexity. Regular testing validates backup integrity and recovery procedures. Recovery time and recovery point objectives guide appropriate backup frequency and retention.
+Write down the newest write you can afford to lose (recovery point objective, RPO) and how long users can wait (recovery time objective, RTO). A nightly logical dump can put almost a day's writes at risk. A database that must recover to a particular minute needs a different design, such as PostgreSQL base backups plus continuous WAL archiving. Time the download, restore, application checks and cutover separately. A fast dump tells you little about how long the restore will take. [PostgreSQL backup methods](https://www.postgresql.org/docs/current/backup.html)
 
-Backup architectures range from simple single-server scripts to distributed multi-site solutions. Evaluate requirements before selecting tools and strategies. Over-engineered backup systems introduce maintenance burdens while under-engineered systems risk data loss.
+Inventory the rest of the service too. For uploaded files, retain versioned copies and test that an object referenced by a restored row is present. Record the OS and database versions, required extensions, roles, configuration and how to recover encryption keys. Give the backup job only the permissions it needs and keep a separately protected copy outside the source host's failure domain. Test access with the credentials available during an incident.
 
-## Backup Fundamentals
+## Set up a known recovery test
 
-Learn backup types and strategies to guide appropriate implementation.
+This example uses Bash, gzip, PostgreSQL client tools and rclone. It produces a plain SQL dump of **one database**. Use clients matching the source major version and a compatible disposable PostgreSQL cluster with the required extensions. The restore account needs permission to create databases on that cluster. Use a libpq service or a restricted password file for credentials. Only restore dumps you control: restoring runs SQL from the backup.
 
-### Backup Types
+For a rehearsal, create an empty source database you own. Run the following in that database. The probe stands in for an application record whose identity you know ahead of time.
 
-Full backups copy all data, providing complete recovery points but consuming significant storage and time. Incremental backups copy only changes since last backup, enabling frequent backups with minimal overhead. Differential backups copy changes since last full backup, simplifying recovery at the cost of increasing backup sizes.
-
-```bash
-# Full backup example
-tar -czvf /backup/full-$(date +%Y%m%d).tar.gz -C / data/
-
-# Incremental backup (requires prior full)
-tar -czvf /backup/incr-$(date +%Y%m%d).tar.gz \
-  -g /backup/snapshot.snar -C / data/
-
-# Differential backup
-tar -czvf /backup/diff-$(date +%Y%m%d).tar.gz \
-  -N /backup/full-$(date -d '1 week ago' +%Y%m%d).tar.gz -C / data/
+```sql
+CREATE TABLE public.backup_probe (id integer PRIMARY KEY, label text NOT NULL);
+INSERT INTO public.backup_probe VALUES (1, 'serverhi-drill');
 ```
 
-Tar with snapshot files implements simple incremental backups. Modern backup tools automate incremental chains with better deduplication.
+For a real application, choose a stable, meaningful check on its own tables. Also verify a recent business record or transaction watermark from the backup window. A fixed probe alone cannot tell you how recent a copy is. This drill omits ownership and grants for portability. Back up global roles and test privileges separately before using a restored service.
 
-### Recovery Objectives
+## Restore into a fresh database
 
-Recovery Time Objective (RTO) defines maximum acceptable downtime. Recovery Point Objective (RPO) defines maximum acceptable data loss. These objectives drive backup frequency and architecture decisions:
-
-```bash
-# High availability (RTO < 1 hour, RPO < 5 minutes)
-# Continuous replication + frequent incremental backups
-
-# Standard protection (RTO < 4 hours, RPO < 24 hours)
-# Daily full + hourly incremental
-
-# Basic protection (RTO < 24 hours, RPO < 1 week)
-# Weekly full + daily incremental
-```
-
-Match backup strategies to business requirements. Critical systems require aggressive RTO/RPO while archival systems tolerate extended recovery times.
-
-## Backup Tools and Techniques
-
-Linux provides diverse backup tools suiting different requirements.
-
-### rsync for File Backups
-
-rsync excels at efficient file synchronization with bandwidth optimization:
+Save this as `verify-db.sh`. Set `RESTORE_HOST` to the host or socket directory of the **isolated test cluster**, and `RESTORE_USER` to its test account. The script creates an empty database for this attempt. It removes only the database it successfully created. `ON_ERROR_STOP` makes a SQL error fail the restore; `pipefail` also catches a gzip read failure.
 
 ```bash
-# Basic rsync backup
-rsync -avz /source/ /backup/
-
-# Delete files not in source
-rsync -avz --delete /source/ /backup/
-
-# Exclude patterns
-rsync -avz --exclude='*.tmp' --exclude='cache/*' /source/ /backup/
-
-# Show progress
-rsync -avz --progress /source/ /backup/
-
-# Hard links for space-efficient snapshots
-rsync -avz --link-dest=/backup/daily.1 /source/ /backup/daily.0/
-```
-
-The `--link-dest` option creates space-efficient snapshots. Unchanged files hard-link to previous backups, reducing storage while maintaining point-in-time recovery.
-
-### rsnapshot for Snapshots
-
-rsnapshot automates rsync-based snapshot rotation:
-
-```bash
-# Install rsnapshot
-sudo apt install rsnapshot
-
-# Configuration /etc/rsnapshot.conf
-# snapshot_root /backup/snapshots/
-# cmd_cp /bin/cp
-# rsync_numtries 3
-# retain hourly 24
-# retain daily 7
-# retain weekly 4
-# retain monthly 6
-# backup /home/ localhost/
-# backup /etc/ localhost/
-# backup /var/www/ localhost/
-
-# Test configuration
-rsnapshot configtest
-
-# Create hourly snapshot
-rsnapshot hourly
-
-# List snapshots
-ls -la /backup/snapshots/hourly.0/
-
-# Rotation commands
-rsnapshot daily
-rsnapshot weekly
-rsnapshot monthly
-```
-
-rsnapshot manages snapshot rotation automatically. Hourly, daily, weekly, and monthly retention provides multiple recovery points.
-
-### BorgBackup for Deduplication
-
-BorgBackup provides deduplication and compression for efficient storage:
-
-```bash
-# Install BorgBackup
-sudo apt install borgbackup
-
-# Initialize repository (encrypted)
-borg init --encryption=repokey /backup/borg-repo
-
-# Create backup
-borg create /backup/borg-repo::backup-{now} \
-  /home/user/data \
-  --exclude '*.tmp' \
-  --compression lz4 \
-  --progress
-
-# List backups
-borg list /backup/borg-repo
-
-# Show backup info
-borg info /backup/borg-repo::backup-2026-02-08
-
-# Mount backup for browsing
-borg mount /backup/borg-repo::backup-2026-02-08 /mnt/backup/
-
-# Extract specific file
-borg extract /backup/borg-repo::backup-2026-02-08 \
-  path/to/file.txt
-
-# Prune old backups (keep 7 daily, 4 weekly, 6 monthly)
-borg prune --keep-daily 7 --keep-weekly 4 --keep-monthly 6
-```
-
-Deduplication reduces storage dramatically for systems with repeated data. Encryption protects backup data at rest.
-
-### Database-Specific Backups
-
-Database backups require specialized tools for consistent snapshots:
-
-```bash
-# PostgreSQL logical backup
-pg_dump -U postgres -Fc mydb > mydb-$(date +%Y%m%d).dump
-
-# PostgreSQL physical backup (requires special configuration)
-pg_basebackup -D /backup/pg_basebackup -Fp -Xs -P -R
-
-# MySQL backup
-mysqldump -u root -p --single-transaction \
-  --quick --lock-tables=false \
-  mydb > mydb-$(date +%Y%m%d).sql
-
-# MySQL with compression
-mysqldump -u root -p mydb | gzip > mydb-$(date +%Y%m%d).sql.gz
-
-# MongoDB backup
-mongodump --out /backup/mongodb/$(date +%Y%m%d)/
-mongodump --out - | gzip > mongodump-$(date +%Y%m%d).gz
-
-# Redis backup (BGSAVE)
-docker exec redis-server redis-cli BGSAVE
-docker cp redis-server:/data/dump.rdb redis-$(date +%Y%m%d).rdb
-```
-
-Database consistency requires either logical backups capturing transaction snapshots or point-in-time recovery configurations.
-
-## Cloud Backup Strategies
-
-Cloud storage provides offsite protection against local disasters.
-
-### AWS S3 Backups
-
-```bash
-# Configure AWS CLI
-aws configure
-
-# Sync to S3
-aws s3 sync /backup/ s3://mybucket/backups/ \
-  --storage-class STANDARD_IA \
-  --sse AES256
-
-# Lifecycle policy (from AWS console or Terraform)
-# Transition to Glacier after 90 days
-# Delete after 7 years
-
-# S3 versioning for protection against ransomware
-aws s3api put-bucket-versioning \
-  --bucket mybucket \
-  --versioning-configuration Status=Enabled
-```
-
-S3 provides durable, scalable storage with lifecycle management. Versioning protects against accidental deletion or ransomware encryption.
-
-### Rclone for Multi-Cloud Sync
-
-```bash
-# Install rclone
-curl https://rclone.org/install.sh | sudo bash
-
-# Configure cloud storage
-rclone config
-
-# Sync to cloud (demonstrates S3)
-rclone sync /backup/data s3:mybucket/backups \
-  --s3-storage-class STANDARD_IA \
-  --transfers 4 \
-  --checkers 8 \
-  --bwlimit 50M \
-  --verbose
-
-# List remote files
-rclone ls s3:mybucket/backups
-
-# Check remote size
-rclone size s3:mybucket/backups
-
-# Sync with deletion (use with caution)
-rclone sync /backup/data s3:mybucket/backups --delete-during
-```
-
-Rclone supports numerous cloud providers with consistent command syntax. Parallel transfers optimize bandwidth utilization.
-
-### Encrypted Cloud Backups
-
-Encrypt backups before cloud storage:
-
-```bash
-# Encrypt with GPG
-gpg --symmetric --cipher-algo AES256 sensitive-data.tar.gz
-gpg --decrypt sensitive-data.tar.gz.gpg | tar xz
-
-# Encrypt with openssl
-openssl enc -aes-256-cbc -salt \
-  -in sensitive-data.tar.gz \
-  -out sensitive-data.tar.gz.enc
-openssl enc -d -aes-256-cbc \
-  -in sensitive-data.tar.gz.enc | tar xz
-
-#borg with encryption (preferred)
-borg init --encryption=repokey /backup/borg-repo
-borg create /backup/borg-repo::backup-{now} /data
-```
-
-Client-side encryption ensures cloud providers never access plaintext data. Key management requires careful planning.
-
-## Backup Automation
-
-Automate backup execution and verification.
-
-### Cron Scheduling
-
-```bash
-# /etc/cron.d/backup-schedule
-# Daily full backup at 2 AM
-0 2 * * * root /usr/local/bin/backup-full.sh
-
-# Hourly incremental at minute 0
-0 * * * * root /usr/local/bin/backup-incremental.sh
-
-# Weekly database backup Sunday 3 AM
-0 3 * * 0 root /usr/local/bin/backup-db.sh
-
-# Monthly cleanup first day 4 AM
-0 4 1 * * root /usr/local/bin/backup-cleanup.sh
-```
-
-Cron provides reliable scheduling for backup automation. Multiple schedules suit different backup types.
-
-### Backup Scripts
-
-```bash
-#!/bin/bash
-# backup-full.sh - Daily full backup script
-
+#!/usr/bin/env bash
 set -euo pipefail
 
-# Configuration
-BACKUP_DIR="/backup/daily"
-DATE=$(date +%Y%m%d)
-LOG_FILE="/var/log/backup-full.log"
-RETENTION_DAYS=30
+dump=${1:?usage: verify-db.sh path/to/app.sql.gz}
+: "${RESTORE_HOST:?set the isolated restore cluster host or socket directory}"
+: "${RESTORE_USER:?set the restore cluster role}"
+unset PGSERVICE PGDATABASE PGHOSTADDR
+export PGHOST="$RESTORE_HOST" PGUSER="$RESTORE_USER" PGPORT="${RESTORE_PORT:-5432}"
+database="serverhi_verify_$(date -u +%s)_$$"
 
-# Start logging
-exec > >(tee -a "$LOG_FILE") 2>&1
-echo "=== Backup started at $(date) ==="
+createdb --template=template0 "$database"
+trap 'dropdb "$database"' EXIT
 
-# Create backup directory
+gzip -dc -- "$dump" |
+  psql -X --set=ON_ERROR_STOP=1 --single-transaction --dbname="$database" --file=- > /dev/null
+
+result=$(psql -X -qAt --set=ON_ERROR_STOP=1 --dbname="$database" \
+  --command="SELECT label FROM public.backup_probe WHERE id = 1")
+if [[ "$result" != "serverhi-drill" ]]; then
+  echo "Restore failed: the expected application record was missing or different." >&2
+  exit 1
+fi
+echo "Restore passed: recovered the expected application record."
+```
+
+An empty SQL file can be accepted by `psql`. It still fails this drill because the probe table is absent. A file that merely contains the word “PostgreSQL” fails when the SQL parser reads it. [Restoring a plain-text dump](https://www.postgresql.org/docs/current/backup-dump.html)
+
+## Copy one identified recovery point off-site
+
+Save this script alongside `verify-db.sh` and make both executable. Set `SOURCE_DB` to the source database connection (a service name can be passed as `service=backup_source`), `BACKUP_DIR` to a private local directory, and `REMOTE_DIR` to a configured rclone destination such as `archive:server-backups/postgres`. Keep the restore-cluster variables set. The job writes a new directory and object name each run, including retries. It does not rotate existing backup generations.
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+umask 077
+: "${SOURCE_DB:?set the source database connection}"
+: "${BACKUP_DIR:?set the private staging directory}"
+: "${REMOTE_DIR:?set an rclone backup destination}"
+verify="$(cd "$(dirname "$0")" && pwd)/verify-db.sh"
 mkdir -p "$BACKUP_DIR"
+run=$(mktemp -d "$BACKUP_DIR/pg-$(date -u +%Y%m%dT%H%M%SZ)-XXXXXXXX")
+object="${REMOTE_DIR%/}/${run##*/}/app.sql.gz"
 
-# Database backup
-echo "Backing up databases..."
-docker exec postgres-server \
-  pg_dump -U appuser appdb | gzip > "$BACKUP_DIR/db-$DATE.sql.gz"
+echo "Exporting into $run"
+pg_dump --format=plain --no-owner --no-privileges --dbname="$SOURCE_DB" |
+  gzip -c > "$run/app.sql.gz"
+"$verify" "$run/app.sql.gz"
 
-# File backup
-echo "Backing up files..."
-rsync -avz --delete \
-  --exclude='*.tmp' \
-  --exclude='.cache/*' \
-  /data/ "$BACKUP_DIR/data/"
-
-# Upload to cloud
-echo "Uploading to cloud..."
-rclone sync "$BACKUP_DIR" cloud:backups/daily/ \
-  --quiet || echo "Cloud upload failed"
-
-# Cleanup old backups
-echo "Cleaning up old backups..."
-find "$BACKUP_DIR" -name "*gz" -mtime +$RETENTION_DAYS -delete
-
-# Verify backup
-echo "Verifying backup..."
-rclone check "$BACKUP_DIR" cloud:backups/daily/ || echo "Verification warning"
-
-echo "=== Backup completed at $(date) ==="
+echo "Uploading backup"
+rclone copyto --immutable "$run/app.sql.gz" "$object"
+echo "Reading back the stored object"
+rclone copyto "$object" "$run/returned.sql.gz"
+if ! cmp -s "$run/app.sql.gz" "$run/returned.sql.gz"; then
+  echo "Remote copy differs from the local export." >&2
+  exit 1
+fi
+"$verify" "$run/returned.sql.gz"
+printf '%s\n' "$object" > "$run/VERIFIED"
+echo "Verified off-site restore from $object"
 ```
 
-Backup scripts encapsulate configuration, execution, and verification. Logging provides audit trails for compliance.
+Alert on a nonzero exit and on an overdue `VERIFIED` record; a scheduler can stop running altogether. Keep enough space for the export, downloaded copy and restored database. Monitor and expire incomplete staging directories separately. Retention and storage-side versioning should preserve older known-good generations even if the newest job fails or a source file is accidentally removed. [rclone copyto](https://rclone.org/commands/rclone_copyto/)
 
-### Backup Verification
+## Rehearse the failure paths
 
-```bash
-#!/bin/bash
-# verify-backups.sh - Test backup restoration
+| Drill in the test environment | Expected result |
+|---|---|
+| Run a dump of the seeded source and retrieve its stored copy | Both restores return the seed record. The run gains a `VERIFIED` marker containing the remote path. |
+| Pass gzipped invalid SQL, a valid gzip with an empty payload, then a truncated gzip to the verifier | Each invocation exits nonzero. None reports a successful restore. |
+| Remove access to the test source, use an unavailable test remote, or change the downloaded test copy | The corresponding job stops before writing its success marker. The previous generation remains readable. |
+| Restore an older generation by its recorded object name | Record its latest application data and elapsed restore time, then compare them with the RPO and RTO. |
 
-BACKUP_FILE="$1"
-EXTRACT_DIR="/tmp/verify-$$"
+Before a real cutover, verify application behavior using the restored database and matching file snapshot, account for writes made after the recovery point, and keep the original instance available until the recovery owner accepts the result. [Docker volume management](/posts/docker-volume-management/) · [PostgreSQL in Docker](/posts/postgresql-docker-setup/)
 
-if [ -z "$BACKUP_FILE" ]; then
-    echo "Usage: $0 <backup-file>"
-    exit 1
-fi
+## Verification on November 25, 2026
 
-echo "Verifying $BACKUP_FILE..."
-
-# Create extraction directory
-mkdir -p "$EXTRACT_DIR"
-
-# Extract to verification directory
-case "$BACKUP_FILE" in
-    *.tar.gz|*.tgz)
-        tar -xzf "$BACKUP_FILE" -C "$EXTRACT_DIR" || exit 1
-        ;;
-    *.zip)
-        unzip -q "$BACKUP_FILE" -d "$EXTRACT_DIR" || exit 1
-        ;;
-    *.sql.gz)
-        gzip -dc "$BACKUP_FILE" > /dev/null || exit 1
-        ;;
-    *)
-        echo "Unknown format"
-        exit 1
-        ;;
-esac
-
-# Verify expected content exists
-if [ -d "$EXTRACT_DIR/data" ]; then
-    FILE_COUNT=$(find "$EXTRACT_DIR/data" -type f | wc -l)
-    echo "Extracted $FILE_COUNT files"
-fi
-
-# Check database backup
-if [[ "$BACKUP_FILE" == *.sql.gz ]]; then
-    if gzip -dc "$BACKUP_FILE" | head -c 100 | grep -q "PostgreSQL"; then
-        echo "Database backup verified"
-    fi
-fi
-
-# Cleanup
-rm -rf "$EXTRACT_DIR"
-
-echo "Verification complete"
-```
-
-Regular verification ensures backups restore correctly before emergencies require them.
-
-## Disaster Recovery Planning
-
-Recovery procedures require documentation and regular testing.
-
-### Recovery Documentation
-
-Document recovery procedures for various scenarios:
-
-```markdown
-## Database Recovery Procedure
-
-### Prerequisites
-- Access to backup storage (cloud or local)
-- Database server running
-- Sufficient disk space
-
-### Recovery Steps
-
-1. Stop application
-   systemctl stop application
-
-2. Identify backup
-   rclone ls cloud:backups/daily/
-   # Note: backup-20260208.sql.gz
-
-3. Create temporary directory
-   mkdir -p /tmp/restore
-   cd /tmp/restore
-
-4. Download backup
-   rclone copy cloud:backups/daily/backup-20260208.sql.gz /tmp/restore/
-
-5. Restore database
-   gunzip -c backup-20260208.sql.gz | psql -U postgres -d appdb
-
-6. Verify restoration
-   psql -U postgres -d appdb -c "SELECT COUNT(*) FROM users;"
-
-7. Restart application
-   systemctl start application
-
-### Rollback Procedure
-If issues occur:
-1. Stop application
-2. Restore previous backup (backup-20260207.sql.gz)
-3. Restart application
-```
-
-Documentation ensures consistent recovery across team members. Test procedures regularly to verify accuracy.
-
-### Recovery Testing
-
-```bash
-#!/bin/bash
-# test-recovery.sh - Automated recovery testing
-
-TEST_ENV="recovery-test-$(date +%s)"
-BACKUP_SOURCE="/backup/daily/latest"
-
-echo "Starting recovery test..."
-
-# Create isolated test environment
-docker run -d --name "$TEST_ENV" -e POSTGRES_PASSWORD=test \
-  postgres:15
-
-# Wait for database
-sleep 10
-
-# Restore test
-docker exec -i "$TEST_ENV" psql -U postgres \
-  -c "CREATE DATABASE test_restore;"
-  
-gunzip -c "$BACKUP_SOURCE/db-*.sql.gz" | \
-  docker exec -i "$TEST_ENV" psql -U postgres -d test_restore
-
-# Verify
-TABLE_COUNT=$(docker exec "$TEST_ENV" psql -U postgres \
-  -d test_restore -t -c "SELECT COUNT(*) FROM information_schema.tables;")
-
-if [ "$TABLE_COUNT" -gt 0 ]; then
-    echo "Recovery test PASSED: $TABLE_COUNT tables restored"
-else
-    echo "Recovery test FAILED"
-    exit 1
-fi
-
-# Cleanup
-docker stop "$TEST_ENV"
-docker rm "$TEST_ENV"
-
-echo "Recovery test complete"
-```
-
-Automated testing validates recovery procedures without affecting production. Schedule regular tests to maintain confidence.
-
-## Backup Monitoring
-
-Monitor backup success and storage consumption.
-
-### Backup Status Monitoring
-
-```bash
-#!/bin/bash
-# check-backups.sh - Backup health monitoring
-
-ERRORS=0
-
-# Check last backup age
-LAST_BACKUP=$(stat -c %Y /backup/daily/data/. 2>/dev/null || echo 0)
-NOW=$(date +%s)
-AGE=$((NOW - LAST_BACKUP))
-
-if [ $AGE -gt 86400 ]; then
-    echo "WARNING: Last backup is ${AGE} seconds old (> 86400)"
-    ERRORS=$((ERRORS + 1))
-fi
-
-# Check backup file size
-SIZE=$(du -sm /backup/daily/ 2>/dev/null | cut -f1)
-if [ $SIZE -lt 100 ]; then
-    echo "WARNING: Backup size ${SIZE}MB seems small"
-    ERRORS=$((ERRORS + 1))
-fi
-
-# Check cloud sync
-rclone check /backup/daily/ cloud:backups/daily/ --quiet
-if [ $? -ne 0 ]; then
-    echo "WARNING: Cloud sync verification failed"
-    ERRORS=$((ERRORS + 1))
-fi
-
-# Exit with status
-if [ $ERRORS -gt 0 ]; then
-    echo "Backup check FAILED with $ERRORS issues"
-    exit 1
-else
-    echo "Backup check PASSED"
-    exit 0
-fi
-```
-
-Monitoring catches backup problems before emergencies. Integrate with alerting systems for proactive notification.
-
-### Storage Reporting
-
-```bash
-#!/bin/bash
-# storage-report.sh - Backup storage usage report
-
-echo "=== Backup Storage Report ==="
-echo "Generated: $(date)"
-echo ""
-
-echo "Local backup storage:"
-du -sh /backup/*/ 2>/dev/null
-
-echo ""
-echo "Cloud storage usage:"
-rclone about cloud:backups/ 2>/dev/null || echo "Cloud info unavailable"
-
-echo ""
-echo "Old backup cleanup candidates:"
-find /backup -name "*.tar.gz" -mtime +90 -exec ls -lh {} \; 2>/dev/null
-
-echo ""
-echo "Database backup sizes:"
-du -sh /backup/*db*.gz 2>/dev/null
-```
-
-Regular storage reports inform capacity planning and cleanup decisions.
-
-## Conclusion
-
-Backup strategies require systematic planning matching business recovery requirements. Appropriate tool selection balances complexity against capability needs. Regular testing validates backup integrity and recovery procedures.
-
-Automation ensures consistent backup execution while monitoring catches problems before emergencies. Documentation enables recovery under pressure while regular practice builds team confidence.
-
-Review and update backup strategies as systems evolve. Annual disaster recovery exercises validate procedures against current infrastructure. Maintain backup procedures for infrastructure-as-code alongside application data.
-
----
-
-**Related Posts:**
-- [Docker Volume Management](/posts/docker-volume-management)
-- [PostgreSQL Docker Setup](/posts/postgresql-docker-setup)
-- [Linux Security Hardening](/posts/linux-security-hardening)
+On November 25, 2026, we ran these scripts against two PostgreSQL 16.15 clusters on Ubuntu 24.04.5. The source and restore ports differed. A second filesystem location served as the rclone destination. Both restored copies returned the expected record. Invalid SQL exited 3; an empty gzip payload and a truncated gzip each exited 1. Export, upload, download and byte-comparison failures all stopped the job before the marker was written. The previous verified generation still restored. A real provider’s permissions, availability and retention need a separate drill.

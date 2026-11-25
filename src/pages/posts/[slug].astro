@@ -1,17 +1,16 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ArticleCard from '../../components/ArticleCard.astro';
 import Breadcrumb from '../../components/Breadcrumb.astro';
 import ArticleSchema from '../../components/schema/ArticleSchema.astro';
 import BreadcrumbSchema from '../../components/schema/BreadcrumbSchema.astro';
 import ArticleCoverImage from '../../components/ArticleCoverImage.astro';
-import { formatDate, getRelatedPosts, tagToSlug } from '../../lib/posts';
+import { formatDate, getAllPosts, getRelatedPosts, tagToSlug } from '../../lib/posts';
 import { getCategoryColor, getCategoryIcon, getCategoryBySlug, site } from '../../lib/config';
 import { getDifficultyColor, getDifficultyLabel } from '../../lib/utils';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('posts');
+  const posts = await getAllPosts();
   return posts.map(post => ({
     params: { slug: post.slug },
     props: { post },
@@ -26,14 +25,14 @@ const { title, description, pubDate, updatedDate, coverImage, coverImageAlt, cat
 
 const categoryInfo = getCategoryBySlug(category);
 const breadcrumbItems = [
-  { label: 'Tutorials', href: '/posts' },
-  { label: categoryInfo?.name || category, href: `/category/${encodeURIComponent(category)}` },
-  { label: title, href: `/posts/${post.slug}` }
+  { label: 'Tutorials', href: '/posts/' },
+  { label: categoryInfo?.name || category, href: `/category/${encodeURIComponent(category)}/` },
+  { label: title, href: `/posts/${post.slug}/` }
 ];
 
 // 构建完整的图片 URL
 const fullImageUrl = coverImage?.src ? `${site.url}${coverImage.src}` : `${site.url}/images/site/og-image.jpg`;
-const articleUrl = `${site.url}/posts/${post.slug}`;
+const articleUrl = `${site.url}/posts/${post.slug}/`;
 ---
 
 <BaseLayout
@@ -57,7 +56,7 @@ const articleUrl = `${site.url}/posts/${post.slug}`;
   />
   <BreadcrumbSchema items={breadcrumbItems} />
 
-  <article class="article-page">
+  <article class="article-page" data-pagefind-body>
     <div class="container">
       <!-- Breadcrumb -->
       <Breadcrumb items={breadcrumbItems} />
@@ -66,7 +65,7 @@ const articleUrl = `${site.url}/posts/${post.slug}`;
       <header class="article-header fade-in-up">
         <div class="article-meta">
           <a
-            href={`/category/${encodeURIComponent(category)}`}
+            href={`/category/${encodeURIComponent(category)}/`}
             class="category-badge terminal-hover"
             style={`background: ${getCategoryColor(category)}20; color: ${getCategoryColor(category)}`}
           >
@@ -79,7 +78,7 @@ const articleUrl = `${site.url}/posts/${post.slug}`;
           )}
         </div>
 
-        <h1 class="article-title">{title}</h1>
+        <h1 class="article-title" data-pagefind-meta="title">{title}</h1>
         <p class="article-description">{description}</p>
 
         <div class="article-info">
@@ -101,7 +100,9 @@ const articleUrl = `${site.url}/posts/${post.slug}`;
           )}
           <div class="info-item">
             <span class="info-label">Author:</span>
-            <span>{author}</span>
+            {['ServerHi Team', 'ServerHi Editorial Team'].includes(author)
+              ? <a href="/author/" rel="author">{author}</a>
+              : <span>{author}</span>}
           </div>
         </div>
 
@@ -151,7 +152,7 @@ const articleUrl = `${site.url}/posts/${post.slug}`;
           <h3 class="tags-title">Tags</h3>
           <div class="tags-list">
             {tags.map(tag => (
-              <a href={`/tag/${tagToSlug(tag)}`} class="tag terminal-hover">
+              <a href={`/tag/${tagToSlug(tag)}/`} class="tag terminal-hover">
                 #{tag}
               </a>
             ))}
@@ -159,9 +160,11 @@ const articleUrl = `${site.url}/posts/${post.slug}`;
         </div>
       )}
 
+      <p class="article-correction" data-pagefind-ignore><a href="/contact/">Report a correction to this article</a></p>
+
       <!-- Related Posts -->
       {relatedPosts.length > 0 && (
-        <section class="related-posts fade-in-up">
+        <section class="related-posts fade-in-up" data-pagefind-ignore>
           <h2 class="section-title">
             <span class="terminal-prompt"></span>
             Related Tutorials

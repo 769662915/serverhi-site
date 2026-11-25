@@ -40,6 +40,7 @@ const schema = {
   author: {
     '@type': 'Organization',
     name: author,
+    url: ['ServerHi Team', 'ServerHi Editorial Team'].includes(author) ? `${site.url}/author/` : undefined,
   },
   publisher: {
     '@type': 'Organization',

@@ -503,6 +503,6 @@ Consider extending your security implementation with additional measures like Co
 ---
 
 **Related Guides:**
-- [Nginx Reverse Proxy Configuration](/posts/nginx-reverse-proxy)
-- [SSH Server Hardening](/posts/ssh-server-hardening)
-- [SSL/TLS Certificate Management](/posts/ssl-tls-certificate-management)
+- [Nginx Reverse Proxy Configuration](/posts/nginx-reverse-proxy/)
+- [SSH Server Hardening](/posts/ssh-server-hardening/)
+- [SSL/TLS Certificate Management](/posts/ssl-tls-certificate-management/)

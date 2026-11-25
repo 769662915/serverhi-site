@@ -458,6 +458,6 @@ Regular firewall audits verify that rules match current requirements. Remove obs
 ---
 
 **Related Posts:**
-- [SSH Server Hardening](/posts/ssh-server-hardening)
-- [Linux Security Hardening](/posts/linux-security-hardening)
-- [Docker Security Best Practices](/posts/docker-security-guide)
+- [SSH Server Hardening](/posts/ssh-server-hardening/)
+- [Linux Security Hardening](/posts/linux-security-hardening/)
+- [Docker Security Best Practices](/posts/docker-security-guide/)

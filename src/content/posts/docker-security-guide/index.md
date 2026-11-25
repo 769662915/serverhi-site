@@ -403,5 +403,5 @@ Effective container security balances protection with operational requirements. 
 ---
 
 **Related Posts:**
-- [Kubernetes Basics](/posts/kubernetes-basics)
-- [Linux Security Hardening](/posts/linux-security-hardening)
+- [Kubernetes Basics](/posts/kubernetes-basics/)
+- [Linux Security Hardening](/posts/linux-security-hardening/)

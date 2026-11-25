@@ -1,4 +1,5 @@
----title: "Linux Log Rotation and Disk Space Management: A Practical Guide"
+---
+title: "Linux Log Rotation and Disk Space Management: A Practical Guide"
 description: "Your server ran out of disk space at 3am. The culprit? Logs. Here's how to configure logrotate, manage systemd journal size, and prevent disk exhaustion from killing your production services."
 pubDate: 2026-08-15
 coverImage: "./cover.webp"

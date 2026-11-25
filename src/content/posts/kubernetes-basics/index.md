@@ -347,5 +347,5 @@ Explore additional resources as you build your Kubernetes skills. Practice with 
 ---
 
 **Related Posts:**
-- [CI/CD Pipeline Setup](/posts/cicd-pipeline-setup)
-- [Docker Security Best Practices](/posts/docker-security-guide)
+- [CI/CD Pipeline Setup](/posts/cicd-pipeline-setup/)
+- [Docker Security Best Practices](/posts/docker-security-guide/)

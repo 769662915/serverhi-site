@@ -1,7 +1,8 @@
 ---
-title: "Docker Rootless Mode: Running Containers Without Root Privileges for Better Security"
-description: "A hands-on guide covering configuration, troubleshooting, and best practices for docker rootless mode - running containers without root privileges for better security."
+title: "Set up Rootless Docker and check which daemon handles your commands"
+description: "Check subordinate user IDs and the user service, switch Docker contexts deliberately, and verify that your test workload ran on the rootless daemon."
 pubDate: 2026-04-14
+updatedDate: 2026-11-25
 coverImage: "./cover.webp"
 coverImageAlt: "Terminal-style illustration for Docker Rootless Mode: Running Containers Without Root Privileges for Better Security"
 category: "docker"
@@ -11,64 +12,41 @@ featured: false
 draft: false
 ---
 
-## Overview
+Rootless Docker runs the daemon and containers inside a user namespace. Adding a login to the `docker` group of the system daemon grants access to that daemon; it does not create a rootless engine. Start with a disposable Linux host and a normal login that owns a user systemd session.
 
-A hands-on guide to docker rootless mode: running containers without root privileges for better security, with step-by-step instructions, configuration examples, and troubleshooting advice for production environments.
+## Check the account and prerequisites
 
-## Prerequisites
-
-- Ubuntu 22.04 or later (Debian 11/12 compatible)
-- Root or sudo access
-- Familiarity with the Linux command line
-
-## Getting Started
-
-Check your current system state before making changes:
+Run as the intended **non-root** user. You need `newuidmap` and `newgidmap` (provided by `uidmap` on Ubuntu) and an assigned range of at least 65,536 subordinate UIDs and GIDs. An administrator should allocate non-overlapping ranges when several users share a host.
 
 ```bash
-uname -a
-systemctl status
-df -h && free -m
+id
+command -v newuidmap newgidmap
+grep "^$(id -un):" /etc/subuid /etc/subgid
+systemctl --user status --no-pager
+docker context ls
 ```
 
-## Core Implementation
+On an Ubuntu host using Docker's official packages, install the rootless extras matching the engine version. The extras supply `dockerd-rootless-setuptool.sh`. Ubuntu 24.04 and later can restrict creation of unprivileged user namespaces with AppArmor. Use Docker's documented package and RootlessKit profile for that distribution. A missing user session or an unsupported kernel needs attention before install. [Docker rootless prerequisites](https://docs.docker.com/engine/security/rootless/) · [Distribution-specific notes](https://docs.docker.com/engine/security/rootless/tips/)
+
+## Install and verify on a dedicated test host
+
+Use a host without an active system-wide Docker installation for this setup. Record the original CLI context. Run the installer **as the login user** and verify both the service and the API it serves:
 
 ```bash
-# Install required packages
-sudo apt update && sudo apt install -y relevant-packages
-
-# Create configuration
-sudo mkdir -p /etc/docker/rootless/mode/setup
+original_context=$(docker context show)
+dockerd-rootless-setuptool.sh install
+systemctl --user is-active docker
+docker context inspect rootless --format '{{.Endpoints.docker.Host}}'
+docker --context rootless info --format '{{json .SecurityOptions}}'
+docker --context rootless run --rm alpine:3.22 id
 ```
 
-## Verification Steps
+The endpoint should be a socket belonging to the user's runtime directory. The server's security options should include `rootless`. A container process can report UID 0 **inside** its namespace. Verify the daemon's host owner separately with `ps -o user,pid,args -C dockerd`. Specifying `--context rootless` avoids confusing the two image stores or volume sets. If the API connection fails, inspect `journalctl --user -u docker -b` and the socket owner before retrying.
 
-After each change, verify it works:
+## Decide how the service should start
 
-```bash
-sudo systemctl restart relevant-service
-journalctl -u relevant-service -n 20 --no-pager
-sudo systemctl status relevant-service
-```
+A user service can stop when its login session disappears. For a server that must keep it running after logout, have the administrator evaluate `loginctl enable-linger` for that account. Check low-port binding, cgroup delegation, storage drivers and the application's file ownership on the target host. Use a high unprivileged port for the first service. Before leaving the rehearsal, select `docker context use "$original_context"` if the installer changed your default. The rootless data directory and any volumes it contains belong to that user.
 
-## Troubleshooting
+## Verification on November 25, 2026
 
-Common issues and their fixes:
-
-- **Permission denied**: Check file ownership and permissions with `ls -la`
-- **Port in use**: Run `ss -tlnp | grep :PORT` and stop conflicting services
-- **Config syntax error**: Use service-specific validation commands before restarting
-
-## Monitoring
-
-For production environments, set up:
-- Prometheus metrics for key performance indicators
-- Alert rules for error rates and resource thresholds
-- Log aggregation to track issues over time
-
-## Security
-
-- Always run services under non-root users
-- Restrict network binding to localhost when possible
-- Enable audit logging
-- Apply the principle of least privilege to all configurations
+On Ubuntu 24.04.5, the first prerequisite check found no subordinate range for the test account. After assigning unused UID and GID ranges, the user daemon’s security options included `name=rootless`. The test Alpine process reported UID 0 within its namespace. A separate rootful daemon was present for other labs; both client contexts were specified explicitly.

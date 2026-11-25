@@ -2,6 +2,7 @@
 title: "SSL/TLS Certificate Management: Let's Encrypt and Beyond"
 description: "Master SSL/TLS certificate management for web servers. Learn Let's Encrypt automation, certificate renewal, multiple domain certificates, and certificate chain configuration for Nginx and Apache."
 pubDate: 2026-02-08
+updatedDate: 2026-11-25
 coverImage: "./cover.webp"
 coverImageAlt: "SSL certificate management terminal showing certificate issuance and renewal status"
 category: "server-config"
@@ -141,12 +142,6 @@ server {
     ssl_session_cache shared:SSL:10m;
     ssl_session_timeout 1d;
 
-    # OCSP stapling
-    ssl_stapling on;
-    ssl_stapling_verify on;
-    resolver 8.8.8.8 8.8.4.4 valid=300s;
-    ssl_trusted_certificate /etc/letsencrypt/live/example.com/chain.pem;
-
     # Security headers
     add_header Strict-Transport-Security "max-age=31536000" always;
     add_header X-Frame-Options DENY always;
@@ -161,25 +156,11 @@ server {
 }
 ```
 
-Modern TLS configurations prefer TLSv1.3 while maintaining TLSv1.2 for compatibility. OCSP stapling reduces certificate validation latency.
+Modern TLS configurations prefer TLSv1.3 while maintaining TLSv1.2 for compatibility. Let’s Encrypt stopped serving OCSP on August 6, 2025 and publishes revocation data through CRLs. This configuration omits stapling. For another issuer, inspect its current certificate and revocation service before enabling stapling. [Let’s Encrypt retirement notice](https://letsencrypt.org/2025/08/06/ocsp-service-has-reached-end-of-life/)
 
-### Advanced TLS Configuration
+### Choose the scope of HSTS
 
-```nginx
-# Strong SSL configuration
-ssl_protocols TLSv1.2 TLSv1.3;
-ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384;
-ssl_prefer_server_ciphers off;
-ssl_ecdh_curve secp384r1;
-
-# HSTS configuration
-add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload" always;
-
-# Certificate transparency
-add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';" always;
-```
-
-HSTS headers enforce HTTPS connections. Certificate transparency headers provide audit logging of certificate issuance.
+Set an HSTS lifetime only after the HTTPS service and renewal path are working. Start with a short lifetime on a newly migrated host. Before enabling `includeSubDomains` or requesting browser preload, verify HTTPS and recovery for every subdomain. A Content Security Policy controls which resources a browser may load; Certificate Transparency is a separate system of public issuance logs.
 
 ## Apache HTTPS Configuration
 
@@ -230,59 +211,21 @@ Apache modules enable SSL and headers. Site configuration follows standard Apach
 
 ## Automated Certificate Renewal
 
-Let's Encrypt certificates expire after 90 days. Automated renewal prevents service disruptions.
+Read the actual certificate expiry and use your ACME client's renewal schedule. Lifetimes vary by certificate profile. Automated renewal prevents service disruptions.
 
-### Certbot Renewal Configuration
+### Test renewal and reload the certificate
+
+Inspect the scheduler configured by the installed Certbot package. Distribution packages and snaps can use different service names. On a systemd host, begin with:
 
 ```bash
-# Test automatic renewal
+systemctl list-timers --all | grep -i certbot
+sudo certbot certificates
 sudo certbot renew --dry-run
-
-# Manual renewal
-sudo certbot renew
-
-# Force renewal before expiration
-sudo certbot renew --force-renewal
 ```
 
-Dry-run tests verify renewal configuration without issuing certificates. Production renewals occur automatically through systemd timers.
+A dry run exercises the renewal flow against staging. For a webroot challenge keep the challenge location available over HTTP. Schedule one renewal mechanism. If your installation already has a timer, adding another cron job creates duplicate attempts.
 
-### Cron Configuration
-
-Cron jobs provide renewal scheduling:
-
-```bash
-# /etc/cron.d/certbot
-# Attempt renewal twice daily
-0 */12 * * * root certbot -q renew
-```
-
-Systemd timers provide more reliable scheduling than cron:
-
-```bash
-# Check timer status
-systemctl list-timers | grep certbot
-
-# Manual timer trigger
-sudo systemctl run certbot-renew.timer
-```
-
-### Hook Scripts
-
-Execute commands before and after renewal:
-
-```bash
-# Pre-hook: stop web server
-certbot renew --pre-hook "systemctl stop nginx"
-
-# Post-hook: restart web server
-certbot renew --post-hook "systemctl restart nginx"
-
-# Deploy hook: reload configuration
-certbot renew --deploy-hook "systemctl reload nginx"
-```
-
-Hooks ensure web servers reload certificates after renewal. Multiple hooks chain for complex deployment workflows.
+A deploy hook runs after a successful renewal. For Nginx, use a reviewed hook that validates the configuration before reloading, such as `nginx -t && systemctl reload nginx`. Check the served certificate from a client afterward. A forced issuance consumes rate-limit budget and is unnecessary for a routine rehearsal. [Certbot renewal and hooks](https://eff-certbot.readthedocs.io/en/stable/using.html#renewing-certificates)
 
 ## Multiple Domain Certificates
 
@@ -428,8 +371,9 @@ openssl s_client -cipher 'ECDHE-RSA-AES256-GCM-SHA384' -connect example.com:443
 # Check certificate expiration
 echo | openssl s_client -servername example.com -connect example.com:443 2>/dev/null | openssl x509 -noout -dates
 
-# Test OCSP stapling
-openssl s_client -connect example.com:443 -servername example.com -status </dev/null 2>/dev/null | grep -A 2 "OCSP Response"
+# Inspect the served leaf certificate, using the actual hostname
+openssl s_client -connect example.com:443 -servername example.com </dev/null 2>/dev/null \
+  | openssl x509 -noout -issuer -dates -ext crlDistributionPoints
 ```
 
 Local testing identifies configuration issues without external dependencies. Regular testing ensures configurations remain secure.
@@ -443,6 +387,10 @@ Certificate monitoring prevents expiration through automated renewal and expirat
 ---
 
 **Related Posts:**
-- [Nginx Reverse Proxy Configuration](/posts/nginx-reverse-proxy)
-- [Docker Security Best Practices](/posts/docker-security-guide)
-- [Ubuntu 22.04 Server Setup](/posts/ubuntu-22-04-server-setup)
+- [Nginx Reverse Proxy Configuration](/posts/nginx-reverse-proxy/)
+- [Docker Security Best Practices](/posts/docker-security-guide/)
+- [Ubuntu 22.04 Server Setup](/posts/ubuntu-22-04-server-setup/)
+
+## Verification on November 25, 2026
+
+On November 25, 2026 the certificate served by `valid-isrgrootx1.letsencrypt.org` had issuer YR1 and a CRL Distribution Point under `yr1.c.lencr.org`. The basic Nginx server block also passed configuration validation on Nginx 1.24.0 and negotiated HTTPS using a locally trusted test certificate. No public certificate was issued in this exercise.

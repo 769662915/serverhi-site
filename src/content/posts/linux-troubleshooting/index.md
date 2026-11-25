@@ -535,6 +535,6 @@ Document troubleshooting steps and solutions for recurring issues. This document
 ---
 
 **Related Posts:**
-- [Systemd Service Management](/posts/systemd-service-management)
-- [Ubuntu 22.04 Server Setup](/posts/ubuntu-22-04-server-setup)
-- [Linux Security Hardening](/posts/linux-security-hardening)
+- [Systemd Service Management](/posts/systemd-service-management/)
+- [Ubuntu 22.04 Server Setup](/posts/ubuntu-22-04-server-setup/)
+- [Linux Security Hardening](/posts/linux-security-hardening/)

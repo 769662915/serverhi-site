@@ -1,40 +1,26 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumb from '../../components/Breadcrumb.astro';
-import { getAllPosts, getPostsByTag, tagToSlug } from '../../lib/posts';
-import type { CollectionEntry } from 'astro:content';
+import { getAllPosts, groupPostsByTag, isNavigationOnlyTag } from '../../lib/posts';
 
 export async function getStaticPaths() {
-  const allPosts = await getAllPosts();
-  const tagMap = new Map<string, string>();
-
-  allPosts.forEach((post: CollectionEntry<'posts'>) => {
-    post.data.tags.forEach((tag: string) => {
-      const slug = tagToSlug(tag);
-      if (!tagMap.has(slug)) {
-        tagMap.set(slug, tag);
-      }
-    });
-  });
-
-  return Array.from(tagMap.entries()).map(([slug, displayTag]) => ({
-    params: { slug },
-    props: { originalTag: displayTag }
+  return groupPostsByTag(await getAllPosts()).map(group => ({
+    params: { slug: group.slug },
+    props: { group },
   }));
 }
 
-const { slug } = Astro.params;
-const { originalTag } = Astro.props;
-const decodedSlug = originalTag || decodeURIComponent(slug);
-const posts = await getPostsByTag(decodedSlug);
+const { group } = Astro.props;
+const { slug, name: decodedSlug, posts } = group;
+const description = `${posts.length} ${posts.length === 1 ? 'article' : 'articles'} on ${decodedSlug}. Start with ${posts[0].data.title}.`;
 
 const breadcrumbItems = [
-  { label: 'Tags', href: '/posts' },
-  { label: `#${decodedSlug}`, href: `/tag/${slug}` }
+  { label: 'Tags', href: '/posts/' },
+  { label: `#${decodedSlug}`, href: `/tag/${slug}/` }
 ];
 ---
 
-<BaseLayout title={`${decodedSlug} Tutorials - ServerHi`}>
+<BaseLayout title={`${decodedSlug} Tutorials - ServerHi`} description={description} noindex={isNavigationOnlyTag(group)}>
   <div class="container">
     <Breadcrumb items={breadcrumbItems} />
 
@@ -46,14 +32,15 @@ const breadcrumbItems = [
       <p class="page-description">
         {posts.length} tutorial{posts.length !== 1 ? 's' : ''} tagged with "{decodedSlug}"
       </p>
+      {isNavigationOnlyTag(group) && <p><a href="/tag/docker-compose/">Browse all Docker Compose articles</a></p>}
     </div>
 
     {posts.length > 0 ? (
       <div class="posts-grid">
-        {posts.map((post: any, index: number) => (
+        {posts.map((post, index) => (
           <div class="stagger-item" style={`animation-delay: ${index * 0.05}s`}>
             <article class="post-card terminal-window hover-lift">
-              <a href={`/posts/${post.slug}`}>
+              <a href={`/posts/${post.slug}/`}>
                 <div class="card-content">
                   <h2 class="card-title terminal-prompt">{post.data.title}</h2>
                   <p class="card-description">{post.data.description}</p>
@@ -77,7 +64,7 @@ const breadcrumbItems = [
         </div>
         <div class="empty-content">
           <p class="terminal-prompt">No tutorials found with this tag.</p>
-          <a href="/posts" class="btn btn-primary">Browse All Tutorials</a>
+          <a href="/posts/" class="btn btn-primary">Browse All Tutorials</a>
         </div>
       </div>
     )}

@@ -2,6 +2,7 @@
 title: "Linux Disk Full? A Systematic Guide to Finding and Fixing the Problem"
 description: "When your server hits 90% disk usage at 2 a.m., you need a process, not panic. This guide walks through the exact commands and workflow to find what's eating your disk and reclaim space without breaking running services."
 pubDate: 2026-07-07
+updatedDate: 2026-11-25
 coverImage: "./cover.webp"
 coverImageAlt: "A terminal-style illustration showing a Linux disk usage analyzer with colorful bar charts and directory tree, rendered in green-on-black terminal aesthetic"
 category: troubleshooting
@@ -62,31 +63,23 @@ This one catches people off guard. When a process holds a file handle open and y
 lsof | grep deleted | awk '{print $1, $2, $9}' | sort -u
 ```
 
-If you see a large file in the output — especially a log file — restarting the owning process will release the space instantly. No need to delete anything else.
+If you see a large file in the output — especially a log file — check whether the process supports reopening its logs. Space returns when the final open reference closes. Plan a service restart only if reopening is unavailable.
 
 A common scenario: you rotated a log file but the application is still writing to the old (deleted) inode. The disk shows full, `du` can't find the space, but `lsof` reveals a 20 GB ghost file.
 
-## Step 4: Clean Package Manager Caches
+## Step 4: Review package caches and kernel fallback
 
-Package managers hoard downloaded packages by default. On a server that's been running for a year, the cache can be several gigabytes.
+On Debian or Ubuntu inspect `du -sh /var/cache/apt/archives`. If downloads are the issue and the repository is reachable, `sudo apt-get clean` removes cached package files. Installed packages remain in place. On Fedora or RHEL, `dnf clean packages` targets downloaded packages.
 
-```bash
-# Debian/Ubuntu
-apt clean
-apt autoremove --purge
-
-# RHEL/Fedora
-dnf clean all
-```
-
-On Ubuntu servers, old kernels accumulate in `/boot`. Remove them:
+When `/boot` is full, list installed kernels, then simulate the package manager's proposed changes:
 
 ```bash
-dpkg --list | grep linux-image | awk '{print $2}'
-apt purge $(dpkg --list | grep -E 'linux-image-[0-9]' | grep -v $(uname -r) | awk '{print $2}')
+uname -r
+dpkg-query -W 'linux-image-*'
+apt-get -s autoremove
 ```
 
-That last command keeps the running kernel and removes everything else. Test it with `--dry-run` first if you're on a production machine.
+Keep the running kernel and a known-good fallback. Review bootloader entries, dependent metapackages and the complete simulation before choosing specific obsolete packages to remove. A command that removes every kernel except the running one can leave no recovery choice at reboot.
 
 ## Step 5: Tame systemd Journal Logs
 
@@ -96,7 +89,7 @@ The systemd journal can grow unchecked, especially on servers that log verbose a
 journalctl --disk-usage
 ```
 
-If it's over 500 MB, set a size cap:
+First record your retention requirement. On a test machine where either cap is acceptable, these examples remove older archived journal files:
 
 ```bash
 journalctl --vacuum-size=500M
@@ -106,6 +99,7 @@ journalctl --vacuum-time=7d
 Make the limit permanent by editing `/etc/systemd/journald.conf`:
 
 ```ini
+[Journal]
 SystemMaxUse=500M
 ```
 
@@ -115,27 +109,15 @@ Then restart the service:
 systemctl restart systemd-journald
 ```
 
-## Step 6: Docker-Specific Cleanup
-
-Docker's overlay2 storage driver is notorious for gradual disk consumption. Images pile up, volumes stick around after containers are removed, and build cache accumulates silently.
+## Step 6: Attribute container storage
 
 ```bash
-docker system df
+docker system df -v
+docker ps -a --size
+docker volume ls
 ```
 
-This shows the breakdown: images, containers, local volumes, and build cache. To clean everything not actively in use:
-
-```bash
-docker system prune -a --volumes
-```
-
-The `-a` flag removes all unused images (not just dangling ones). The `--volumes` flag removes unused volumes. On a development server where images are pulled regularly, this can free 10-30 GB in one command.
-
-If you can't prune everything, start with just dangling images:
-
-```bash
-docker image prune
-```
+A stopped container can own useful writable data. A volume with no current attachment may belong to a database being moved. Check its owner, backups and recovery plan. `docker system prune -a --volumes` can remove stopped containers, unused images and networks, build cache and unreferenced anonymous volumes. It is unsuitable as a routine response to a full production disk. Inspect individual objects and agree a retention window with the responsible service owner. For container output, [configure rotation and verify retention](/posts/docker-log-rotation-management/). [Docker prune reference](https://docs.docker.com/reference/cli/docker/system/prune/)
 
 ## Step 7: Install ncdu for the Next Time
 

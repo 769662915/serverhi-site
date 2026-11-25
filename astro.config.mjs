@@ -7,19 +7,9 @@ export default defineConfig({
   integrations: [
     react(),
     sitemap({
-      filter: (page) =>
-        !page.includes('/404') &&
-        !page.includes('/search'),
-      changefreq: 'weekly',
-      priority: 0.7,
-      lastmod: new Date(),
-      customPages: [
-        'https://serverhi.com/',
-        'https://serverhi.com/posts/',
-        'https://serverhi.com/archive/',
-        'https://serverhi.com/about/',
-        'https://serverhi.com/contact/',
-      ],
+      // Post and topic URLs share their publication rules with the content sitemap.
+      filter: (page) => !/^\/(?:404\/?$|search\/?$|posts\/[^/]+\/|tag\/)/.test(new URL(page).pathname),
+      customSitemaps: ['https://serverhi.com/sitemap-content.xml'],
     }),
   ],
   image: {

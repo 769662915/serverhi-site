@@ -87,7 +87,7 @@ jobs:
           npm test
 ```
 
-Workflows matching this insecure pattern require immediate restructuring, as discussed in our guide on [GitHub Actions secrets management](/posts/github-actions-secrets-management-guide-2026). Checking out untrusted code while retaining base secrets grants external contributors access to the build environment.
+Workflows matching this insecure pattern require immediate restructuring, as discussed in our guide on [GitHub Actions secrets management](/posts/github-actions-secrets-management-guide-2026/). Checking out untrusted code while retaining base secrets grants external contributors access to the build environment.
 
 ## Migration paths and safe workflow architectures
 
@@ -120,7 +120,7 @@ jobs:
           npm test
 ```
 
-Under this configuration, GitHub executes the workflow in the isolated fork context. The job receives an unprivileged, read-only token and cannot access upstream secrets. The workflow will run smoothly without triggering policy blocks, and it eliminates the risk of fork-based credential leakage. Integrating standard test runs with automated validation steps reinforces pipeline reliability, as detailed in our analysis of [CI/CD automated pipeline validation](/posts/cicd-healthcheck-automation-pipeline-2026).
+Under this configuration, GitHub executes the workflow in the isolated fork context. The job receives an unprivileged, read-only token and cannot access upstream secrets. The workflow will run smoothly without triggering policy blocks, and it eliminates the risk of fork-based credential leakage. Integrating standard test runs with automated validation steps reinforces pipeline reliability, as detailed in our analysis of [CI/CD automated pipeline validation](/posts/cicd-healthcheck-automation-pipeline-2026/).
 
 ### Path 2: Retaining pull_request_target for metadata-only bots
 
@@ -155,7 +155,7 @@ jobs:
             });
 ```
 
-Because this workflow does not check out files or execute shell scripts from the incoming pull request, an attacker cannot manipulate the execution environment. Once the workflow is verified as safe, administrators can configure an explicit repository policy to permit the trigger, ensuring uninterrupted operation when the default block activates. When using third-party actions in these automation tasks, ensure you follow strict pinning standards, as examined in our review of [third-party action pin safety](/posts/actions-cool-tags-back-shai-hulud-2026).
+Because this workflow does not check out files or execute shell scripts from the incoming pull request, an attacker cannot manipulate the execution environment. Once the workflow is verified as safe, administrators can configure an explicit repository policy to permit the trigger, ensuring uninterrupted operation when the default block activates. When using third-party actions in these automation tasks, ensure you follow strict pinning standards, as examined in our review of [third-party action pin safety](/posts/actions-cool-tags-back-shai-hulud-2026/).
 
 ### Path 3: The two-stage decoupling pattern with workflow_run
 

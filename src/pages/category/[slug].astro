@@ -16,12 +16,12 @@ const category = getCategoryBySlug(slug);
 const posts = await getPostsByCategory(slug);
 
 const breadcrumbItems = [
-  { label: 'Categories', href: '/posts' },
-  { label: category?.name || slug, href: `/category/${slug}` }
+  { label: 'Categories', href: '/posts/' },
+  { label: category?.name || slug, href: `/category/${slug}/` }
 ];
 ---
 
-<BaseLayout title={`${category?.name} Tutorials - ServerHi`}>
+<BaseLayout title={`${category?.name} Tutorials - ServerHi`} description={category?.description}>
   <div class="container">
     <Breadcrumb items={breadcrumbItems} />
 
@@ -54,7 +54,7 @@ const breadcrumbItems = [
         </div>
         <div class="empty-content">
           <p class="terminal-prompt">No tutorials found in this category yet.</p>
-          <a href="/posts" class="btn btn-primary">Browse All Tutorials</a>
+          <a href="/posts/" class="btn btn-primary">Browse All Tutorials</a>
         </div>
       </div>
     )}

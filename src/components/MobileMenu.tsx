@@ -45,23 +45,23 @@ export default function MobileMenu() {
               <span className="nav-icon">🏠</span>
               <span>Home</span>
             </a>
-            <a href="/posts" className="mobile-nav-link terminal-hover" onClick={handleClose}>
+            <a href="/posts/" className="mobile-nav-link terminal-hover" onClick={handleClose}>
               <span className="nav-icon">📚</span>
               <span>Tutorials</span>
             </a>
-            <a href="/category/docker" className="mobile-nav-link terminal-hover" onClick={handleClose}>
+            <a href="/category/docker/" className="mobile-nav-link terminal-hover" onClick={handleClose}>
               <span className="nav-icon">🐳</span>
               <span>Docker</span>
             </a>
-            <a href="/category/linux" className="mobile-nav-link terminal-hover" onClick={handleClose}>
+            <a href="/category/linux/" className="mobile-nav-link terminal-hover" onClick={handleClose}>
               <span className="nav-icon">🐧</span>
               <span>Linux</span>
             </a>
-            <a href="/category/devops" className="mobile-nav-link terminal-hover" onClick={handleClose}>
+            <a href="/category/devops/" className="mobile-nav-link terminal-hover" onClick={handleClose}>
               <span className="nav-icon">⚙️</span>
               <span>DevOps</span>
             </a>
-            <a href="/search" className="mobile-nav-link terminal-hover" onClick={handleClose}>
+            <a href="/search/" className="mobile-nav-link terminal-hover" onClick={handleClose}>
               <span className="nav-icon">🔍</span>
               <span>Search</span>
             </a>

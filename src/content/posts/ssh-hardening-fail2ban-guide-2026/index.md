@@ -1,4 +1,5 @@
----title: "SSH Hardening with Fail2Ban: A Complete Guide to Blocking Brute Force Attacks"
+---
+title: "SSH Hardening with Fail2Ban: A Complete Guide to Blocking Brute Force Attacks"
 description: "Stop SSH brute force attacks cold. This guide covers key-based auth, fail2ban configuration, firewall rules, and advanced hardening for production Linux servers."
 pubDate: 2026-08-30
 coverImage: "./cover.webp"
@@ -16,8 +17,6 @@ prerequisites:
   - "Basic familiarity with the Linux command line"
 osCompatibility: ["Ubuntu 22.04+", "Debian 12+", "CentOS/RHEL 9+"]
 ---
-
-# SSH Hardening with Fail2Ban: A Complete Guide to Blocking Brute Force Attacks
 
 If your Linux server is connected to the internet, someone is already trying to break into it. Automated bots scan every IP address looking for open SSH ports, and they start hammering away at default credentials within minutes of a server going online. The Verizon 2025 Data Breach Investigations Report found that SSH brute force attacks account for roughly 30% of all server intrusion attempts. That's not a theoretical risk — it's what's happening on every server with port 22 exposed.
 

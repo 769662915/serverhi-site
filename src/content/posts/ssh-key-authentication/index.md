@@ -427,6 +427,6 @@ The initial setup investment pays dividends through reduced attack surface, simp
 ---
 
 **Related Guides:**
-- [SSH Server Hardening](/posts/ssh-server-hardening)
-- [Linux Security Hardening](/posts/linux-security-hardening)
-- [UFW Firewall Configuration](/posts/ufw-firewall-configuration)
+- [SSH Server Hardening](/posts/ssh-server-hardening/)
+- [Linux Security Hardening](/posts/linux-security-hardening/)
+- [UFW Firewall Configuration](/posts/ufw-firewall-configuration/)

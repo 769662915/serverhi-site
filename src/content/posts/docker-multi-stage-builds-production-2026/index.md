@@ -1,4 +1,5 @@
----title: "Docker Multi-Stage Builds: A Practical Guide to Production-Ready Images"
+---
+title: "Docker Multi-Stage Builds: A Practical Guide to Production-Ready Images"
 description: "Master multi-stage builds to create smaller, more secure Docker images. Learn builder patterns, caching strategies, and real-world examples."
 pubDate: 2026-08-29
 coverImage: "./cover.webp"
@@ -16,8 +17,6 @@ prerequisites:
   - "Understanding of container concepts"
 osCompatibility: ["Ubuntu 22.04+", "Debian 12+", "Rocky Linux 9+"]
 ---
-
-# Docker Multi-Stage Builds: A Practical Guide to Production-Ready Images
 
 Every Docker tutorial starts with a Dockerfile. Most of them produce images that are 800MB to 2GB. That's fine for learning, but in production, those bloated images slow down deployments, increase attack surface, and waste storage. Multi-stage builds fix this problem by separating the build process from the runtime environment.
 

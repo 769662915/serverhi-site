@@ -449,6 +449,6 @@ Combine SSH hardening with broader server security practices including firewall 
 ---
 
 **Related Posts:**
-- [Linux Security Hardening](/posts/linux-security-hardening)
-- [Linux Troubleshooting](/posts/linux-troubleshooting)
-- [Ubuntu 22.04 Server Setup](/posts/ubuntu-22-04-server-setup)
+- [Linux Security Hardening](/posts/linux-security-hardening/)
+- [Linux Troubleshooting](/posts/linux-troubleshooting/)
+- [Ubuntu 22.04 Server Setup](/posts/ubuntu-22-04-server-setup/)

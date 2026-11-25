@@ -2,6 +2,7 @@
 title: "Two Azure Incidents. Don't Merge the Region Lists."
 description: "Azure's Sept. 29 Sweden Central AI outage ran about 5 hours 55 minutes. ExpressRoute issues started 20:30 UTC Sept. 30. Region counts: 18, or 19."
 pubDate: 2026-10-07
+updatedDate: 2026-11-25
 coverImage: "./cover.webp"
 coverImageAlt: "Two blank paper printouts, one short and one long, beside unplugged ethernet cables and a closed laptop on a beige desk."
 category: troubleshooting
@@ -67,7 +68,7 @@ I am not going to promote correlation into a kernel bug, a bad package name, or 
 
 That is enough to stop a local "fix" that makes things worse. Do not upgrade a gateway firmware on the theory that you are behind. Do not rebuild an ExpressRoute circuit because a blog said maintenance. The maintenance in question was Microsoft's infrastructure OS servicing, and they paused it. Your job is to identify which of your dependencies sat in the named services, in a named region, during a named window, and whether the thing that failed was the path or the ability to change the path.
 
-[A management console that stays broken after the box looks up](/posts/infratrust-management-console-config-2026) is a pattern this site has already had to say out loud. This Azure window is the cloud version. The packet path and the API that edits the packet path failed on different clocks. Write both clocks into the ticket or you will "resolve" the wrong one.
+[A management console that stays broken after the box looks up](/posts/infratrust-management-console-config-2026/) is a pattern this site has already had to say out loud. This Azure window is the cloud version. The packet path and the API that edits the packet path failed on different clocks. Write both clocks into the ticket or you will "resolve" the wrong one.
 
 ## A 25-minute pass that does not invent commands
 
@@ -81,6 +82,6 @@ Third, split data plane from management plane for Firewall and for VPN. Passing 
 
 Fourth, do not close on the mitigation headline. The Register's 03:30 UTC Oct. 1 update says mitigated, and also widens the product list. shattered.io notes that management components in a subset of regions did not come back by themselves. BigGo's five-region tail is France Central, North Europe, Southeast Asia, UK South, and UK West, as of 10:36 a.m. Japan time. If your region is in that tail, your all-clear is later than the headline. Record the time a management write succeeded.
 
-Fifth, keep this out of the kernel queue. [Debian's 1,313 CVE batch](/posts/debian-1313-cve-kernel-batch-2026) is a different week and a different machine. [A deadline that already passed on a node](/posts/cisa-kernel-kev-deadline-passed-2026) is also not this. Patching a Linux host will not repair an ExpressRoute gateway Microsoft paused servicing on. It might still be the right patch for a different ticket. It is the wrong patch for this one.
+Fifth, keep this out of the kernel queue. [Debian's 1,313 CVE batch](/posts/debian-1313-cve-kernel-batch-2026/) is a different week and a different machine. Patching a Linux host will not repair an ExpressRoute gateway Microsoft paused servicing on. It might still be the right patch for a different ticket. It is the wrong patch for this one.
 
 The useful artifact is a short note with two start times, two service lists, your region, whether you were data-plane-down or management-plane-down, and the time a change actually applied. Eighteen or nineteen can stay in a footnote with the outlet names attached. The footnote is how you avoid sounding more certain than The Register was willing to sound on the night Microsoft paused its own servicing and said the investigation was still correlating.

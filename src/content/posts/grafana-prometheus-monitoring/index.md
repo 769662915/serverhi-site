@@ -281,6 +281,6 @@ Grafana and Prometheus together provide a powerful monitoring solution. Start wi
 ---
 
 **Related Guides:**
-- [Prometheus Monitoring Setup](/posts/prometheus-monitoring)
-- [Log Analysis Techniques](/posts/log-analysis-techniques)
-- [Systemd Service Management](/posts/systemd-service-management)
+- [Prometheus Monitoring Setup](/posts/prometheus-monitoring/)
+- [Log Analysis Techniques](/posts/log-analysis-techniques/)
+- [Systemd Service Management](/posts/systemd-service-management/)
