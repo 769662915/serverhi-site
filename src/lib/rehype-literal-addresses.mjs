@@ -1,7 +1,7 @@
 import { SKIP, visit } from 'unist-util-visit';
 
 function containsAddressText(node) {
-  return node.type === 'text' ? /[\w.+-]+@[\w.-]+\.[a-z][\w-]+/i.test(node.value) : node.children?.some(containsAddressText);
+  return node.type === 'text' ? node.value.includes('@') : node.children?.some(containsAddressText);
 }
 
 // Cloudflare otherwise turns text such as SSH destinations into email-decoding links.
