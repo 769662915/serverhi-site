@@ -1,269 +1,130 @@
 ---
-import { site } from '../lib/config';
-import ThemeToggle from './ThemeToggle';
-const navigation = [
-  { href: '/', label: 'Home', icon: '🏠' },
-  { href: '/posts/', label: 'Tutorials', icon: '📚' },
-  { href: '/category/docker/', label: 'Docker', icon: '🐳' },
-  { href: '/category/linux/', label: 'Linux', icon: '🐧' },
-  { href: '/category/devops/', label: 'DevOps', icon: '🚀' },
-  { href: '/search/', label: 'Search', icon: '🔍' },
+import ManualIcon from './ManualIcon.astro';
+import Wordmark from './Wordmark.astro';
+
+const nav = [
+  { href: '/posts/', label: 'Guides' },
+  { href: '/#topics', label: 'Topics' },
+  { href: '/category/troubleshooting/', label: 'Troubleshooting' },
+  { href: '/archive/', label: 'Archive' },
 ];
+const here = Astro.url.pathname;
+const currentSection = (href: string) => here === href
+  || (href === '/posts/' && here.startsWith('/posts/'))
+  || (href === '/#topics' && here.startsWith('/category/') && here !== '/category/troubleshooting/');
 ---
 
-<header class="site-header">
-  <div class="container">
-    <div class="header-content">
-      <a href="/" class="logo terminal-hover">
-        <span class="logo-bracket">[</span>
-        <span class="logo-text glow-primary">{site.name}</span>
-        <span class="logo-bracket">]</span>
+<header class="site-header" data-pagefind-ignore>
+  <div class="header-inner container">
+    <Wordmark />
+
+    <nav class="header-nav" aria-label="Main navigation">
+      {nav.map(({ href, label }) => (
+        <a href={href} class:list={[{ active: currentSection(href) }]} aria-current={here === href ? 'page' : undefined}>{label}</a>
+      ))}
+    </nav>
+
+    <div class="header-actions">
+      <a class="header-search" href="/search/" aria-label="Search guides" aria-current={here === '/search/' ? 'page' : undefined}>
+        <ManualIcon name="search" size={19} />
+        <span>Search guides</span>
       </a>
 
-      <nav class="main-nav" aria-label="Main navigation">
-        {navigation.map(item => <a href={item.href} class="nav-link terminal-hover">{item.label}</a>)}
-      </nav>
+      <button class="icon-control" id="theme-toggle" type="button" aria-label="Dark mode" aria-pressed="false" hidden>
+        <span class="icon-moon"><ManualIcon name="moon" size={18} /></span>
+        <span class="icon-sun"><ManualIcon name="sun" size={19} /></span>
+      </button>
 
-      <div class="header-actions">
-        <ThemeToggle client:load />
-        <details class="mobile-menu-wrapper" id="mobile-menu">
-          <summary class="mobile-menu-toggle" aria-label="Toggle menu">
-            <span class="hamburger-line"></span>
-            <span class="hamburger-line"></span>
-            <span class="hamburger-line"></span>
-          </summary>
-          <div class="mobile-menu-overlay">
-            <nav class="mobile-nav" aria-label="Main navigation">
-              {navigation.map(item => (
-                <a href={item.href} class="mobile-nav-link terminal-hover">
-                  <span class="nav-icon" aria-hidden="true">{item.icon}</span>
-                  <span>{item.label}</span>
-                </a>
-              ))}
-            </nav>
-          </div>
-        </details>
-      </div>
+      <details id="mobile-menu" class="mobile-menu">
+        <summary class="icon-control" aria-label="Toggle menu">
+          <span class="menu-icon"><ManualIcon name="menu" size={22} /></span>
+          <span class="close-icon"><ManualIcon name="close" size={22} /></span>
+        </summary>
+        <nav class="mobile-nav" aria-label="Main navigation">
+          {nav.map(({ href, label }) => (
+            <a href={href} aria-current={here === href ? 'page' : undefined} class:list={[{ active: currentSection(href) }]}>
+              {label}<ManualIcon name="right" size={16} />
+            </a>
+          ))}
+        </nav>
+      </details>
     </div>
   </div>
 </header>
 
-<script>
-  const menu = document.querySelector<HTMLDetailsElement>('#mobile-menu');
-  if (menu) {
-    menu.addEventListener('click', event => {
-      if (event.target instanceof Element && event.target.matches('.mobile-menu-overlay')) {
-        menu.open = false;
-        menu.querySelector('summary')?.focus();
-      }
-    });
-    document.addEventListener('keydown', event => {
-      if (event.key === 'Escape' && menu.open) {
-        menu.open = false;
-        menu.querySelector('summary')?.focus();
-      }
-    });
-    window.addEventListener('pagehide', () => { menu.open = false; });
-  }
+<script is:inline>
+  (() => {
+    const button = document.getElementById('theme-toggle');
+    const menu = document.getElementById('mobile-menu');
+    if (button) {
+      const sync = () => button.setAttribute('aria-pressed', String(document.documentElement.dataset.theme === 'dark'));
+      sync();
+      button.hidden = false;
+      button.addEventListener('click', () => {
+        const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+        applyTheme(next);
+        try { localStorage.setItem('theme', next); } catch {}
+        sync();
+      });
+      systemTheme.addEventListener('change', sync);
+    }
+    if (menu) {
+      menu.querySelectorAll('a').forEach(link => link.addEventListener('click', () => {
+        if (link.hash && link.pathname === location.pathname) menu.open = false;
+      }));
+      menu.addEventListener('focusout', event => {
+        if (menu.open && event.relatedTarget && !menu.contains(event.relatedTarget)) menu.open = false;
+      });
+      document.addEventListener('click', event => {
+        if (menu.open && !menu.contains(event.target)) menu.open = false;
+      });
+      document.addEventListener('keydown', event => {
+        if (event.key === 'Escape' && menu.open) {
+          menu.open = false;
+          menu.querySelector('summary').focus();
+        }
+      });
+      window.addEventListener('pagehide', () => { menu.open = false; });
+    }
+  })();
 </script>
 
 <style>
   .site-header {
-    background: rgba(var(--surface-rgb), 0.85);
-    border-bottom: 1px solid var(--border);
-    padding: 1rem 0;
     position: sticky;
     top: 0;
-    z-index: 100;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-  }
-
-  .header-content {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 2rem;
-  }
-
-  .logo {
-    font-family: var(--font-heading);
-    font-size: 1.5rem;
-    font-weight: 700;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-  }
-
-  .logo-bracket {
-    color: var(--secondary);
-  }
-
-  .logo-text {
-    color: var(--primary);
-  }
-
-  .main-nav {
-    display: flex;
-    align-items: center;
-    gap: 2rem;
-    flex: 1;
-    justify-content: center;
-  }
-
-  .nav-link {
-    font-family: var(--font-code);
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-    text-decoration: none;
-    transition: color 0.2s ease;
-    position: relative;
-  }
-
-  .nav-link::before {
-    content: '> ';
-    color: var(--primary);
-    opacity: 0;
-    transition: opacity 0.2s ease;
-  }
-
-  .nav-link:hover {
-    color: var(--primary);
-  }
-
-  .nav-link:hover::before {
-    opacity: 1;
-  }
-
-  .header-actions {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .mobile-menu-wrapper {
-    display: none;
-  }
-
-  @media (max-width: 768px) {
-    .main-nav {
-      display: none;
-    }
-
-    .mobile-menu-wrapper {
-      display: block;
-    }
-
-    .logo {
-      font-size: 1.25rem;
-    }
-  }
-</style>
-
-<style is:global>
-  /* 汉堡菜单按钮样式 */
-  .mobile-menu-toggle {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    width: 2rem;
-    height: 2rem;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    z-index: 10000;
-    position: relative;
-  }
-
-  .mobile-menu-toggle::-webkit-details-marker { display: none; }
-
-  @media (max-width: 768px) {
-    body:has(.mobile-menu-wrapper[open]) { overflow: hidden; }
-  }
-
-  .hamburger-line {
-    width: 2rem;
-    height: 2px;
-    background: var(--primary);
-    border-radius: 2px;
-    transition: all 0.3s ease;
-    transform-origin: center;
-  }
-
-  .mobile-menu-wrapper[open] .mobile-menu-toggle .hamburger-line:nth-child(1) {
-    transform: rotate(45deg) translateY(0.5rem);
-  }
-
-  .mobile-menu-wrapper[open] .mobile-menu-toggle .hamburger-line:nth-child(2) {
-    opacity: 0;
-  }
-
-  .mobile-menu-wrapper[open] .mobile-menu-toggle .hamburger-line:nth-child(3) {
-    transform: rotate(-45deg) translateY(-0.5rem);
-  }
-
-  /* 移动端菜单覆盖层 */
-  .mobile-menu-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100vw;
-    height: 100vh;
+    z-index: 5;
+    border-bottom: 1px solid var(--border);
     background: var(--background);
-    z-index: 9999;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-    padding-top: 5rem;
-    overflow-y: auto;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
   }
-
-  .mobile-menu-wrapper[open] .mobile-menu-overlay {
-    opacity: 1;
-    visibility: visible;
+  .header-inner { display: flex; align-items: center; min-height: calc(var(--header-height) - 1px); gap: clamp(1.4rem, 4vw, 4rem); }
+  .header-nav { display: flex; align-items: stretch; align-self: stretch; gap: clamp(0.9rem, 2.25vw, 2rem); }
+  .header-nav a { position: relative; display: grid; place-items: center; text-decoration: none; color: var(--text-secondary); font-size: 0.91rem; font-weight: 620; }
+  .header-nav a:hover, .header-nav .active { color: var(--text); }
+  .header-nav .active::after { content: ''; position: absolute; inset: auto 0 0; height: 2px; background: var(--primary); }
+  .header-nav a:focus-visible { outline-offset: -3px; }
+  .header-actions { display: flex; align-items: center; margin-inline-start: auto; gap: 0.45rem; }
+  .icon-control, .header-search { min-width: 44px; min-height: 44px; border-radius: var(--radius-sm); display: inline-flex; align-items: center; justify-content: center; gap: 0.48rem; color: var(--text); background: transparent; text-decoration: none; }
+  .header-search { padding-inline: 0.85rem; border: 1px solid var(--border); font-size: 0.89rem; font-weight: 560; }
+  .icon-control { border: 0; padding: 0; list-style: none; }
+  .icon-control[hidden] { display: none; }
+  .icon-control:hover, .header-search:hover, .header-search[aria-current] { background: var(--surface-muted); }
+  .icon-moon, .icon-sun, .menu-icon, .close-icon { line-height: 0; }
+  .icon-sun, .close-icon, :global([data-theme='dark']) .icon-moon, .mobile-menu[open] .menu-icon { display: none; }
+  :global([data-theme='dark']) .icon-sun, .mobile-menu[open] .close-icon { display: block; }
+  .mobile-menu { display: none; }
+  summary::-webkit-details-marker { display: none; }
+  .mobile-nav { position: absolute; inset: 100% 0 auto; background: var(--surface); border-block-end: 1px solid var(--border-strong); padding: 0.5rem var(--gutter) 0.75rem; max-height: calc(100dvh - var(--header-height)); overflow: auto; }
+  .mobile-nav a { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; min-height: 46px; padding: 0.3rem 0.35rem; color: var(--text); text-decoration: none; font-weight: 620; }
+  .mobile-nav a + a { border-block-start: 1px solid var(--border); }
+  .mobile-nav a:hover, .mobile-nav .active { color: var(--primary); }
+  @media (max-width: 48rem) {
+    .header-nav, .header-search span { display: none; }
+    .mobile-menu { display: block; }
+    .header-actions { gap: 0.125rem; }
+    .header-search { padding: 0; border: 0; }
   }
-
-  /* 移动端导航 */
-  .mobile-nav {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.5rem;
-    padding: 2rem;
-  }
-
-  .mobile-nav-link {
-    font-family: var(--font-code);
-    font-size: 1.25rem;
-    color: var(--text-secondary);
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem 2rem;
-    border: 1px solid var(--border);
-    border-radius: 0.5rem;
-    width: 100%;
-    max-width: 300px;
-    transition: all 0.3s ease;
-    background: var(--surface);
-  }
-
-  .mobile-nav-link:hover {
-    color: var(--primary);
-    border-color: var(--primary);
-    background: rgba(var(--primary-rgb), 0.1);
-    transform: translateX(0.5rem);
-  }
-
-  .nav-icon {
-    font-size: 1.5rem;
+  @media (max-width: 23rem) {
+    .header-inner { gap: 0.25rem; }
   }
 </style>

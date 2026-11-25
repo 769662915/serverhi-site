@@ -2,11 +2,11 @@
 
 ## 项目概述
 
-**ServerHi** 是一个专业的 Linux 服务器管理和 DevOps 教程网站，采用独特的终端美学设计风格。该项目是一个基于 Astro 5.0 构建的静态网站，专注于提供 Docker 容器化、Linux 系统管理、服务器配置和安全加固方面的实践教程。
+**ServerHi** 是面向运维人员的 Linux 和 DevOps 技术手册。该项目是一个基于 Astro 5.0 构建的静态网站，专注于提供 Docker 容器化、Linux 系统管理、服务器配置和安全加固方面的实践教程。
 
 ### 核心特性
 
-- **终端美学设计** - 黑客风格的 UI，使用终端绿色作为主色调
+- **技术手册界面** - 可按主题、任务和故障入口浏览，文章包含目录和代码操作
 - **SEO 优化** - 内置站点地图、元标签和结构化数据
 - **高性能** - 使用 Astro 的静态站点生成
 - **深色/浅色模式** - 带持久化偏好的主题切换
@@ -55,7 +55,7 @@ npm run build
 此命令执行以下操作：
 1. 运行 `astro check` 进行类型检查
 2. 执行 `astro build` 构建生产版本
-3. 运行 `npx pagefind --site dist` 生成搜索索引
+3. 运行 `pagefind --site dist` 生成搜索索引
 
 ### 预览生产构建
 
@@ -87,7 +87,7 @@ serverhi-site/
 │   │   ├── Footer.astro         # 页脚组件
 │   │   ├── Header.astro         # 页头组件
 │   │   ├── SEO.astro            # SEO 元标签组件
-│   │   └── ThemeToggle.tsx      # 主题切换组件
+│   │   └── TableOfContents.astro # 文章目录
 │   ├── layouts/                 # 页面布局
 │   │   └── BaseLayout.astro     # 基础布局
 │   ├── pages/                   # 路由页面
@@ -115,7 +115,7 @@ serverhi-site/
 │       ├── base.css             # 基础样式
 │       ├── global.css           # 全局样式
 │       ├── theme.css            # 主题样式
-│       └── animations.css       # 动画效果
+│       └── article.css          # 正文和代码排版
 ├── public/                      # 静态资源
 │   ├── favicon.svg              # 网站图标
 │   ├── robots.txt               # 爬虫规则
@@ -184,36 +184,11 @@ osCompatibility: ["Ubuntu 22.04", "Debian 11"]
 
 ### 样式规范
 
-#### 颜色方案
+#### 颜色、排版与交互
 
-**深色模式**（默认）：
-- Primary: `#00ff00`（终端绿）
-- Secondary: `#ff9500`（橙色）
-- Background: `#0d1117`（深色背景）
-- Surface: `#161b22`（卡片背景）
-- Text: `#e6edf3`（主要文本）
-- Text Secondary: `#8b949e`（次要文本）
-- Border: `#30363d`（边框）
+主题变量位于 `src/styles/theme.css`。浅色使用暖白页面与墨色文字，琥珀色用于导航状态和技术提示。深色沿用同样的层级。标题与正文采用 Geist，代码使用 IBM Plex Mono。
 
-**浅色模式**：
-- Primary: `#00d900`
-- Background: `#f5f5f5`
-- Surface: `#ffffff`
-- Text: `#1a1a1a`
-
-#### 字体
-
-- **标题**: Space Mono（等宽字体）
-- **正文**: Work Sans
-- **代码**: Space Mono
-
-所有字体从 Google Fonts 加载。
-
-#### 设计理念
-
-- 终端美学：受经典终端界面启发
-- 视觉效果：网格背景、扫描线、终端光标动画
-- UI 元素：终端窗口框架、命令行提示符
+移动导航和正文目录使用 HTML 展开控件。代码使用独立的横向滚动面板，复制功能以可用的浏览器剪贴板为准。正文和主导航在禁用脚本时仍可阅读和使用。
 
 ### TypeScript 配置
 
@@ -226,7 +201,7 @@ osCompatibility: ["Ubuntu 22.04", "Debian 11"]
 
 - 使用 React 集成
 - 启用站点地图插件
-- Markdown 使用 `github-dark` Shiki 主题进行代码高亮
+- Markdown 使用 `github-dark-default` Shiki 主题进行代码高亮
 - 站点 URL: `https://serverhi.com`
 
 ---
@@ -242,13 +217,9 @@ osCompatibility: ["Ubuntu 22.04", "Debian 11"]
 - 每页文章数（默认 12）
 - 相关文章数量（默认 3）
 
-### config/theme.json
+### src/styles/theme.css
 
-主题配置，包括：
-- 颜色方案（浅色/深色）
-- 字体配置
-- 布局参数（最大宽度、内容宽度、圆角）
-- 视觉效果（动画、纹理、光标效果）
+定义公开页面的字体、版心、颜色及浅色和深色主题变量。
 
 ### config/categories.json
 
@@ -336,14 +307,9 @@ osCompatibility: ["Ubuntu 22.04", "Debian 11"]
 - 发布日期
 - 阅读时间
 
-### ThemeToggle.tsx
+### TableOfContents.astro
 
-React 组件，处理：
-- 主题切换（深色/浅色）
-- 持久化存储（localStorage）
-- 平滑过渡动画
-
----
+基于已发布文章的小节锚点渲染桌面目录和移动端展开目录。外观偏好由页头控件和基础布局处理，仍使用 `localStorage` 的 `theme` 键。
 
 ## 部署
 
@@ -379,8 +345,8 @@ netlify deploy --prod
 
 1. **图片处理**: 每篇文章都需要封面图片（推荐 `cover.jpg`，可选 `cover.svg`）
 2. **搜索索引**: 每次构建后会自动生成 Pagefind 搜索索引
-3. **主题默认**: 网站默认使用深色模式
-4. **代码高亮**: Markdown 代码块使用 GitHub Dark 主题
+3. **主题默认**: 首次访问遵循系统的外观偏好
+4. **代码高亮**: Markdown 代码块使用 GitHub Dark Default 主题
 5. **内容验证**: 使用 Zod schema 验证文章 Frontmatter，确保数据一致性
 
 ---
@@ -391,11 +357,11 @@ netlify deploy --prod
 
 1. 编辑 `config/categories.json` 添加分类定义
 2. 更新 `src/content/config.ts` 中的 category enum
-3. 创建 `src/pages/category/[slug].astro` 路由
+3. 在 `src/lib/manual.ts` 添加专题摘要和已发布的任务入口
 
 ### 修改主题颜色
 
-编辑 `config/theme.json` 中的 `colors` 对象，然后重启开发服务器。
+编辑 `src/styles/theme.css` 中对应的颜色变量。
 
 ### 更改站点元数据
 

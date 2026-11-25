@@ -13,74 +13,42 @@ interface Props {
   modifiedTime?: string;
   noindex?: boolean;
 }
-
-const { title, description, image, article, publishedTime, modifiedTime, noindex } = Astro.props;
 ---
 
-<!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<!doctype html>
+<html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
-
-    <SEO
-      title={title}
-      description={description}
-      image={image}
-      article={article}
-      publishedTime={publishedTime}
-      modifiedTime={modifiedTime}
-      noindex={noindex}
-    />
+    <meta name="theme-color" content="#faf8f3" />
+    <script is:inline>
+      function applyTheme(theme) {
+        document.documentElement.dataset.theme = theme;
+        document.querySelector('meta[name="theme-color"]').content = theme === 'dark' ? '#1b1d19' : '#faf8f3';
+      }
+      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)');
+      function readTheme() {
+        try {
+          const theme = localStorage.getItem('theme');
+          if (theme === 'light' || theme === 'dark') return theme;
+        } catch {}
+        return systemTheme.matches ? 'dark' : 'light';
+      }
+      applyTheme(readTheme());
+      systemTheme.addEventListener('change', () => applyTheme(readTheme()));
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400..800&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" />
+    <SEO {...Astro.props} />
   </head>
   <body>
+    <a class="skip-link visually-hidden" href="#main-content">Skip to content</a>
     <Header />
-    <main class="main-content">
+    <main class="main-content" id="main-content" tabindex="-1">
       <slot />
     </main>
     <Footer />
-
-    <style is:global>
-      /* 确保 astro-island 不影响布局 */
-      astro-island {
-        display: contents;
-      }
-
-      .theme-toggle {
-        display: flex !important;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.5rem 1rem;
-        background: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: var(--radius-sm);
-        color: var(--text);
-        font-family: var(--font-code);
-        font-size: 0.875rem;
-        cursor: pointer;
-        transition: all 0.2s ease;
-      }
-
-      .theme-toggle:hover {
-        border-color: var(--primary);
-        box-shadow: 0 0 10px rgba(var(--primary-rgb), 0.2);
-      }
-
-      .theme-icon {
-        font-size: 1.2rem;
-      }
-
-      .main-content {
-        min-height: calc(100vh - 200px);
-        padding: 2rem 0;
-      }
-    </style>
-
-    <script>
-      // Initialize theme on page load
-      const savedTheme = localStorage.getItem('theme') || 'dark';
-      document.documentElement.setAttribute('data-theme', savedTheme);
-    </script>
   </body>
 </html>

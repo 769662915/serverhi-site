@@ -1,13 +1,16 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ArticleCard from '../../components/ArticleCard.astro';
+import ArticleCoverImage from '../../components/ArticleCoverImage.astro';
 import Breadcrumb from '../../components/Breadcrumb.astro';
+import ManualIcon from '../../components/ManualIcon.astro';
+import TableOfContents from '../../components/TableOfContents.astro';
 import ArticleSchema from '../../components/schema/ArticleSchema.astro';
 import BreadcrumbSchema from '../../components/schema/BreadcrumbSchema.astro';
-import ArticleCoverImage from '../../components/ArticleCoverImage.astro';
 import { formatDate, getAllPosts, getRelatedPosts, tagToSlug } from '../../lib/posts';
-import { getCategoryColor, getCategoryIcon, getCategoryBySlug, site } from '../../lib/config';
-import { getDifficultyColor, getDifficultyLabel } from '../../lib/utils';
+import { getCategoryBySlug, site } from '../../lib/config';
+import { getDifficultyLabel } from '../../lib/utils';
+import '../../styles/article.css';
 
 export async function getStaticPaths() {
   const posts = await getAllPosts();
@@ -18,28 +21,24 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
-const { Content } = await post.render();
+const { Content, headings } = await post.render();
 const relatedPosts = await getRelatedPosts(post, 3);
-
 const { title, description, pubDate, updatedDate, coverImage, coverImageAlt, category, tags, author, difficulty, estimatedTime, prerequisites, osCompatibility } = post.data;
-
 const categoryInfo = getCategoryBySlug(category);
-const breadcrumbItems = [
-  { label: 'Tutorials', href: '/posts/' },
-  { label: categoryInfo?.name || category, href: `/category/${encodeURIComponent(category)}/` },
-  { label: title, href: `/posts/${post.slug}/` }
-];
-
-// 构建完整的图片 URL
-const fullImageUrl = coverImage?.src ? `${site.url}${coverImage.src}` : `${site.url}/images/site/og-image.jpg`;
 const articleUrl = `${site.url}/posts/${post.slug}/`;
+const menuItems = [
+  { label: 'Guides', href: '/posts/' },
+  { label: categoryInfo?.name || category, href: `/category/${encodeURIComponent(category)}/` },
+];
+const toc = headings.filter(heading => heading.depth === 2 || heading.depth === 3);
+const displayTags = Array.from(new Map(tags.map(tag => [tagToSlug(tag), tag])), ([slug, label]) => ({ slug, label })).filter(tag => tag.slug);
 ---
 
 <BaseLayout
   title={`${title} - ServerHi`}
   description={description}
   image={coverImage?.src}
-  article={true}
+  article
   publishedTime={pubDate.toISOString()}
   modifiedTime={updatedDate?.toISOString()}
 >
@@ -49,340 +48,219 @@ const articleUrl = `${site.url}/posts/${post.slug}/`;
     publishedTime={pubDate.toISOString()}
     modifiedTime={updatedDate?.toISOString()}
     author={author}
-    image={fullImageUrl}
+    image={new URL(coverImage?.src || '/images/site/og-image.jpg', site.url).href}
     category={categoryInfo?.name || category}
     tags={tags}
     url={articleUrl}
   />
-  <BreadcrumbSchema items={breadcrumbItems} />
+  <BreadcrumbSchema items={[...menuItems, { label: title, href: `/posts/${post.slug}/` }]} />
 
-  <article class="article-page" data-pagefind-body>
-    <div class="container">
-      <!-- Breadcrumb -->
-      <Breadcrumb items={breadcrumbItems} />
-
-      <!-- Article Header -->
-      <header class="article-header fade-in-up">
-        <div class="article-meta">
-          <a
-            href={`/category/${encodeURIComponent(category)}/`}
-            class="category-badge terminal-hover"
-            style={`background: ${getCategoryColor(category)}20; color: ${getCategoryColor(category)}`}
-          >
-            {getCategoryIcon(category)} {category}
-          </a>
-          {difficulty && (
-            <span class="difficulty-badge" style={`color: ${getDifficultyColor(difficulty)}`}>
-              {getDifficultyLabel(difficulty)}
-            </span>
-          )}
-        </div>
-
-        <h1 class="article-title" data-pagefind-meta="title">{title}</h1>
-        <p class="article-description">{description}</p>
-
-        <div class="article-info">
-          <div class="info-item">
-            <span class="info-label">Published:</span>
-            <time datetime={pubDate.toISOString()}>{formatDate(pubDate)}</time>
-          </div>
-          {updatedDate && (
-            <div class="info-item">
-              <span class="info-label">Updated:</span>
-              <time datetime={updatedDate.toISOString()}>{formatDate(updatedDate)}</time>
-            </div>
-          )}
-          {estimatedTime && (
-            <div class="info-item">
-              <span class="info-label">Duration:</span>
-              <span>⏱️ {estimatedTime}</span>
-            </div>
-          )}
-          <div class="info-item">
-            <span class="info-label">Author:</span>
+  <article class="article-page container" data-pagefind-body>
+    <Breadcrumb items={menuItems} trailOnly />
+    <header class="article-heading">
+      <h1 class="article-title" data-pagefind-meta="title">{title}</h1>
+      <p class="article-description">{description}</p>
+      <dl class="article-info">
+        <div>
+          <dt>Author</dt>
+          <dd>
             {['ServerHi Team', 'ServerHi Editorial Team'].includes(author)
               ? <a href="/author/" rel="author">{author}</a>
               : <span>{author}</span>}
-          </div>
+          </dd>
+        </div>
+        <div><dt>Published</dt><dd><time datetime={pubDate.toISOString()}>{formatDate(pubDate)}</time></dd></div>
+        {updatedDate && <div><dt>Updated</dt><dd><time datetime={updatedDate.toISOString()}>{formatDate(updatedDate)}</time></dd></div>}
+        {estimatedTime && <div><dt>Time</dt><dd>{estimatedTime}</dd></div>}
+        {difficulty && <div><dt>Level</dt><dd>{getDifficultyLabel(difficulty)}</dd></div>}
+      </dl>
+    </header>
+
+    <div class:list={['reading-grid', { 'has-contents': toc.length > 0 }]}>
+      {toc.length > 0 && (
+        <>
+          <div class="contents-mobile" data-pagefind-ignore><TableOfContents headings={toc} collapsible /></div>
+          <aside class="contents-rail" data-pagefind-ignore><TableOfContents headings={toc} /></aside>
+        </>
+      )}
+      <div class="reading-main">
+        {(Boolean(prerequisites?.length) || Boolean(osCompatibility?.length)) && (
+          <section class="requirements" aria-labelledby="requirements-title">
+            <h2 id="requirements-title">Before you start</h2>
+            {Boolean(osCompatibility?.length) && osCompatibility && <p><strong>Compatible with</strong> {osCompatibility.join(', ')}</p>}
+            {Boolean(prerequisites?.length) && prerequisites && <ul>{prerequisites.map(prerequisite => <li>{prerequisite}</li>)}</ul>}
+          </section>
+        )}
+
+        <div class="article-content" data-reader-content>
+          <Content />
         </div>
 
-        {prerequisites && prerequisites.length > 0 && (
-          <div class="prerequisites terminal-window">
-            <div class="terminal-header">
-              <span class="terminal-dot red"></span>
-              <span class="terminal-dot yellow"></span>
-              <span class="terminal-dot green"></span>
-            </div>
-            <div class="prerequisites-content">
-              <h3>Prerequisites</h3>
-              <ul>
-                {prerequisites.map(prereq => (
-                  <li>{prereq}</li>
-                ))}
+        <div class="article-end">
+          {displayTags.length > 0 && (
+            <nav aria-label="Article topics" class="article-tags">
+              <h2>Topics in this guide</h2>
+              <ul class="list-reset">
+                {displayTags.map(tag => <li><a href={`/tag/${tag.slug}/`}>{tag.label}</a></li>)}
               </ul>
-            </div>
-          </div>
-        )}
+            </nav>
+          )}
+          <p class="article-correction" data-pagefind-ignore><a class="text-link" href="/contact/">Report a correction to this article <ManualIcon name="arrow" size={16} /></a></p>
+          {coverImage && (
+            <details class="article-cover" data-pagefind-ignore>
+              <summary>Article illustration <ManualIcon name="down" size={15} /></summary>
+              <figure><ArticleCoverImage src={coverImage} alt={coverImageAlt} /></figure>
+            </details>
+          )}
 
-        {osCompatibility && osCompatibility.length > 0 && (
-          <div class="os-compatibility">
-            <span class="os-label">Compatible with:</span>
-            {osCompatibility.map(os => (
-              <span class="os-badge">{os}</span>
-            ))}
-          </div>
-        )}
-      </header>
-
-      <!-- Cover Image -->
-      {coverImage && (
-        <div class="article-cover fade-in-up">
-          <ArticleCoverImage src={coverImage} alt={coverImageAlt} />
+          {relatedPosts.length > 0 && (
+            <section class="related-posts" aria-labelledby="related-title" data-pagefind-ignore>
+              <h2 class="section-heading" id="related-title">Related guides</h2>
+              <ul class="article-list">
+                {relatedPosts.map(relatedPost => <li><ArticleCard post={relatedPost} showDescription={false} /></li>)}
+              </ul>
+            </section>
+          )}
         </div>
-      )}
-
-      <!-- Article Content -->
-      <div class="article-content content-wrapper fade-in-up">
-        <Content />
       </div>
-
-      <!-- Tags -->
-      {tags && tags.length > 0 && (
-        <div class="article-tags fade-in-up">
-          <h3 class="tags-title">Tags</h3>
-          <div class="tags-list">
-            {tags.map(tag => (
-              <a href={`/tag/${tagToSlug(tag)}/`} class="tag terminal-hover">
-                #{tag}
-              </a>
-            ))}
-          </div>
-        </div>
-      )}
-
-      <p class="article-correction" data-pagefind-ignore><a href="/contact/">Report a correction to this article</a></p>
-
-      <!-- Related Posts -->
-      {relatedPosts.length > 0 && (
-        <section class="related-posts fade-in-up" data-pagefind-ignore>
-          <h2 class="section-title">
-            <span class="terminal-prompt"></span>
-            Related Tutorials
-          </h2>
-          <div class="related-grid">
-            {relatedPosts.map(relatedPost => (
-              <ArticleCard post={relatedPost} />
-            ))}
-          </div>
-        </section>
-      )}
     </div>
   </article>
 </BaseLayout>
 
+<script>
+  const reader = document.querySelector<HTMLElement>('[data-reader-content]');
+  const correction = reader?.querySelector(':scope > p:first-child > strong:first-child');
+  if (correction?.textContent?.startsWith('Correction,')) reader?.firstElementChild?.classList.add('editorial-correction');
+
+  if (reader) {
+    const status = document.createElement('div');
+    status.className = 'visually-hidden';
+    status.setAttribute('role', 'status');
+    reader.before(status);
+
+    reader.querySelectorAll('pre').forEach(pre => {
+      const code = pre.querySelector('code');
+      if (!code?.textContent?.trim()) return;
+      const language = pre.dataset.language || 'text';
+      const label = language === 'text' ? 'Plain text' : language;
+      pre.tabIndex = 0;
+      pre.setAttribute('role', 'group');
+      pre.setAttribute('aria-label', `${label} code, scroll horizontally if needed`);
+
+      const panel = document.createElement('div');
+      panel.className = 'code-panel';
+      const toolbar = document.createElement('div');
+      toolbar.className = 'code-toolbar';
+      const caption = document.createElement('span');
+      caption.textContent = label;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.textContent = 'Copy';
+      button.setAttribute('aria-label', `Copy ${label} code`);
+      let reset = 0;
+
+      button.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(code.textContent ?? '');
+          button.textContent = 'Copied';
+          status.textContent = 'Code copied to clipboard.';
+        } catch {
+          const selection = getSelection();
+          const range = document.createRange();
+          range.selectNodeContents(code);
+          selection?.removeAllRanges();
+          selection?.addRange(range);
+          button.textContent = 'Selected';
+          status.textContent = 'Code selected. Use your copy shortcut.';
+        }
+        window.clearTimeout(reset);
+        reset = window.setTimeout(() => {
+          button.textContent = 'Copy';
+          status.textContent = '';
+        }, 2000);
+      });
+
+      toolbar.append(caption, button);
+      pre.before(panel);
+      panel.append(toolbar, pre);
+    });
+
+    reader.querySelectorAll('table').forEach(table => {
+      const scroller = document.createElement('div');
+      scroller.className = 'reader-table';
+      scroller.tabIndex = 0;
+      scroller.setAttribute('role', 'group');
+      scroller.setAttribute('aria-label', 'Article table');
+      table.before(scroller);
+      scroller.append(table);
+    });
+  }
+
+  const contentsLinks = document.querySelectorAll<HTMLAnchorElement>('.contents a');
+  const syncContents = () => {
+    for (const link of contentsLinks) {
+      if (link.hash === location.hash) link.setAttribute('aria-current', 'location');
+      else link.removeAttribute('aria-current');
+    }
+  };
+  for (const link of contentsLinks) link.addEventListener('click', () => {
+    const disclosure = link.closest('details');
+    if (!disclosure) return;
+    disclosure.open = false;
+    const id = decodeURIComponent(link.hash.slice(1));
+    const heading = document.getElementById(id);
+    if (heading) {
+      heading.tabIndex = -1;
+      heading.focus({ preventScroll: true });
+    }
+  });
+  syncContents();
+  addEventListener('hashchange', syncContents);
+</script>
+
 <style>
-  .article-page {
-    padding: 2rem 0;
+  .article-page { max-width: 72rem; }
+  .article-heading { padding: .35rem 0 1.45rem; border-bottom: 1px solid var(--border-strong); }
+  .article-title { margin-bottom: .75rem; max-width: 60rem; font-size: clamp(2.2rem, 4.25vw, 3.42rem); font-weight: 725; letter-spacing: -.055em; line-height: 1.03; text-wrap: pretty; }
+  .article-description { max-width: 71ch; color: var(--text-secondary); font-size: clamp(1.04rem, 1.7vw, 1.23rem); line-height: 1.52; }
+  .article-info { display: flex; flex-wrap: wrap; column-gap: 1.7rem; row-gap: .7rem; margin: 1.2rem 0 0; }
+  .article-info dt { color: var(--text-secondary); font: 500 .69rem/1.4 var(--font-code); text-transform: uppercase; letter-spacing: .025em; }
+  .article-info dd { margin: .18rem 0 0; font-size: .9rem; font-weight: 570; }
+  .reading-grid { padding-top: 1.65rem; }
+  .reading-grid.has-contents { display: grid; grid-template-columns: minmax(0, 1fr) minmax(12rem, 16rem); column-gap: clamp(2.2rem, 5.6vw, 5rem); align-items: start; }
+  .reading-main { grid-column: 1; grid-row: 1; min-width: 0; max-width: 52rem; }
+  .contents-rail { grid-column: 2; grid-row: 1; min-width: 0; position: sticky; top: calc(var(--header-height) + 22px); max-height: calc(100dvh - var(--header-height) - 50px); overflow: auto; border-inline-start: 1px solid var(--border); padding: .08rem .25rem .2rem 1rem; }
+  .contents-mobile { display: none; }
+
+  .requirements { background: var(--surface-muted); border: 1px solid var(--border); border-inline-start: 3px solid var(--accent-border); border-radius: var(--radius-md); padding: .9rem 1.12rem; margin-bottom: 1.55rem; font-size: .93rem; }
+  .requirements h2 { margin-bottom: .45rem; font-size: 1.05rem; }
+  .requirements p { margin: .25rem 0; }
+  .requirements strong { margin-right: .35rem; }
+  .requirements ul { padding-inline-start: 1.1rem; margin: .38rem 0 0; }
+  .requirements li + li { margin-top: .18rem; }
+  .article-end { margin-top: 2.8rem; border-top: 1px solid var(--border-strong); padding-top: 1.4rem; }
+  .article-tags h2 { font-size: 1.01rem; margin-bottom: .5rem; }
+  .article-tags ul { display: flex; flex-wrap: wrap; gap: .4rem .55rem; }
+  .article-tags a { display: inline-flex; align-items: center; min-height: 35px; padding: .25rem .55rem; color: var(--text); background: var(--surface-muted); border: 1px solid var(--border); border-radius: var(--radius-sm); text-decoration: none; font-size: .85rem; }
+  .article-tags a:hover { color: var(--primary); border-color: var(--accent-border); text-decoration: underline; }
+  .article-correction { margin-top: .75rem; }
+  .article-correction a, summary { min-height: 44px; }
+  .article-cover summary { display: inline-flex; align-items: center; gap: .4rem; color: var(--text-secondary); font-size: .89rem; list-style: none; }
+  .article-cover summary::-webkit-details-marker { display: none; }
+  .article-cover[open] summary :global(svg) { transform: rotate(180deg); }
+  .article-cover figure { max-width: 35rem; }
+  .article-cover img { border-radius: var(--radius-sm); }
+  .related-posts { margin-top: 2.05rem; }
+  .related-posts h2 { margin-bottom: 1rem; }
+  @media (max-width: 54rem) {
+    .reading-grid.has-contents { display: block; }
+    .contents-rail { display: none; }
+    .contents-mobile { display: block; margin-bottom: 1.15rem; }
+    .article-heading { padding-bottom: 1.08rem; }
+    .reading-grid { padding-top: 1rem; }
+    .article-info { gap: .55rem 1.15rem; margin-top: .95rem; }
   }
-
-  .article-header {
-    margin-bottom: 2rem;
-  }
-
-  .article-meta {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 1.5rem;
-    flex-wrap: wrap;
-  }
-
-  .category-badge,
-  .difficulty-badge {
-    font-family: var(--font-code);
-    font-size: 0.75rem;
-    padding: 0.25rem 0.75rem;
-    border-radius: var(--radius-sm);
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    text-decoration: none;
-  }
-
-  .difficulty-badge {
-    background: var(--code-bg);
-  }
-
-  .article-title {
-    font-size: clamp(2rem, 5vw, 3rem);
-    margin-bottom: 1rem;
-    line-height: 1.2;
-  }
-
-  .article-description {
-    font-size: 1.25rem;
-    color: var(--text-secondary);
-    margin-bottom: 1.5rem;
-    line-height: 1.6;
-  }
-
-  .article-info {
-    display: flex;
-    gap: 2rem;
-    flex-wrap: wrap;
-    padding: 1rem 0;
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 1.5rem;
-  }
-
-  .info-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-family: var(--font-code);
-    font-size: 0.875rem;
-  }
-
-  .info-label {
-    color: var(--text-secondary);
-  }
-
-  .prerequisites {
-    margin: 1.5rem 0;
-  }
-
-  .prerequisites-content {
-    padding: 1.5rem;
-  }
-
-  .prerequisites h3 {
-    font-family: var(--font-code);
-    font-size: 1rem;
-    color: var(--primary);
-    margin-bottom: 1rem;
-  }
-
-  .prerequisites ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  .prerequisites li {
-    padding-left: 1.5rem;
-    position: relative;
-    margin-bottom: 0.5rem;
-  }
-
-  .prerequisites li::before {
-    content: '✓';
-    position: absolute;
-    left: 0;
-    color: var(--primary);
-    font-weight: 700;
-  }
-
-  .os-compatibility {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    flex-wrap: wrap;
-    margin-top: 1rem;
-  }
-
-  .os-label {
-    font-family: var(--font-code);
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-  }
-
-  .os-badge {
-    font-family: var(--font-code);
-    font-size: 0.75rem;
-    background: var(--code-bg);
-    color: var(--text);
-    padding: 0.25rem 0.75rem;
-    border-radius: var(--radius-sm);
-  }
-
-  .article-cover {
-    margin-bottom: 3rem;
-    border-radius: var(--radius-md);
-    overflow: hidden;
-    border: 1px solid var(--border);
-  }
-
-  .article-cover img {
-    width: 100%;
-    height: auto;
-    display: block;
-  }
-
-  .article-content {
-    margin-bottom: 3rem;
-  }
-
-  .article-tags {
-    padding: 2rem 0;
-    border-top: 1px solid var(--border);
-    margin-bottom: 3rem;
-  }
-
-  .tags-title {
-    font-family: var(--font-code);
-    font-size: 1rem;
-    margin-bottom: 1rem;
-  }
-
-  .tags-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-  }
-
-  .tag {
-    font-family: var(--font-code);
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-    background: var(--code-bg);
-    padding: 0.5rem 1rem;
-    border-radius: var(--radius-sm);
-    text-decoration: none;
-    transition: all 0.2s ease;
-    border: 1px solid var(--border);
-  }
-
-  .tag:hover {
-    color: var(--primary);
-    border-color: var(--primary);
-  }
-
-  .related-posts {
-    padding: 2rem 0;
-    border-top: 1px solid var(--border);
-  }
-
-  .section-title {
-    font-size: 1.75rem;
-    margin-bottom: 2rem;
-  }
-
-  .related-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-  }
-
-  @media (max-width: 768px) {
-    .article-info {
-      flex-direction: column;
-      gap: 0.75rem;
-      align-items: flex-start;
-    }
-
-    .related-grid {
-      grid-template-columns: 1fr;
-    }
+  @media (max-width: 33rem) {
+    .article-title { font-size: clamp(1.95rem, 7.7vw, 2.6rem); }
   }
 </style>

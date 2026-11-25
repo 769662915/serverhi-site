@@ -1,14 +1,14 @@
 ---
 import PublicEmail from '../components/PublicEmail.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import '../styles/legal.css';
 ---
 
 <BaseLayout title="Privacy Policy - ServerHi">
   <div class="container">
     <article class="legal-page">
-      <header class="page-header fade-in-up">
-        <h1 class="page-title">
-          <span class="terminal-prompt"></span>
+      <header class="page-header">
+        <h1 class="page-heading">
           Privacy Policy
         </h1>
         <p class="last-updated">Last updated: November 25, 2026</p>
@@ -16,7 +16,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       <div class="content-wrapper">
         <!-- Table of Contents -->
-        <nav class="toc fade-in-up">
+        <nav class="toc">
           <h2 class="toc-title">Table of Contents</h2>
           <ol class="toc-list">
             <li><a href="#introduction">Introduction</a></li>
@@ -37,7 +37,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           </ol>
         </nav>
 
-        <div class="legal-content fade-in-up">
+        <div class="legal-content">
           <section id="introduction" class="legal-section">
             <h2>Introduction</h2>
             <p>
@@ -204,231 +204,3 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </article>
   </div>
 </BaseLayout>
-
-<style>
-  .legal-page {
-    padding: 2rem 0;
-  }
-
-  .page-header {
-    text-align: center;
-    margin-bottom: 3rem;
-  }
-
-  .page-title {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-  }
-
-  .last-updated {
-    color: var(--text-secondary);
-    font-family: var(--font-code);
-    font-size: 0.9rem;
-  }
-
-  /* Table of Contents */
-  .toc {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: 1.5rem 2rem;
-    margin-bottom: 3rem;
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .toc-title {
-    font-size: 1.25rem;
-    margin-bottom: 1rem;
-    color: var(--primary);
-    font-family: var(--font-code);
-  }
-
-  .toc-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 0.5rem 2rem;
-  }
-
-  .toc-list li {
-    position: relative;
-    padding-left: 1rem;
-  }
-
-  .toc-list li::before {
-    content: "›";
-    position: absolute;
-    left: 0;
-    color: var(--primary);
-    font-weight: bold;
-  }
-
-  .toc-list a {
-    color: var(--text-secondary);
-    text-decoration: none;
-    font-size: 0.9rem;
-    transition: color 0.2s ease;
-  }
-
-  .toc-list a:hover {
-    color: var(--primary);
-  }
-
-  .legal-content {
-    max-width: 800px;
-    margin: 0 auto;
-  }
-
-  .legal-section {
-    margin-bottom: 3rem;
-    scroll-margin-top: 2rem;
-  }
-
-  .legal-section h2 {
-    font-size: 1.75rem;
-    margin-bottom: 1rem;
-    color: var(--primary);
-  }
-
-  .legal-section h3 {
-    font-size: 1.25rem;
-    margin: 1.5rem 0 0.75rem;
-    color: var(--text);
-  }
-
-  .legal-section p {
-    color: var(--text-secondary);
-    line-height: 1.8;
-    margin-bottom: 1rem;
-  }
-
-  .legal-section ul {
-    color: var(--text-secondary);
-    line-height: 1.8;
-    margin-bottom: 1rem;
-    padding-left: 2rem;
-  }
-
-  .legal-section li {
-    margin-bottom: 0.5rem;
-  }
-
-  .legal-section a {
-    color: var(--accent);
-    text-decoration: none;
-  }
-
-  .legal-section a:hover {
-    color: var(--primary);
-    text-decoration: underline;
-  }
-
-  .legal-section strong {
-    color: var(--text);
-    font-weight: 600;
-  }
-
-  /* Data Tables */
-  .data-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 1.5rem 0;
-    font-size: 0.95rem;
-  }
-
-  .data-table th,
-  .data-table td {
-    padding: 0.75rem 1rem;
-    text-align: left;
-    border: 1px solid var(--border);
-  }
-
-  .data-table th {
-    background: var(--code-bg);
-    color: var(--text);
-    font-weight: 600;
-  }
-
-  .data-table td {
-    color: var(--text-secondary);
-  }
-
-  .data-table tr:hover td {
-    background: var(--surface);
-  }
-
-  /* Callouts */
-  .callout {
-    background: var(--surface);
-    border-left: 4px solid var(--primary);
-    padding: 1rem 1.5rem;
-    margin: 1.5rem 0;
-    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-  }
-
-  .callout-info {
-    border-left-color: var(--accent);
-    background: rgba(59, 130, 246, 0.1);
-  }
-
-  .callout-warning {
-    border-left-color: #f59e0b;
-    background: rgba(245, 158, 11, 0.1);
-  }
-
-  .callout p {
-    margin: 0;
-  }
-
-  /* Contact Box */
-  .contact-box {
-    background: var(--code-bg);
-    border-radius: var(--radius-md);
-    padding: 1.5rem;
-    margin: 1rem 0;
-  }
-
-  .contact-box ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  .contact-box li {
-    padding: 0.5rem 0;
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-  }
-
-  .contact-box strong {
-    color: var(--primary);
-  }
-
-  @media (max-width: 768px) {
-    .page-title {
-      font-size: 2rem;
-    }
-
-    .legal-section h2 {
-      font-size: 1.5rem;
-    }
-
-    .toc-list {
-      grid-template-columns: 1fr;
-    }
-
-    .data-table {
-      font-size: 0.85rem;
-    }
-
-    .data-table th,
-    .data-table td {
-      padding: 0.5rem;
-    }
-  }
-</style>

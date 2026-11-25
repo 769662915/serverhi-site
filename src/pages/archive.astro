@@ -1,251 +1,70 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getAllPosts } from '../lib/posts';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import ManualIcon from '../components/ManualIcon.astro';
+import { getAllPosts, type Post } from '../lib/posts';
+import { getCategoryBySlug } from '../lib/config';
 
-const allPosts = await getAllPosts();
-
-// Group posts by year and month
-const postsByDate = allPosts.reduce((acc, post) => {
-  const year = post.data.pubDate.getFullYear();
-  const month = post.data.pubDate.toLocaleString('en-US', { month: 'long' });
-
-  if (!acc[year]) {
-    acc[year] = {};
-  }
-  if (!acc[year][month]) {
-    acc[year][month] = [];
-  }
-
-  acc[year][month].push(post);
-  return acc;
-}, {} as Record<number, Record<string, typeof allPosts>>);
-
-// Sort years in descending order
-const sortedYears = Object.keys(postsByDate)
-  .map(Number)
-  .sort((a, b) => b - a);
-
-// Month order for sorting
-const monthOrder = [
-  'January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December'
-];
+const posts = await getAllPosts();
+const months = new Map<string, Post[]>();
+for (const post of posts) {
+  const month = post.data.pubDate.toISOString().slice(0, 7);
+  const existing = months.get(month);
+  if (existing) existing.push(post);
+  else months.set(month, [post]);
+}
+const monthLabel = new Intl.DateTimeFormat('en-US', { timeZone: 'UTC', month: 'long', year: 'numeric' });
+const dayLabel = new Intl.DateTimeFormat('en-US', { timeZone: 'UTC', month: 'short', day: 'numeric' });
 ---
 
 <BaseLayout title="Archive - ServerHi">
-  <div class="container">
-    <div class="archive-page">
-      <header class="page-header fade-in-up">
-        <h1 class="page-title">
-          <span class="terminal-prompt"></span>
-          Tutorial Archive
-        </h1>
-        <p class="page-description">
-          Browse all {allPosts.length} tutorials organized by date
-        </p>
-      </header>
-
-      <div class="archive-content">
-        {sortedYears.map((year, yearIndex) => {
-          const months = Object.keys(postsByDate[year]).sort(
-            (a, b) => monthOrder.indexOf(b) - monthOrder.indexOf(a)
-          );
-
-          return (
-            <section class="year-section fade-in-up" style={`animation-delay: ${yearIndex * 0.1}s`}>
-              <h2 class="year-title">
-                <span class="year-number glow-primary">{year}</span>
-                <span class="year-count">
-                  {Object.values(postsByDate[year]).flat().length} tutorials
-                </span>
-              </h2>
-
-              <div class="months-container">
-                {months.map((month) => {
-                  const posts = postsByDate[year][month];
-
-                  return (
-                    <div class="month-section">
-                      <h3 class="month-title">
-                        <span class="terminal-prompt"></span>
-                        {month}
-                      </h3>
-
-                      <ul class="posts-list">
-                        {posts.map((post) => (
-                          <li class="post-item">
-                            <a href={`/posts/${post.slug}/`} class="post-link terminal-hover">
-                              <span class="post-date">
-                                {post.data.pubDate.toLocaleDateString('en-US', {
-                                  month: 'short',
-                                  day: 'numeric'
-                                })}
-                              </span>
-                              <span class="post-title">{post.data.title}</span>
-                              <span class="post-category">{post.data.category}</span>
-                            </a>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  );
-                })}
-              </div>
-            </section>
-          );
-        })}
-      </div>
-    </div>
+  <div class="container archive-page">
+    <Breadcrumb items={[{ label: 'Archive', href: '/archive/' }]} />
+    <header>
+      <h1 class="page-heading">Article archive</h1>
+      <p class="page-intro">{posts.length} articles organized by publication date.</p>
+    </header>
+    <nav class="archive-months" aria-label="Jump to month">
+      {Array.from(months, ([month, entries]) => <a href={`#month-${month}`}>{monthLabel.format(entries[0].data.pubDate)}</a>)}
+    </nav>
+    {Array.from(months, ([month, entries]) => (
+      <section class="archive-group" id={`month-${month}`} aria-labelledby={`heading-${month}`}>
+        <h2 id={`heading-${month}`} class="section-heading">{monthLabel.format(entries[0].data.pubDate)}</h2>
+        <ul class="list-reset">
+          {entries.map(post => (
+            <li>
+              <a class="archive-row" href={`/posts/${post.slug}/`}>
+                <time datetime={post.data.pubDate.toISOString()}>{dayLabel.format(post.data.pubDate)}</time>
+                <span class="archive-title">{post.data.title}</span>
+                <span class="archive-topic">{getCategoryBySlug(post.data.category)?.name}</span>
+                <ManualIcon name="diagonal" size={16} />
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))}
   </div>
 </BaseLayout>
 
 <style>
-  .archive-page {
-    padding: 2rem 0;
-  }
-
-  .page-header {
-    text-align: center;
-    margin-bottom: 3rem;
-  }
-
-  .page-title {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-  }
-
-  .page-description {
-    color: var(--text-secondary);
-    font-size: 1.125rem;
-    font-family: var(--font-code);
-  }
-
-  .archive-content {
-    max-width: 900px;
-    margin: 0 auto;
-  }
-
-  .year-section {
-    margin-bottom: 4rem;
-  }
-
-  .year-title {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    padding-bottom: 1rem;
-    border-bottom: 2px solid var(--primary);
-    margin-bottom: 2rem;
-  }
-
-  .year-number {
-    font-family: var(--font-heading);
-    font-size: 2.5rem;
-    font-weight: 700;
-  }
-
-  .year-count {
-    font-family: var(--font-code);
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-  }
-
-  .months-container {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-  }
-
-  .month-section {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: 1.5rem;
-  }
-
-  .month-title {
-    font-family: var(--font-code);
-    font-size: 1.25rem;
-    margin-bottom: 1rem;
-    color: var(--primary);
-  }
-
-  .posts-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .post-item {
-    border-bottom: 1px solid var(--border);
-  }
-
-  .post-item:last-child {
-    border-bottom: none;
-  }
-
-  .post-link {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    gap: 1rem;
-    align-items: center;
-    padding: 0.75rem 0;
-    text-decoration: none;
-    color: var(--text);
-    transition: all 0.2s ease;
-  }
-
-  .post-link:hover {
-    color: var(--primary);
-    padding-left: 0.5rem;
-  }
-
-  .post-date {
-    font-family: var(--font-code);
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-    min-width: 60px;
-  }
-
-  .post-title {
-    font-size: 1rem;
-    line-height: 1.4;
-  }
-
-  .post-category {
-    font-family: var(--font-code);
-    font-size: 0.75rem;
-    color: var(--text-secondary);
-    background: var(--code-bg);
-    padding: 0.25rem 0.5rem;
-    border-radius: var(--radius-sm);
-    text-transform: uppercase;
-  }
-
-  @media (max-width: 768px) {
-    .page-title {
-      font-size: 2rem;
-    }
-
-    .year-number {
-      font-size: 2rem;
-    }
-
-    .post-link {
-      grid-template-columns: 1fr;
-      gap: 0.5rem;
-    }
-
-    .post-date {
-      min-width: auto;
-    }
-
-    .post-category {
-      justify-self: start;
-    }
+  .archive-page { max-width: 68rem; }
+  header { margin: .4rem 0 1.3rem; }
+  .archive-months { display: flex; flex-wrap: wrap; gap: .32rem .58rem; }
+  .archive-months a { display: inline-flex; align-items: center; min-height: 40px; padding: .25rem .55rem; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); color: var(--text); text-decoration: none; font-size: .83rem; }
+  .archive-months a:hover { border-color: var(--accent-border); color: var(--primary); }
+  .archive-group { margin: 2.2rem 0 0; }
+  .archive-group h2 { margin-bottom: .6rem; }
+  .archive-group ul { border-top: 1px solid var(--border-strong); }
+  .archive-group li { border-bottom: 1px solid var(--border); }
+  .archive-row { display: grid; grid-template-columns: 4.4rem minmax(0, 1fr) 9rem auto; gap: 0.35rem .7rem; align-items: center; padding: .6rem .25rem .6rem 0; min-height: 45px; color: var(--text); text-decoration: none; font-size: .93rem; }
+  .archive-row time, .archive-topic { color: var(--text-secondary); font-size: .8rem; }
+  .archive-title { font-weight: 610; overflow-wrap: anywhere; }
+  .archive-row :global(svg) { color: var(--primary); }
+  .archive-row:hover .archive-title { color: var(--primary); text-decoration: underline; }
+  @media (max-width: 42rem) {
+    .archive-row { grid-template-columns: 3rem minmax(0, 1fr) auto; align-items: start; }
+    .archive-topic { grid-row: 2; grid-column: 2; }
+    .archive-row :global(svg) { grid-row: 1; grid-column: 3; }
   }
 </style>

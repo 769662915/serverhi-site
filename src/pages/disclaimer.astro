@@ -1,21 +1,21 @@
 ---
 import PublicEmail from '../components/PublicEmail.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import '../styles/legal.css';
 ---
 
 <BaseLayout title="Disclaimer - ServerHi">
   <div class="container">
     <article class="legal-page">
-      <header class="page-header fade-in-up">
-        <h1 class="page-title">
-          <span class="terminal-prompt"></span>
+      <header class="page-header">
+        <h1 class="page-heading">
           Disclaimer
         </h1>
         <p class="last-updated">Last updated: June 18, 2026</p>
       </header>
 
       <div class="content-wrapper">
-        <div class="legal-content fade-in-up">
+        <div class="legal-content">
           <section class="legal-section">
             <h2>General Disclaimer</h2>
             <p>
@@ -115,88 +115,3 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </article>
   </div>
 </BaseLayout>
-
-<style>
-  .legal-page {
-    padding: 2rem 0;
-  }
-
-  .page-header {
-    text-align: center;
-    margin-bottom: 3rem;
-  }
-
-  .page-title {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-  }
-
-  .last-updated {
-    color: var(--text-secondary);
-    font-family: var(--font-code);
-    font-size: 0.9rem;
-  }
-
-  .legal-content {
-    max-width: 800px;
-    margin: 0 auto;
-  }
-
-  .legal-section {
-    margin-bottom: 3rem;
-  }
-
-  .legal-section h2 {
-    font-size: 1.75rem;
-    margin-bottom: 1rem;
-    color: var(--primary);
-  }
-
-  .legal-section h3 {
-    font-size: 1.25rem;
-    margin: 1.5rem 0 0.75rem;
-    color: var(--text);
-  }
-
-  .legal-section p {
-    color: var(--text-secondary);
-    line-height: 1.8;
-    margin-bottom: 1rem;
-  }
-
-  .legal-section ul {
-    color: var(--text-secondary);
-    line-height: 1.8;
-    margin-bottom: 1rem;
-    padding-left: 2rem;
-  }
-
-  .legal-section li {
-    margin-bottom: 0.5rem;
-  }
-
-  .legal-section a {
-    color: var(--accent);
-    text-decoration: none;
-  }
-
-  .legal-section a:hover {
-    color: var(--primary);
-    text-decoration: underline;
-  }
-
-  .legal-section strong {
-    color: var(--text);
-    font-weight: 600;
-  }
-
-  @media (max-width: 768px) {
-    .page-title {
-      font-size: 2rem;
-    }
-
-    .legal-section h2 {
-      font-size: 1.5rem;
-    }
-  }
-</style>

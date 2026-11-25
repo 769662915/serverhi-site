@@ -1,60 +1,44 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ArticleCard from '../../components/ArticleCard.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import ManualIcon from '../../components/ManualIcon.astro';
+import SearchField from '../../components/SearchField.astro';
+import TopicDirectory from '../../components/TopicDirectory.astro';
 import { getAllPosts } from '../../lib/posts';
 
-const allPosts = await getAllPosts();
-// const postsPerPage = 12; // Reserved for future pagination
+const posts = await getAllPosts();
 ---
 
 <BaseLayout title="All Tutorials - ServerHi">
-  <div class="container">
-    <div class="page-header fade-in-up">
-      <h1 class="page-title">
-        <span class="terminal-prompt"></span>
-        All Tutorials
-      </h1>
-      <p class="page-description">
-        Browse all {allPosts.length} tutorials on Linux, Docker, DevOps, and server management
-      </p>
-    </div>
-
-    <div class="posts-grid">
-      {allPosts.map((post, index) => (
-        <div class="stagger-item" style={`animation-delay: ${(index % 12) * 0.05}s`}>
-          <ArticleCard post={post} />
-        </div>
-      ))}
-    </div>
+  <div class="container catalog">
+    <Breadcrumb items={[{ label: 'Guides', href: '/posts/' }]} />
+    <header class="catalog-header">
+      <div>
+        <h1 class="page-heading">All guides</h1>
+        <p class="page-intro">Browse Linux, Docker, and DevOps by topic, or search the full collection.</p>
+      </div>
+      <SearchField id="catalog-search" placeholder="Search the collection…" />
+    </header>
+    <section id="topics" class="catalog-topics" aria-label="Browse by topic">
+      <TopicDirectory compact />
+    </section>
+    <section aria-labelledby="catalog-index">
+      <div class="section-line">
+        <h2 id="catalog-index" class="section-heading">{posts.length} published {posts.length === 1 ? 'article' : 'articles'}</h2>
+        <a class="text-link" href="/archive/">Browse by date <ManualIcon name="arrow" size={16} /></a>
+      </div>
+      <ul class="article-list">
+        {posts.map(post => <li><ArticleCard post={post} showCategory /></li>)}
+      </ul>
+    </section>
   </div>
 </BaseLayout>
 
 <style>
-  .page-header {
-    text-align: center;
-    margin: 3rem 0;
-  }
-
-  .page-title {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-  }
-
-  .page-description {
-    color: var(--text-secondary);
-    font-size: 1.125rem;
-  }
-
-  .posts-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 2rem;
-    margin-bottom: 3rem;
-  }
-
-  @media (max-width: 768px) {
-    .posts-grid {
-      grid-template-columns: 1fr;
-    }
-  }
+  .catalog { max-width: 61rem; }
+  .catalog-header { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(16rem, .85fr); align-items: end; gap: 1rem 2rem; margin: .4rem 0 1.6rem; }
+  .catalog-topics { margin-block-end: 2.6rem; }
+  .catalog .article-list > li:nth-child(n + 18) { content-visibility: auto; contain-intrinsic-block-size: auto 120px; }
+  @media (max-width: 44rem) { .catalog-header { grid-template-columns: 1fr; } }
 </style>

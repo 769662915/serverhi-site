@@ -1,0 +1,45 @@
+---
+import ManualIcon from './ManualIcon.astro';
+import { categories } from '../lib/config';
+import { getTopic } from '../lib/manual';
+interface Props { current: string; }
+const { current } = Astro.props;
+---
+<div class="topic-rail">
+  <nav class="topics-desktop" aria-label="Topics">
+    <p class="micro-label">Topics</p>
+    <ul class="list-reset">
+      {categories.map(category => (
+        <li><a href={`/category/${category.slug}/`} aria-current={category.slug === current ? 'page' : undefined}>
+          <ManualIcon name={getTopic(category.slug).icon} size={17} />{category.name}
+        </a></li>
+      ))}
+    </ul>
+  </nav>
+  <details class="topics-mobile">
+    <summary>Explore topics <ManualIcon name="down" size={16} /></summary>
+    <nav aria-label="Topics">
+      <ul class="list-reset">
+        {categories.map(category => (
+          <li><a href={`/category/${category.slug}/`} aria-current={category.slug === current ? 'page' : undefined}>{category.name}</a></li>
+        ))}
+      </ul>
+    </nav>
+  </details>
+</div>
+<style>
+  .topic-rail { min-width: 0; }
+  .micro-label { margin: 0 0 .4rem .65rem; }
+  .topics-desktop a, .topics-mobile a { display: flex; align-items: center; gap: .55rem; border-inline-start: 2px solid transparent; min-height: 42px; padding: .4rem .55rem; text-decoration: none; color: var(--text-secondary); font-size: .88rem; font-weight: 560; }
+  .topics-desktop a:where(:hover, [aria-current]), .topics-mobile a:where(:hover, [aria-current]) { color: var(--primary); background: var(--accent-soft); }
+  a[aria-current] { border-inline-start-color: var(--primary); font-weight: 660; }
+  .topics-mobile { display: none; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); }
+  .topics-mobile summary { display: flex; justify-content: space-between; align-items: center; padding: .45rem .75rem; min-height: 44px; color: var(--text); font-weight: 630; list-style: none; }
+  summary::-webkit-details-marker { display: none; }
+  details[open] summary { border-bottom: 1px solid var(--border); }
+  details[open] summary :global(svg) { transform: rotate(180deg); }
+  @media (max-width: 50rem) {
+    .topics-desktop { display: none; }
+    .topics-mobile { display: block; }
+  }
+</style>

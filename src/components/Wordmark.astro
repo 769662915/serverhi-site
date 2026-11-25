@@ -1,0 +1,10 @@
+---
+import ManualIcon from './ManualIcon.astro';
+---
+<a class="wordmark" href="/" translate="no"><span class="wordmark-icon"><ManualIcon name="rack" size={21} /></span><span>ServerHi</span></a>
+
+<style>
+  .wordmark { display: inline-flex; align-items: center; gap: 0.65rem; min-height: 44px; flex: 0 0 auto; color: var(--text); text-decoration: none; font-size: 1.26rem; font-weight: 740; letter-spacing: -0.045em; }
+  .wordmark:hover { color: var(--primary); }
+  .wordmark-icon { display: grid; place-items: center; inline-size: 35px; block-size: 35px; border-radius: 7px; color: #efb65d; background: #242520; flex: none; }
+</style>

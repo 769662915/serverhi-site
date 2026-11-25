@@ -21,7 +21,7 @@ export default defineConfig({
   markdown: {
     rehypePlugins: [preserveLiteralAddresses],
     shikiConfig: {
-      theme: 'github-dark',
+      theme: 'github-dark-default',
       wrap: true,
     },
   },

@@ -1,6 +1,8 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
 import Breadcrumb from '../../components/Breadcrumb.astro';
+import ManualIcon from '../../components/ManualIcon.astro';
 import { getAllPosts, groupPostsByTag, isNavigationOnlyTag } from '../../lib/posts';
 
 export async function getStaticPaths() {
@@ -11,170 +13,28 @@ export async function getStaticPaths() {
 }
 
 const { group } = Astro.props;
-const { slug, name: decodedSlug, posts } = group;
-const description = `${posts.length} ${posts.length === 1 ? 'article' : 'articles'} on ${decodedSlug}. Start with ${posts[0].data.title}.`;
-
-const breadcrumbItems = [
-  { label: 'Tags', href: '/posts/' },
-  { label: `#${decodedSlug}`, href: `/tag/${slug}/` }
-];
+const { slug, name, posts } = group;
+const count = `${posts.length} ${posts.length === 1 ? 'article' : 'articles'}`;
+const description = `${count} on ${name}. Start with ${posts[0].data.title}.`;
+const navigationOnly = isNavigationOnlyTag(group);
 ---
 
-<BaseLayout title={`${decodedSlug} Tutorials - ServerHi`} description={description} noindex={isNavigationOnlyTag(group)}>
-  <div class="container">
-    <Breadcrumb items={breadcrumbItems} />
-
-    <div class="tag-header fade-in-up">
-      <h1 class="page-title">
-        <span class="terminal-prompt"></span>
-        <span class="tag-symbol">#</span>{decodedSlug}
-      </h1>
-      <p class="page-description">
-        {posts.length} tutorial{posts.length !== 1 ? 's' : ''} tagged with "{decodedSlug}"
-      </p>
-      {isNavigationOnlyTag(group) && <p><a href="/tag/docker-compose/">Browse all Docker Compose articles</a></p>}
-    </div>
-
-    {posts.length > 0 ? (
-      <div class="posts-grid">
-        {posts.map((post, index) => (
-          <div class="stagger-item" style={`animation-delay: ${index * 0.05}s`}>
-            <article class="post-card terminal-window hover-lift">
-              <a href={`/posts/${post.slug}/`}>
-                <div class="card-content">
-                  <h2 class="card-title terminal-prompt">{post.data.title}</h2>
-                  <p class="card-description">{post.data.description}</p>
-                  <div class="card-meta">
-                    <span class="category-badge" style={`background: var(--code-bg); color: var(--primary)`}>
-                      {post.data.category}
-                    </span>
-                  </div>
-                </div>
-              </a>
-            </article>
-          </div>
-        ))}
-      </div>
-    ) : (
-      <div class="empty-state terminal-window">
-        <div class="terminal-header">
-          <span class="terminal-dot red"></span>
-          <span class="terminal-dot yellow"></span>
-          <span class="terminal-dot green"></span>
-        </div>
-        <div class="empty-content">
-          <p class="terminal-prompt">No tutorials found with this tag.</p>
-          <a href="/posts/" class="btn btn-primary">Browse All Tutorials</a>
-        </div>
-      </div>
-    )}
+<BaseLayout title={`${name} Tutorials - ServerHi`} description={description} noindex={navigationOnly}>
+  <div class="container tag-page">
+    <Breadcrumb items={[{ label: 'Guides', href: '/posts/' }, { label: name, href: `/tag/${slug}/` }]} />
+    <header>
+      <h1 class="page-heading">{name}</h1>
+      <p class="page-intro">{count} on this topic</p>
+      {navigationOnly && <a class="text-link" href="/tag/docker-compose/">Browse all Docker Compose articles <ManualIcon name="arrow" size={16} /></a>}
+    </header>
+    <ul class="article-list">
+      {posts.map(post => <li><ArticleCard post={post} heading="h2" showCategory /></li>)}
+    </ul>
   </div>
 </BaseLayout>
 
 <style>
-  .tag-header {
-    text-align: center;
-    margin: 3rem 0;
-  }
-
-  .page-title {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-  }
-
-  .tag-symbol {
-    color: var(--primary);
-  }
-
-  .page-description {
-    color: var(--text-secondary);
-    font-size: 1.125rem;
-    font-family: var(--font-code);
-  }
-
-  .posts-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 2rem;
-    margin-bottom: 3rem;
-  }
-
-  .post-card {
-    height: 100%;
-  }
-
-  .post-card a {
-    text-decoration: none;
-    color: inherit;
-    display: block;
-    height: 100%;
-  }
-
-  .card-content {
-    padding: 2rem;
-  }
-
-  .card-title {
-    font-size: 1.25rem;
-    margin-bottom: 1rem;
-    color: var(--text);
-  }
-
-  .card-description {
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-    line-height: 1.6;
-    margin-bottom: 1rem;
-  }
-
-  .card-meta {
-    display: flex;
-    gap: 0.5rem;
-  }
-
-  .category-badge {
-    font-family: var(--font-code);
-    font-size: 0.75rem;
-    padding: 0.25rem 0.75rem;
-    border-radius: var(--radius-sm);
-    font-weight: 600;
-    text-transform: uppercase;
-  }
-
-  .empty-state {
-    max-width: 500px;
-    margin: 3rem auto;
-  }
-
-  .empty-content {
-    padding: 3rem 2rem;
-    text-align: center;
-  }
-
-  .empty-content p {
-    margin-bottom: 1.5rem;
-    font-family: var(--font-code);
-  }
-
-  .btn {
-    display: inline-flex;
-    padding: 0.75rem 1.5rem;
-    background: var(--primary);
-    color: var(--background);
-    border-radius: var(--radius-sm);
-    font-family: var(--font-code);
-    font-weight: 600;
-    text-decoration: none;
-    transition: all 0.2s ease;
-  }
-
-  .btn:hover {
-    box-shadow: 0 0 20px var(--primary);
-  }
-
-  @media (max-width: 768px) {
-    .posts-grid {
-      grid-template-columns: 1fr;
-    }
-  }
+  .tag-page { max-width: 62rem; }
+  header { padding: .4rem 0 1.8rem; }
+  header .text-link { min-height: 44px; margin-top: .2rem; }
 </style>

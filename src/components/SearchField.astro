@@ -1,0 +1,40 @@
+---
+import ManualIcon from './ManualIcon.astro';
+
+interface Props {
+  id: string;
+  label?: string;
+  placeholder?: string;
+  visibleLabel?: boolean;
+}
+const { id, label = 'Search guides', placeholder = 'Search by tool, task, or error…', visibleLabel = false } = Astro.props;
+---
+<form class="guide-search" role="search" action="/search/" method="get" aria-label={label}>
+  <label for={id} class:list={['search-label', { 'visually-hidden': !visibleLabel }]}>{label}</label>
+  <div class="search-field">
+    <div class="search-input">
+      <ManualIcon name="search" size={20} />
+      <input id={id} name="q" type="search" placeholder={placeholder} autocomplete="off" spellcheck="false" />
+    </div>
+    <button type="submit">Search</button>
+  </div>
+</form>
+
+<style>
+  .guide-search { margin: 0; }
+  .search-label { display: inline-block; margin: 0 0 .4rem; font-size: .89rem; font-weight: 650; color: var(--text); }
+  .search-field { display: flex; min-width: 0; min-height: 52px; padding: 3px; gap: .35rem; border: 1px solid var(--border-strong); border-radius: var(--radius-md); background: var(--surface); }
+  .search-field:focus-within { border-color: var(--primary); }
+  .search-input { display: flex; position: relative; align-items: center; flex: 1; min-width: 0; color: var(--text-secondary); }
+  .search-input :global(svg) { position: absolute; left: .72rem; pointer-events: none; }
+  input { display: block; width: 100%; min-width: 0; height: 100%; min-height: 44px; padding: .6rem .4rem .6rem 2.45rem; border: 0; background: transparent; color: var(--text); border-radius: var(--radius-sm); font-size: 1rem; }
+  input:focus-visible { outline-offset: -2px; }
+  input::placeholder { color: var(--text-secondary); opacity: 1; }
+  button { min-height: 44px; padding: .45rem 1rem; border: 0; border-radius: var(--radius-sm); background: var(--action); color: var(--action-text); font-size: .91rem; font-weight: 650; }
+  button:hover { background: var(--primary); color: var(--surface); }
+  @media (max-width: 25rem) {
+    button { padding-inline: .7rem; }
+    input { padding-inline-start: 2.1rem; }
+    .search-input :global(svg) { left: .5rem; }
+  }
+</style>

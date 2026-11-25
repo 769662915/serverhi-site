@@ -1,287 +1,121 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import SearchField from '../components/SearchField.astro';
+const examples = ['nginx 502', 'docker compose', 'postgres backup', 'disk space'];
 ---
 
 <BaseLayout noindex title="Search - ServerHi">
-  <div class="container">
-    <div class="search-page">
-      <div class="search-header fade-in-up">
-        <h1 class="page-title">
-          <span class="terminal-prompt"></span>
-          Search Tutorials
-        </h1>
-        <p class="page-description">
-          Search published articles or <a href="/archive/">browse the archive</a>.
-        </p>
-      </div>
-
-      <div class="search-container fade-in-up">
-        <div class="search-box terminal-window">
-          <div class="terminal-header">
-            <span class="terminal-dot red"></span>
-            <span class="terminal-dot yellow"></span>
-            <span class="terminal-dot green"></span>
-          </div>
-          <div class="search-input-wrapper">
-            <span class="search-prompt">$</span>
-            <div id="search">
-              <input
-                type="text"
-                placeholder="Search tutorials..."
-                aria-label="Search"
-                autocomplete="off"
-              />
-            </div>
-          </div>
-        </div>
-
-        <p id="search-status" role="status"></p>
-        <div id="search-results" class="search-results"></div>
-      </div>
-
-      <div class="search-tips fade-in-up">
-        <h2 class="tips-title">
-          <span class="terminal-prompt"></span>
-          Search Tips
-        </h2>
-        <ul class="tips-list">
-          <li>Use specific keywords like "docker compose" or "nginx ssl"</li>
-          <li>Search by category: "docker", "linux", "devops"</li>
-          <li>Look for difficulty levels: "beginner", "intermediate", "advanced"</li>
-          <li>Try OS-specific searches: "ubuntu", "centos", "debian"</li>
-        </ul>
-      </div>
-    </div>
+  <div class="container search-page">
+    <Breadcrumb items={[{ label: 'Search', href: '/search/' }]} />
+    <header>
+      <h1 class="page-heading">Search the manual</h1>
+      <p class="page-intro">Look up a command, a service, or the error you’re seeing.</p>
+    </header>
+    <SearchField id="manual-query" placeholder="Search guides…" visibleLabel />
+    <nav aria-label="Example searches" class="examples">
+      {examples.map(query => <a href={`/search/?q=${encodeURIComponent(query)}`}>{query}</a>)}
+    </nav>
+    <noscript><p class="search-note">Live search requires JavaScript. <a href="/archive/">Browse the article archive</a>.</p></noscript>
+    <p id="search-status" class="search-note" role="status"></p>
+    <ol id="search-results" class="list-reset" aria-label="Search results"></ol>
   </div>
 </BaseLayout>
 
-<style>
-  .search-page {
-    padding: 2rem 0;
-    max-width: 900px;
-    margin: 0 auto;
-  }
-
-  .search-header {
-    text-align: center;
-    margin-bottom: 3rem;
-  }
-
-  .page-title {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-  }
-
-  .page-description {
-    color: var(--text-secondary);
-    font-size: 1.125rem;
-  }
-
-  .search-container {
-    margin-bottom: 3rem;
-  }
-
-  .search-box {
-    margin-bottom: 2rem;
-  }
-
-  .search-input-wrapper {
-    padding: 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .search-prompt {
-    font-family: var(--font-code);
-    color: var(--primary);
-    font-size: 1.25rem;
-    font-weight: 700;
-  }
-
-  #search {
-    flex: 1;
-  }
-
-  #search input {
-    width: 100%;
-    background: transparent;
-    border: none;
-    color: var(--text);
-    font-family: var(--font-code);
-    font-size: 1rem;
-    outline: none;
-  }
-
-  #search input::placeholder {
-    color: var(--text-secondary);
-  }
-
-  .search-results {
-    min-height: 200px;
-  }
-
-  .search-tips {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: 2rem;
-  }
-
-  .tips-title {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-  }
-
-  .tips-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  .tips-list li {
-    padding: 0.75rem 0;
-    padding-left: 2rem;
-    position: relative;
-    color: var(--text-secondary);
-    border-bottom: 1px solid var(--border);
-  }
-
-  .tips-list li:last-child {
-    border-bottom: none;
-  }
-
-  .tips-list li::before {
-    content: '→';
-    position: absolute;
-    left: 0;
-    color: var(--primary);
-    font-weight: 700;
-  }
-
-  @media (max-width: 768px) {
-    .search-page {
-      padding: 1rem 0;
-    }
-
-    .page-title {
-      font-size: 2rem;
-    }
-  }
-</style>
-
 <script is:inline>
-  document.addEventListener('DOMContentLoaded', () => {
-    const input = document.querySelector('#search input');
-    const results = document.querySelector('#search-results');
-    const status = document.querySelector('#search-status');
-    if (!input.value) input.value = new URLSearchParams(location.search).get('q') || '';
-    let revision = 0;
-    let index;
+  const input = document.getElementById('manual-query');
+  const results = document.getElementById('search-results');
+  const status = document.getElementById('search-status');
+  const form = input.form;
+  if (!input.value) input.value = new URLSearchParams(location.search).get('q') || '';
+  let revision = 0;
+  let timeout;
+  let index;
 
-    async function search() {
-      const request = ++revision;
-      const query = input.value.trim();
-      results.replaceChildren();
-      status.textContent = '';
-      if (query.length < 2) return;
-      status.textContent = 'Searching…';
-      try {
-        index ??= import('/pagefind/pagefind.js').then(async module => {
-          await module.options({ excerptLength: 18 });
-          return module;
-        }).catch(error => { index = undefined; throw error; });
-        const engine = await index;
-        if (request !== revision) return;
-        const matches = await engine.search(query);
-        // An image filename can match arbitrary text in the generated asset hash.
-        const relevant = matches.results.filter(result =>
-          result.words?.length || !result.matchedMetaFields?.includes('image')
-          || result.matchedMetaFields.some(field => field !== 'image')
-        );
-        const items = await Promise.all(relevant.slice(0, 10).map(result => result.data()));
-        if (request !== revision) return;
-        status.textContent = items.length
-          ? `Showing ${items.length} of ${relevant.length} results for “${query}”.`
-          : `No results for “${query}”.`;
-        for (const item of items) {
-          const article = document.createElement('article');
-          article.className = 'search-result-item terminal-hover';
-          const link = document.createElement('a');
-          link.href = item.url;
-          const heading = document.createElement('h3');
-          heading.textContent = item.meta.title;
-          const excerpt = document.createElement('p');
-          excerpt.textContent = item.plain_excerpt;
-          link.append(heading, excerpt);
-          article.append(link);
-          results.append(article);
-        }
-      } catch {
-        if (request !== revision) return;
-        status.textContent = 'Search could not load. ';
-        const retry = document.createElement('a');
-        retry.href = '/search/?' + new URLSearchParams({ q: query });
-        retry.textContent = 'Reload this search';
-        status.append(retry);
+  function schedule(delay = 0) {
+    clearTimeout(timeout);
+    const request = ++revision;
+    timeout = setTimeout(() => search(request), delay);
+  }
+
+  async function search(request) {
+    const query = input.value.trim();
+    const url = new URL(location.href);
+    if (query) url.searchParams.set('q', query);
+    else url.searchParams.delete('q');
+    if (url.href !== location.href) history.replaceState(history.state, '', url);
+
+    results.replaceChildren();
+    status.textContent = '';
+    if (query.length < 2) return;
+    status.textContent = 'Searching…';
+
+    try {
+      index ??= import('/pagefind/pagefind.js').then(async module => {
+        await module.options({ excerptLength: 18 });
+        return module;
+      }).catch(error => { index = undefined; throw error; });
+      const engine = await index;
+      if (request !== revision) return;
+      const matches = await engine.search(query);
+      if (request !== revision) return;
+
+      // Asset hashes in automatic image metadata are unrelated to a guide's text.
+      const relevant = matches.results.filter(result =>
+        result.words?.length || !result.matchedMetaFields?.includes('image')
+        || result.matchedMetaFields.some(field => field !== 'image')
+      );
+      const items = await Promise.all(relevant.slice(0, 10).map(result => result.data()));
+      if (request !== revision) return;
+
+      status.textContent = items.length
+        ? `Showing ${items.length} of ${relevant.length} results for “${query}”.`
+        : `No results for “${query}”.`;
+
+      for (const item of items) {
+        const li = document.createElement('li');
+        li.className = 'search-result-item';
+        const heading = document.createElement('h2');
+        const link = document.createElement('a');
+        link.href = item.url;
+        link.textContent = item.meta.title;
+        const excerpt = document.createElement('p');
+        excerpt.textContent = item.plain_excerpt;
+        heading.append(link);
+        li.append(heading, excerpt);
+        results.append(li);
       }
+    } catch {
+      if (request !== revision) return;
+      status.textContent = 'Search could not load. ';
+      const retry = document.createElement('a');
+      retry.href = url.pathname + url.search;
+      retry.textContent = 'Reload this search';
+      status.append(retry);
     }
-    input.addEventListener('input', search);
-    search();
+  }
+
+  input.addEventListener('input', () => schedule(125));
+  form.addEventListener('submit', event => { event.preventDefault(); schedule(); });
+  window.addEventListener('popstate', () => {
+    input.value = new URLSearchParams(location.search).get('q') || '';
+    schedule();
   });
+  schedule();
 </script>
 
-<style is:global>
-  .search-result-item {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: 1.5rem;
-    margin-bottom: 1rem;
-    transition: all 0.2s ease;
-  }
-
-  .search-result-item:hover {
-    border-color: var(--primary);
-    box-shadow: 0 0 10px rgba(var(--primary-rgb), 0.2);
-  }
-
-  .search-result-item a {
-    text-decoration: none;
-    color: inherit;
-  }
-
-  .search-result-item h3 {
-    font-size: 1.25rem;
-    margin-bottom: 0.5rem;
-    color: var(--text);
-  }
-
-  .search-result-item p {
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-    line-height: 1.6;
-    margin: 0;
-  }
-
-  .no-results {
-    margin-top: 2rem;
-  }
-</style>
-
-<style is:global>
-  /* Ensure search results work in both themes */
-  .search-result-item {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    color: var(--text);
-  }
-
-  .search-result-item h3 {
-    color: var(--text);
-  }
-
-  .search-result-item p {
-    color: var(--text-secondary);
-  }
+<style>
+  .search-page { max-width: 51rem; }
+  header { margin: .4rem 0 1.35rem; }
+  .examples { display: flex; flex-wrap: wrap; gap: .28rem .55rem; margin-top: .6rem; }
+  .examples a { display: inline-flex; align-items: center; padding: .3rem .55rem; min-height: 36px; border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); font-family: var(--font-code); font-size: .76rem; text-decoration: none; background: var(--surface-muted); }
+  .examples a:hover { color: var(--primary); border-color: var(--accent-border); text-decoration: underline; }
+  .search-note { color: var(--text-secondary); padding-top: 1.15rem; font-size: .96rem; }
+  .search-note:empty { padding: 0; }
+  :global(.search-result-item) { padding: 1rem 0; border-block-end: 1px solid var(--border); }
+  :global(.search-result-item:first-child) { border-block-start: 1px solid var(--border-strong); margin-top: .75rem; }
+  :global(.search-result-item h2) { margin: 0 0 .3rem; font-size: 1.14rem; font-weight: 640; letter-spacing: -.019em; text-wrap: pretty; }
+  :global(.search-result-item a) { color: var(--text); text-decoration: none; }
+  :global(.search-result-item a:hover) { color: var(--primary); text-decoration: underline; }
+  :global(.search-result-item p) { color: var(--text-secondary); font-size: .94rem; }
 </style>

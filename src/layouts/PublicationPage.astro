@@ -9,19 +9,20 @@ const { title, description } = Astro.props;
 ---
 <BaseLayout title={`${title} - ServerHi`} description={description}>
   <article class="publication-page container">
-    <h1 class="terminal-prompt">{title}</h1>
-    <p class="introduction">{description}</p>
+    <header>
+      <h1 class="page-heading">{title}</h1>
+      <p class="page-intro">{description}</p>
+    </header>
     <slot />
   </article>
 </BaseLayout>
 
 <style>
-  .publication-page { max-width: 52rem; margin: 0 auto; padding: 1rem 1.25rem 4rem; }
-  h1 { font-size: clamp(2rem, 5vw, 3rem); line-height: 1.2; }
-  .introduction { color: var(--text-secondary); font-size: 1.15rem; }
-  .publication-page :global(h2) { margin: 2rem 0 0.6rem; font-size: 1.45rem; }
-  .publication-page :global(p), .publication-page :global(li) { line-height: 1.7; }
-  .publication-page :global(ul) { padding-left: 1.4rem; }
-  .publication-page :global(li) { margin: 0.4rem 0; }
-  .publication-page :global(a) { text-underline-offset: 0.18em; }
+  .publication-page { max-width: 48rem; padding-block: clamp(2.35rem, 6vw, 4rem) 1.5rem; }
+  header { padding-bottom: 1.3rem; border-bottom: 1px solid var(--border-strong); margin-bottom: 1.55rem; }
+  .publication-page :global(h2) { margin: 1.65rem 0 .55rem; font-size: 1.42rem; }
+  .publication-page :global(p), .publication-page :global(li) { line-height: 1.68; }
+  .publication-page :global(p + p) { margin-top: .65rem; }
+  .publication-page :global(ul) { padding-left: 1.35rem; }
+  .publication-page :global(li) { margin: .4rem 0; }
 </style>
